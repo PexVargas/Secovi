@@ -1,0 +1,14 @@
+C:\Users\Lúcia\source\repos\BootZap\BootZap\bin\Debug\netcoreapp3.1\BootZap.exe
+C:\Users\Lúcia\source\repos\BootZap\BootZap\bin\Debug\netcoreapp3.1\BootZap.deps.json
+C:\Users\Lúcia\source\repos\BootZap\BootZap\bin\Debug\netcoreapp3.1\BootZap.runtimeconfig.json
+C:\Users\Lúcia\source\repos\BootZap\BootZap\bin\Debug\netcoreapp3.1\BootZap.runtimeconfig.dev.json
+C:\Users\Lúcia\source\repos\BootZap\BootZap\bin\Debug\netcoreapp3.1\BootZap.dll
+C:\Users\Lúcia\source\repos\BootZap\BootZap\bin\Debug\netcoreapp3.1\BootZap.pdb
+C:\Users\Lúcia\source\repos\BootZap\BootZap\obj\Debug\netcoreapp3.1\BootZap.csprojAssemblyReference.cache
+C:\Users\Lúcia\source\repos\BootZap\BootZap\obj\Debug\netcoreapp3.1\BootZap.AssemblyInfoInputs.cache
+C:\Users\Lúcia\source\repos\BootZap\BootZap\obj\Debug\netcoreapp3.1\BootZap.AssemblyInfo.cs
+C:\Users\Lúcia\source\repos\BootZap\BootZap\obj\Debug\netcoreapp3.1\BootZap.dll
+C:\Users\Lúcia\source\repos\BootZap\BootZap\obj\Debug\netcoreapp3.1\BootZap.pdb
+C:\Users\Lúcia\source\repos\BootZap\BootZap\obj\Debug\netcoreapp3.1\BootZap.genruntimeconfig.cache
+C:\Users\Lúcia\source\repos\BootZap\BootZap\bin\Debug\netcoreapp3.1\RestSharp.dll
+C:\Users\Lúcia\source\repos\BootZap\BootZap\obj\Debug\netcoreapp3.1\BootZap.csproj.CopyComplete

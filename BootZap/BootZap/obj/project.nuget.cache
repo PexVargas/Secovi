@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "WzHCf2X8pvmc4h2K+tBAefjkquO949mVADROb+esgXOPxMYK7GSaq1nxNtLrfAyBKkCMYVlxj4oBXhobOws4AA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Lúcia\\source\\repos\\BootZap\\BootZap\\BootZap.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Lúcia\\.nuget\\packages\\htmlagilitypack\\1.11.30\\htmlagilitypack.1.11.30.nupkg.sha512",
+    "C:\\Users\\Lúcia\\.nuget\\packages\\restsharp\\106.11.7\\restsharp.106.11.7.nupkg.sha512"
+  ],
+  "logs": []
+}
