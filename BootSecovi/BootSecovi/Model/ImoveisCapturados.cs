@@ -9,7 +9,7 @@ namespace BootSecovi.Model
 {
     public partial class ImoveisCapturados
     {
-        public int CodImovelCapturado { get; set; }
+        public int CodImovelcapturado { get; set; }
         public string Tipo { get; set; }
         public string Cidade { get; set; }
         public string Bairro { get; set; }
@@ -33,5 +33,8 @@ namespace BootSecovi.Model
         public string Cep { get; set; }
         public string Rua { get; set; }
         public string Banheiros { get; set; }
+        public string Anunciante { get; set; }
+        public string Finalidade { get; set; }
+        public string Localidade { get; set; }
     }
 }

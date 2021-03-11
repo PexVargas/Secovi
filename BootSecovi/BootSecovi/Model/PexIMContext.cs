@@ -26,7 +26,7 @@ namespace BootSecovi.Model
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySQL("Data Source=database-1.czclmi3p5njz.us-east-2.rds.amazonaws.com;Initial Catalog=PexIM;User ID=admin;Password=Pietro2011#");
+                optionsBuilder.UseMySQL("Data Source=database-1.czclmi3p5njz.us-east-2.rds.amazonaws.com,3306;Initial Catalog=PexIM;User ID=admin;Password=Pietro2011#");
             }
         }
 
@@ -34,8 +34,12 @@ namespace BootSecovi.Model
         {
             modelBuilder.Entity<ImoveisCapturados>(entity =>
             {
-                entity.HasKey(e => e.CodImovelCapturado)
+                entity.HasKey(e => e.CodImovelcapturado)
                     .HasName("PRIMARY");
+
+                entity.Property(e => e.CodImovelcapturado).HasColumnName("codImovelcapturado");
+
+                entity.Property(e => e.Anunciante).HasMaxLength(400);
 
                 entity.Property(e => e.AreaPrivativa).HasMaxLength(45);
 
@@ -55,11 +59,15 @@ namespace BootSecovi.Model
 
                 entity.Property(e => e.Descricao).HasMaxLength(4000);
 
+                entity.Property(e => e.Finalidade).HasMaxLength(45);
+
                 entity.Property(e => e.Garagens).HasMaxLength(45);
 
                 entity.Property(e => e.Imagens).HasMaxLength(3000);
 
                 entity.Property(e => e.Iptu).HasMaxLength(45);
+
+                entity.Property(e => e.Localidade).HasMaxLength(1000);
 
                 entity.Property(e => e.Quartos).HasMaxLength(45);
 

@@ -1878,11 +1878,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Lúcia\\Documents\\Pessoal\\Trampo\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+      "projectUniqueName": "C:\\Users\\Lúcia\\git\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
       "projectName": "BootSecovi",
-      "projectPath": "C:\\Users\\Lúcia\\Documents\\Pessoal\\Trampo\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+      "projectPath": "C:\\Users\\Lúcia\\git\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
       "packagesPath": "C:\\Users\\Lúcia\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Lúcia\\Documents\\Pessoal\\Trampo\\BootSecovi\\BootSecovi\\obj\\",
+      "outputPath": "C:\\Users\\Lúcia\\git\\Secovi\\BootSecovi\\BootSecovi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Lúcia\\AppData\\Roaming\\NuGet\\NuGet.Config",

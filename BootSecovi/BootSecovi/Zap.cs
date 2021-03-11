@@ -126,6 +126,8 @@ namespace BootSecovi
                     var imovel = item["listing"];
                     var medias = item["medias"];
                     var link = item["link"];
+                    var account = item["account"];
+                    imovelCapturado.Anunciante = Convert.ToString(account["name"]);
 
 
 
@@ -154,6 +156,7 @@ namespace BootSecovi
 
                     imovelCapturado.Quartos = Convert.ToString(imovel["bedrooms"]).Replace("[", "").Replace("]", "");
                     imovelCapturado.Banheiros = Convert.ToString(imovel["bathrooms"]).Replace("[", "").Replace("]", "");
+                    imovelCapturado.Finalidade = Convert.ToString(imovel["usageTypes"]).Replace("[", "").Replace("]", "");
 
                     imovelCapturado.Garagens = Convert.ToString(imovel["parkingSpaces"]).Replace("[", "").Replace("]", "");
                     imovelCapturado.AreaTotal = Convert.ToString(imovel["totalAreas"]).Replace("[", "").Replace("]", "").Replace("\"", "");
@@ -166,6 +169,7 @@ namespace BootSecovi
                     imovelCapturado.Bairro = Convert.ToString(address["neighborhood"]);
                     imovelCapturado.Cep = Convert.ToString(address["zipCode"]);
                     imovelCapturado.Rua = Convert.ToString(address["street"]);
+                    imovelCapturado.Localidade = Convert.ToString(address["zone"]);
 
 
                     var pricingInfos = imovel["pricingInfos"];

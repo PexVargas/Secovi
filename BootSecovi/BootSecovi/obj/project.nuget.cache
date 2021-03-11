@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "KuzRoUQo8h82tBdJuGIJhTQbJ1kSR4Y0axwLpP4RgMS0+k/n98gJrn4Gx50Y+gt8hxkQTTE4wRqR2/YotSojcw==",
+  "dgSpecHash": "9AZaseStYnBVwTHPhsF3PocficKoZZ3CRY+NvNaHkqr/e64n6A6l9ZeEACEt9JBImK23M8iETmAFi0RAyVMDFQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Lúcia\\Documents\\Pessoal\\Trampo\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+  "projectFilePath": "C:\\Users\\Lúcia\\git\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Lúcia\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",
     "C:\\Users\\Lúcia\\.nuget\\packages\\google.protobuf\\3.11.4\\google.protobuf.3.11.4.nupkg.sha512",
