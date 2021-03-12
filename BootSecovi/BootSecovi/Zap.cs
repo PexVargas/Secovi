@@ -14,7 +14,7 @@ namespace BootSecovi
         public void Coletar(string siglaEstado,string estado, int tipoImovel)
         {
 
-            var tipos = "VILLAGE_HOUSE".Split(',');
+            var tipos = "HOME".Split(',');
 
             foreach (var tipo in tipos)
             {
@@ -24,30 +24,44 @@ namespace BootSecovi
 
                 var total = GetTotal(siglaEstado, estado, tipoImovel, "", "", tipo);
 
-                if (total < 5000)
+                var paginas = total / 18;
+                paginas = paginas + 20;
+
+                for (int i = 0; i < paginas; i++)
                 {
-                    var paginas = total / 18;
-                    paginas = paginas + 20;
+                    //Console.WriteLine(string.Format("Faixa de {0} a {1}", min, max));
+                    //ColetarFaixa(siglaEstado, estado, tipoImovel, min.ToString(), max.ToString(), "HOME", from.ToString(), i.ToString());
+                    ColetarFaixa(siglaEstado, estado, tipoImovel, "", "", tipo, from.ToString(), i.ToString());
 
-                    for (int i = 0; i < paginas; i++)
-                    {
-                        //Console.WriteLine(string.Format("Faixa de {0} a {1}", min, max));
-                        //ColetarFaixa(siglaEstado, estado, tipoImovel, min.ToString(), max.ToString(), "HOME", from.ToString(), i.ToString());
-                        ColetarFaixa(siglaEstado, estado, tipoImovel, "", "", tipo, from.ToString(), i.ToString());
-
-                        from += 18;
-                        //min = (max + 1);
-                        //max += 100;
-                    }
+                    from += 18;
+                    //min = (max + 1);
+                    //max += 100;
                 }
-                else
-                {
+
+                //if (total < 5000)
+                //{
+                //    var paginas = total / 18;
+                //    paginas = paginas + 20;
+
+                //    for (int i = 0; i < paginas; i++)
+                //    {
+                //        //Console.WriteLine(string.Format("Faixa de {0} a {1}", min, max));
+                //        //ColetarFaixa(siglaEstado, estado, tipoImovel, min.ToString(), max.ToString(), "HOME", from.ToString(), i.ToString());
+                //        ColetarFaixa(siglaEstado, estado, tipoImovel, "", "", tipo, from.ToString(), i.ToString());
+
+                //        from += 18;
+                //        //min = (max + 1);
+                //        //max += 100;
+                //    }
+                //}
+                //else
+                //{
 
 
-                }
+                //}
             }
 
-    
+
         }
 
         public int GetTotal(string siglaEstado,string estado, int tipoImovel, string valorMin,  string valorMax, string tipo)
@@ -155,6 +169,7 @@ namespace BootSecovi
                     imovelCapturado.Descricao = descricao;
 
                     imovelCapturado.Quartos = Convert.ToString(imovel["bedrooms"]).Replace("[", "").Replace("]", "");
+                    imovelCapturado.Suites = Convert.ToString(imovel["suites"]).Replace("[", "").Replace("]", "");
                     imovelCapturado.Banheiros = Convert.ToString(imovel["bathrooms"]).Replace("[", "").Replace("]", "");
                     imovelCapturado.Finalidade = Convert.ToString(imovel["usageTypes"]).Replace("[", "").Replace("]", "");
 
