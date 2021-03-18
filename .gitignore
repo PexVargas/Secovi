@@ -1,4 +1,3 @@
-
 ###################
 # compiled source #
 ###################
@@ -59,18 +58,5 @@ TestResults/
 ehthumbs.db
 Icon?
 Thumbs.db
-[Bb]in
-[Oo]bj
-[Tt]est[Rr]esults
-*.suo
-*.user
-*.[Cc]ache
-*[Rr]esharper*
-packages
-NuGet.exe
-_[Ss]cripts
-*.exe
-*.dll
-*.nupkg
-*.ncrunchsolution
-*.dot[Cc]over
+PortalPexIM/.vs/PortalPexIM/v16/.suo
+PortalPexIM/.vs/PortalPexIM/v16/.suo
