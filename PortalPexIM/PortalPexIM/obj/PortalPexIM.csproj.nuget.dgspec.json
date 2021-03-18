@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\source\\repos\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj": {}
+    "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\source\\repos\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj": {
+    "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\source\\repos\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
         "projectName": "PortalPexIM",
-        "projectPath": "C:\\Users\\Admin\\source\\repos\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
+        "projectPath": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\source\\repos\\PortalPexIM\\PortalPexIM\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\PortalPexIM\\PortalPexIM\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -37,6 +37,26 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.13, )"
+            },
+            "MySql.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.10, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[3.2.4, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

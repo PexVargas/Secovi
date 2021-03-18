@@ -1,0 +1,81 @@
+﻿  @model InterCementWeb.Models.Usuario
+
+@{
+    ViewData["Title"] = "LoginPage";
+    Layout = null;
+}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        .login-form {
+            width: 340px;
+            margin: 50px auto;
+        }
+
+            .login-form form {
+                margin-bottom: 15px;
+                background: #ffffff;
+                box-shadow: 2px 2px 2px 2px rgba(0.3, 0.3, 0.3, 0.3);
+                padding: 30px;
+            }
+
+            .login-form h2 {
+                margin: 0 0 15px;
+            }
+
+        .form-control, .btn {
+            min-height: 38px;
+            border-radius: 2px;
+        }
+
+        .btn {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         .wrap-input100.rs2{border-top-right-radius:0}}
+
+    </style>
+</head>
+
+<div class="login-form">
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+    <div class="form-group" style="text-align:center">
+        @*<img src="~/Imagens/logo.png" />*@
+        <img src="~/assets/img/secovi_logo.jpg" style="height:59px;" />
+
+    </div>
+        @*<h2 class="text-center">Login</h2>*@
+
+        <div class="form-group">
+            <input type="text" class="form-control" name="Login" placeholder="Digite seu login..." required />
+            @Html.ValidationMessageFor(model => model.Login)
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="Senha" placeholder="Digite sua senha..." required />
+            @Html.ValidationMessageFor(model => model.Senha)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </div>
+
+        @if (ViewBag.Erro != null)
+        {
+            <h5 style="color:orangered">
+                @ViewBag.Erro
+            </h5>
+        }
+    }
+
+</div>
+
+
