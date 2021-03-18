@@ -1,34 +1,200 @@
-﻿@{
+﻿    @{
     ViewData["Title"] = "Home Page";
 }
+
+<style>
+
+
+    .radio{
+        padding:35px;
+    }
+
+    .highcharts-figure, .highcharts-data-table table {
+        min-width: 310px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    #container {
+        height: 400px;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #EBEBEB;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    .highcharts-figure, .highcharts-data-table table {
+        min-width: 310px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    #container {
+        height: 400px;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #EBEBEB;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+</style>
+
+
+<div class="row ">
+
+    <div class="form-group bmd-form-group is-filled">
+        <label class="label-control bmd-label-static">Datetime Picker</label>
+        <input type="text" class="form-control datetimepicker" value="21/06/2018">
+    </div>
+
+
+    <div class="col-md-6 quadro">
+        <h3 id="p1">Quantidade de ofertas</h3>
+        <br />
+    </div>
+
+    <div class="col-md-3">
+
+
+    </div>
+
+    <div class="col-md-3 c">
+        @*<button type="button" class="btn btn-primary">Venda</button>
+            <button type="button" class="btn btn-light">Locação</button>*@
+        <div class="togglebutton radio">
+            <label>
+                <span style="font-weight:bold"></span>Venda
+                <input type="checkbox" id="cmbAbsoluto">
+                <span class="toggle"></span>Locação
+            </label>
+        </div>
+        <br />
+
+    </div>
+
+
+
+</div>
+
+
+
+<div class="row a">
+    @*<div class="col-md-3">
+        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Cidade</label>
+    </div>
+    <div class="col-md-3">
+        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Bairro</label>
+    </div>
+    <div class="col-md-3">
+        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Tipo</label>
+    </div>
+    <div class="col-md-3">
+
+    </div>*@
+</div>
+
+
 
 
 <div class="row">
     <div class="col-md-12">
         <div class="card ">
-            <div class="card-header card-header-danger card-header-icon">
+            <div class="card-header card-header-info card-header-icon">
                 <div class="card-icon">
                     <i class="material-icons">place</i>
                 </div>
-                <h4 class="card-title">Indicador Nacional</h4>
+                <h4 class="card-title">Indicador nacional</h4>
             </div>
 
             <div class="card-body ">
                 <div class="row">
 
+                    <div class="col-md-12 ml-auto mr-auto" id="boxGraficos">
+                        <script src="https://code.highcharts.com/highcharts.js"></script>
+                        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+                        <script src="https://code.highcharts.com/modules/export-data.js"></script>
+                        <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+                        <figure class="highcharts-figure">
+                            <div id="container"></div>
+                            <p class="highcharts-description">
+
+                            </p>
+                        </figure>
+
+                    </div>
+
+
                     <div class="col-md-4 ml-auto mr-auto" style="text-align:center">
-                  
+
 
                     </div>
                     <div class="col-md-4 ml-auto mr-auto" style="text-align:center">
                         <div class="container">
-                     
+
 
                         </div>
                     </div>
                     <div class="col-md-4 ml-auto mr-auto" style="text-align:center">
                         <div class="container">
-                          
+
 
                         </div>
                     </div>
@@ -39,11 +205,537 @@
 
 
 
-        </div>
+    </div>
 </div>
 
-<script>
-    $(document).ready(function () {
 
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header card-header-info card-header-icon">
+                @*<div class="card-icon">
+                    <i class="material-icons">place</i>
+                </div>*@
+                @*<h4 class="card-title">Indicador nacional</h4>*@
+            </div>
+
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-md-3 b">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Selecione a Cidade...</label>
+                            <select multiple class="form-control selectpicker" data-style="btn btn-link" title="" id="cmbCidade">
+                                @foreach (var item in Model.Cidades)
+                                {
+
+                                    <option value="@item">@item</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Selecione o Bairro...</label>
+                            <select multiple class="form-control selectpicker" data-style="btn btn-link" title="" id="cmbBairro">
+                                @foreach (var item in Model.Bairro)
+                                {
+
+                                    <option value="@item">@item</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Selecione o Tipo...</label>
+                            <select multiple class="form-control selectpicker" data-style="btn btn-link" title="" id="cmbTipo">
+                                @foreach (var item in Model.Tipo)
+                                {
+
+                                    <option value="@item">@item</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        @*<input type="text" class="form-control txtFormulario" placeholder="Mês referência" id="txtReferencia">*@
+                        <button type="button" onclick='limpar()' class="btn btn-light f" style="margin-top: 30px;">Limpar</button>
+                        <button type="button" onclick='pesquisar()' class="btn btn-success" style="margin-top: 30px;">Pesquisar</button>
+
+                        <div class="col c">
+                            @*<button type="button" onclick='limpar()' class="btn btn-light f">Limpar</button>
+                <button type="button" onclick='pesquisar()' class="btn btn-success">Pesquisar</button>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header card-chart card-header-info">
+                <div class="ct-chart" id="dailySalesChart"></div>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Quantidade de ofertas</h4>
+                <p class="card-category"><span class="text-success"><i class="fa fa-long-arrow-up"></i> 55%  </span> increase in today sales.</p>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">access_time</i> updated 4 minutes ago
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header card-chart card-header-info">
+                <div class="ct-chart" id="completedTasksChart"></div>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Metragem média dos imóveis</h4>
+                <p class="card-category">Last Campaign Performance</p>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">access_time</i> updated 2 minutes ago
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header card-chart card-header-info">
+
+            </div>
+            <div class="card-body">
+                <script src="https://code.highcharts.com/highcharts.js"></script>
+                <script src="https://code.highcharts.com/modules/exporting.js"></script>
+                <script src="https://code.highcharts.com/modules/export-data.js"></script>
+                <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+                <figure class="highcharts-figure">
+                    <div id="teste"></div>
+                    <p class="highcharts-description">
+                      
+                    </p>
+                </figure>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header card-chart card-header-info">
+     
+            </div>
+            <div class="card-body">
+                <script src="https://code.highcharts.com/highcharts.js"></script>
+                <script src="https://code.highcharts.com/modules/exporting.js"></script>
+                <script src="https://code.highcharts.com/modules/export-data.js"></script>
+                <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+                <figure class="highcharts-figure">
+                    <div id="teste 2"></div>
+                    <p class="highcharts-description">
+                      
+                    </p>
+                </figure>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    $('.datetimepicker').datetimepicker({
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-chevron-up",
+            down: "fa fa-chevron-down",
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-screenshot',
+            clear: 'fa fa-trash',
+            close: 'fa fa-remove'
+        }
+    });n  
+
+    $(document).ready(function () {
+        console.log("ready!");
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/Home/Evolutivo",
+            //data: JSON.stringify({ Ano: Ano, Regiao: Regiao, Estado: Estado, Empresa: Player, Planta: Planta, Indicador: $this.val(), Dimensao: dimensao }),
+            dataType: "json",
+            success: function (dadosGrafico) {
+                debugger;
+                criarGrafico(dadosGrafico);
+            },
+            error: function (err) {
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/Home/Cidades",
+            //data: JSON.stringify({ Ano: Ano, Regiao: Regiao, Estado: Estado, Empresa: Player, Planta: Planta, Indicador: $this.val(), Dimensao: dimensao }),
+            dataType: "json",
+            success: function (dadosGrafico) {
+                debugger;
+                criarGraficoCidade(dadosGrafico);
+            },
+            error: function (err) {
+            }
+        });
+
+        //$.ajax({
+        //    type: "POST",
+        //    contentType: "application/json; charset=utf-8",
+        //    url: "/Home/Tipo",
+        //    //data: JSON.stringify({ Ano: Ano, Regiao: Regiao, Estado: Estado, Empresa: Player, Planta: Planta, Indicador: $this.val(), Dimensao: dimensao }),
+        //    dataType: "json",
+        //    success: function (dadosGrafico) {
+        //        debugger;
+        //        criarGrafico(dadosGrafico);
+        //    },
+        //    error: function (err) {
+        //    }
+        //});
     });
+
+
+    function search(nameKey, myArray) {
+        for (var i = 0; i < myArray.length; i++) {
+            if (myArray[i].name === nameKey) {
+                return myArray[i];
+            }
+        }
+    }
+
+
+    function criarGrafico(dadosGrafico)
+    {
+        var dadosProcessados = [];
+
+        $.each(dadosGrafico, function (i, obj) {
+            debugger
+            var agregador = { name: obj.tipo, data: [] }
+            agregador.data.push(obj.valor);
+
+            var resultObject = search(obj.tipo, dadosProcessados);
+
+            if (!resultObject) {
+                dadosProcessados.push(agregador)
+            }
+            else {
+                resultObject.data.push(obj.valor)
+            }
+
+        })
+
+        Highcharts.chart('container', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Evolutivo de ofertas'
+            },
+            subtitle: {
+                text: ' '
+            },
+            xAxis: {
+                categories: [
+                   
+                    'Apr',
+                 
+                ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Rainfall (mm)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: dadosProcessados,
+            //series: [{
+            //    name: 'Apto. 1 dorm',
+            //    data: [49.9, 71.5, 106.4, 129.2]
+
+            //}]
+        });
+    }
+
+
+
+
+    function criarGraficoCidade(dadosGrafico)
+    {
+
+        var dadosProcessados = [];
+
+        $.each(dadosGrafico, function (i, obj) {
+            debugger
+            var agregador = { name: obj.cidade, data: [] }
+            agregador.data.push(obj.valor);
+
+            var resultObject = search(obj.cidade, dadosProcessados);
+
+            if (!resultObject) {
+                dadosProcessados.push(agregador)
+            }
+            else {
+                resultObject.data.push(obj.valor)
+            }
+
+        })
+
+        Highcharts.chart('teste', {
+            chart: {
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Oferta por cidades'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: [{
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                crosshair: true
+            }],
+            yAxis: [{ // Primary yAxis
+                labels: {
+                    format: '{value}°C',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                title: {
+                    text: 'Temperature',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                }
+            }, { // Secondary yAxis
+                title: {
+                    text: 'Rainfall',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                labels: {
+                    format: '{value} mm',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                opposite: true
+            }],
+            tooltip: {
+                shared: true
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                x: 120,
+                verticalAlign: 'top',
+                y: 100,
+                floating: true,
+                backgroundColor:
+                    Highcharts.defaultOptions.legend.backgroundColor || // theme
+                    'rgba(255,255,255,0.25)'
+            },
+            series: [{
+                name: 'Rainfall',
+                type: 'column',
+                yAxis: 1,
+                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+                tooltip: {
+                    valueSuffix: ' mm'
+                }
+
+            },
+                [
+                    [1, 12],
+                    [2, 5],
+                    [3, 18],
+                    [4, 13],
+                    [5, 7],
+                    [6, 4],
+                    [7, 9],
+                    [8, 10],
+                    [9, 15],
+                    [10, 22]
+                ]
+                //{
+                //name: 'Temperature',
+                //type: 'spline',
+                //data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+                //tooltip: {
+                //    valueSuffix: '°C'
+                //}
+                //}
+            ]
+        });
+    }
+
+    function criarGraficoBairro() {
+
+        var dadosProcessados = [];
+
+        $.each(dadosGrafico, function (i, obj) {
+            debugger
+            var agregador = { name: obj.tipo, data: [] }
+            agregador.data.push(obj.valor);
+
+            var resultObject = search(obj.tipo, dadosProcessados);
+
+            if (!resultObject) {
+                dadosProcessados.push(agregador)
+            }
+            else {
+                resultObject.data.push(obj.valor)
+            }
+
+        })
+
+
+
+        Highcharts.chart('teste', {
+            chart: {
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Oferta por cidades'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: [{
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                crosshair: true
+            }],
+            yAxis: [{ // Primary yAxis
+                labels: {
+                    format: '{value}°C',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                title: {
+                    text: 'Temperature',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                }
+            }, { // Secondary yAxis
+                title: {
+                    text: 'Rainfall',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                labels: {
+                    format: '{value} mm',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                opposite: true
+            }],
+            tooltip: {
+                shared: true
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                x: 120,
+                verticalAlign: 'top',
+                y: 100,
+                floating: true,
+                backgroundColor:
+                    Highcharts.defaultOptions.legend.backgroundColor || // theme
+                    'rgba(255,255,255,0.25)'
+            },
+            series: [{
+                name: 'Rainfall',
+                type: 'column',
+                yAxis: 1,
+                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+                tooltip: {
+                    valueSuffix: ' mm'
+                }
+
+            }, {
+                name: 'Temperature',
+                type: 'spline',
+                data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+                tooltip: {
+                    valueSuffix: '°C'
+                }
+            }]
+        });
+    }
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
 </script>

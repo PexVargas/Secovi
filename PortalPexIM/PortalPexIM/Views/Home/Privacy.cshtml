@@ -3,4 +3,41 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="file-loading">
+    <input id="input-pa" name="input-pa []" type="arquivo" múltiplo>
+</div>
+<script>
+$ ( "# input-pa" ). fileinput ({
+    uploadUrl : "/ file-upload-batch / 1" ,
+    uploadAsync : false ,
+    minFileCount : 2 ,
+    maxFileCount : 5 ,
+    overwriteInitial : false ,
+    initialPreview : [
+        // DADOS DE IMAGEM
+       'https://picsum.photos/id/700/1920/1080' ,
+        // MARCAÇÃO DE IMAGEM EM BRUTO
+        '<img src = "https://picsum.photos/id/701/1920/1080" class = "kv-preview-data file-preview-image">' ,
+        // PDF DATA
+        'https://kartik-v.github.io/bootstrap-fileinput-samples/samples/pdf-sample.pdf' ,
+        // DADOS DE VÍDEO
+        "https://kartik-v.github.io/bootstrap-fileinput-samples/samples/small.mp4"
+    ],
+    initialPreviewAsData : true , // padroniza a marcação
+    initialPreviewFileType : 'imagem' , // imagem é o padrão e pode ser substituído na configuração abaixo
+    initialPreviewConfig : [
+        { caption : "Business-1.jpg" , size : 762980 , url : "/ site / file-delete" , chave : 8 },
+        { previewAsData : false , size : 823782 , caption : "Business-2.jpg" , url : "/ site / file-delete" , chave : 9 },
+        { type : "pdf" , size : 8000 , caption : "PDF-Sample.pdf" , url : "/ file-upload-batch / 2" , chave : 10 },
+        { type : "video" , size : 375000 , filetype : "video / mp4" , legenda : "KrajeeSample.mp4" , url : "/ file-upload-batch / 2" , chave : 11 }
+    ],
+    uploadExtraData : {
+        img_key : "1000" ,
+        img_keywords : "feliz, natureza"
+    }
+}). on ( 'filesorted' , function ( e , params ) {
+    console . log ( 'Arquivo classificado params' , params );
+}). on ( 'fileuploaded' , função ( e , params ) {
+    console . log ( 'Arquivo carregado params' , params );
+});
+</script>
