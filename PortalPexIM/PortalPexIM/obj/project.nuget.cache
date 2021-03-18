@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "LFa0ltM/5MBJanx3MLYHZM89shk/av9KrsZ7Meb0AYmTtQbFpJlof/TxccsP6fbNnPSMNppLoAJ5ot4eY6Bw7Q==",
+  "dgSpecHash": "ngKYe2P8jM8eyx3walOdSPgBHEnKshOhK0nnYDBzg2F3yAChZtiF0ObKd1QR8p+1Srp4ci5oFUo4AqMDBvwkiw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Admin\\source\\repos\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
+  "projectFilePath": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\google.protobuf\\3.11.4\\google.protobuf.3.11.4.nupkg.sha512",
