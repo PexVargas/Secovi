@@ -20,6 +20,7 @@ namespace BootSecovi.Model
         }
 
         public virtual DbSet<ImoveisCapturados> ImoveisCapturados { get; set; }
+        public virtual DbSet<ImoveisClassificados> ImoveisClassificados { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -84,6 +85,60 @@ namespace BootSecovi.Model
                 entity.Property(e => e.Url).HasMaxLength(1000);
 
                 entity.Property(e => e.Valor).HasMaxLength(45);
+            });
+
+            modelBuilder.Entity<ImoveisClassificados>(entity =>
+            {
+                entity.HasKey(e => e.CodImovelclassificado)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.CodImovelclassificado).HasColumnName("codImovelclassificado");
+
+                entity.Property(e => e.Anunciante).HasMaxLength(400);
+
+                entity.Property(e => e.AreaPrivativa).HasMaxLength(45);
+
+                entity.Property(e => e.AreaTotal).HasMaxLength(20);
+
+                entity.Property(e => e.Bairro).HasMaxLength(250);
+
+                entity.Property(e => e.Banheiros).HasMaxLength(45);
+
+                entity.Property(e => e.Cep).HasMaxLength(45);
+
+                entity.Property(e => e.Churrasqueiras).HasMaxLength(45);
+
+                entity.Property(e => e.Cidade).HasMaxLength(250);
+
+                entity.Property(e => e.Condominio).HasMaxLength(45);
+
+                entity.Property(e => e.Descricao).HasMaxLength(4000);
+
+                entity.Property(e => e.Finalidade).HasMaxLength(45);
+
+                entity.Property(e => e.Garagens).HasMaxLength(45);
+
+                entity.Property(e => e.Imagens).HasMaxLength(3000);
+
+                entity.Property(e => e.Iptu).HasMaxLength(45);
+
+                entity.Property(e => e.Localidade).HasMaxLength(1000);
+
+                entity.Property(e => e.Quartos).HasMaxLength(45);
+
+                entity.Property(e => e.Rua).HasMaxLength(2000);
+
+                entity.Property(e => e.Satus).HasMaxLength(45);
+
+                entity.Property(e => e.SiglaEstado).HasMaxLength(4);
+
+                entity.Property(e => e.Suites).HasMaxLength(45);
+
+                entity.Property(e => e.Tipo).HasMaxLength(200);
+
+                entity.Property(e => e.Url).HasMaxLength(1000);
+
+                entity.Property(e => e.Valor).HasColumnType("decimal(18,2)");
             });
 
             OnModelCreatingPartial(modelBuilder);
