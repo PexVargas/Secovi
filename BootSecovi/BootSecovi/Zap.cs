@@ -18,100 +18,101 @@ namespace BootSecovi
 
             List<FiltroZap> lstTiposSubTipos = new List<FiltroZap>();
 
-            //FiltroZap f1 = new FiltroZap
-            //{
-            //    Tipo = "APARTMENT",
-            //    TipoV3 = "KITNET",
-            //    Perfil = "RESIDENTIAL",
-            //    SubTipo = "KITNET"
-            //};
 
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "APARTMENT",
-            //    TipoV3 = "",
-            //    Perfil = "RESIDENTIAL",
-            //    SubTipo = "STUDIO"
-            //};
-
-
-
-
-
-            //FiltroZap f1 = new FiltroZap
-            //{
-            //    Tipo = "HOME",
-            //    TipoV3 = "HOME",
-            //    Perfil = "RESIDENTIAL",
-            //    SubTipo = ""
-            //};
-
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "HOME",
-            //    TipoV3 = "VILLAGE_HOUSE",
-            //    Perfil = "RESIDENTIAL",
-            //    SubTipo = "VILLAGE_HOUSE"
-            //};
-
-
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "HOME",
-            //    TipoV3 = "CONDOMINIUM",
-            //    Perfil = "RESIDENTIAL",
-            //    SubTipo = "CONDOMINIUM"
-            //};
-
-
-
-
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "APARTMENT",
-            //    TipoV3 = "FLAT",
-            //    Perfil = "RESIDENTIAL",
-            //    SubTipo = "FLAT"
-            //};
-
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "APARTMENT",
-            //    TipoV3 = "LOFT",
-            //    Perfil = "RESIDENTIAL",
-            //    SubTipo = "LOFT"
-            //};
-
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "FARM",
-            //    TipoV3 = "FARM",
-            //    Perfil = "RESIDENTIAL",
-            //    SubTipo = ""
-            //};
-
-
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "ALLOTMENT_LAND",
-            //    TipoV3 = "RESIDENTIAL_ALLOTMENT_LAND",
-            //    Perfil = "RESIDENTIAL",
-            //    SubTipo = ""
-            //};
-
-
-
-            //COMERCIAL
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "BUSINESS",
-            //    TipoV3 = "BUSINESS",
-            //    Perfil = "COMMERCIAL",
-            //    SubTipo = ""
-            //};
-
+            FiltroZap f1 = new FiltroZap
+            {
+                Tipo = "APARTMENT",
+                TipoV3 = "KITNET",
+                Perfil = "RESIDENTIAL",
+                SubTipo = "KITNET"
+            };
 
             FiltroZap f2 = new FiltroZap
+            {
+                Tipo = "APARTMENT",
+                TipoV3 = "",
+                Perfil = "RESIDENTIAL",
+                SubTipo = "STUDIO"
+            };
+
+
+
+
+
+            FiltroZap f3 = new FiltroZap
+            {
+                Tipo = "HOME",
+                TipoV3 = "HOME",
+                Perfil = "RESIDENTIAL",
+                SubTipo = ""
+            };
+
+            FiltroZap f4 = new FiltroZap
+            {
+                Tipo = "HOME",
+                TipoV3 = "VILLAGE_HOUSE",
+                Perfil = "RESIDENTIAL",
+                SubTipo = "VILLAGE_HOUSE"
+            };
+
+
+            FiltroZap f5 = new FiltroZap
+            {
+                Tipo = "HOME",
+                TipoV3 = "CONDOMINIUM",
+                Perfil = "RESIDENTIAL",
+                SubTipo = "CONDOMINIUM"
+            };
+
+
+
+
+            FiltroZap f6 = new FiltroZap
+            {
+                Tipo = "APARTMENT",
+                TipoV3 = "FLAT",
+                Perfil = "RESIDENTIAL",
+                SubTipo = "FLAT"
+            };
+
+            FiltroZap f7 = new FiltroZap
+            {
+                Tipo = "APARTMENT",
+                TipoV3 = "LOFT",
+                Perfil = "RESIDENTIAL",
+                SubTipo = "LOFT"
+            };
+
+            FiltroZap f8 = new FiltroZap
+            {
+                Tipo = "FARM",
+                TipoV3 = "FARM",
+                Perfil = "RESIDENTIAL",
+                SubTipo = ""
+            };
+
+
+            FiltroZap f9 = new FiltroZap
+            {
+                Tipo = "ALLOTMENT_LAND",
+                TipoV3 = "RESIDENTIAL_ALLOTMENT_LAND",
+                Perfil = "RESIDENTIAL",
+                SubTipo = ""
+            };
+
+
+
+            // COMERCIAL
+            FiltroZap f10 = new FiltroZap
+            {
+                Tipo = "BUSINESS",
+                TipoV3 = "BUSINESS",
+                Perfil = "COMMERCIAL",
+                SubTipo = ""
+            };
+
+
+            FiltroZap f11 = new FiltroZap
             {
                 Tipo = "OFFICE",
                 TipoV3 = "OFFICE",
@@ -121,82 +122,101 @@ namespace BootSecovi
 
 
 
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "HOME",
-            //    TipoV3 = "COMMERCIAL_PROPERTY",
-            //    Perfil = "COMMERCIAL",
-            //    SubTipo = ""
-            //};
+            FiltroZap f12 = new FiltroZap
+            {
+                Tipo = "HOME",
+                TipoV3 = "COMMERCIAL_PROPERTY",
+                Perfil = "COMMERCIAL",
+                SubTipo = ""
+            };
 
 
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "HOTEL",
-            //    TipoV3 = "HOTEL",
-            //    Perfil = "COMMERCIAL",
-            //    SubTipo = ""
-            //};
+            FiltroZap f13 = new FiltroZap
+            {
+                Tipo = "HOTEL",
+                TipoV3 = "HOTEL",
+                Perfil = "COMMERCIAL",
+                SubTipo = ""
+            };
 
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "OFFICE",
-            //    TipoV3 = "FLOOR",
-            //    Perfil = "COMMERCIAL",
-            //    SubTipo = ""
-            //};
+            FiltroZap f14 = new FiltroZap
+            {
+                Tipo = "OFFICE",
+                TipoV3 = "FLOOR",
+                Perfil = "COMMERCIAL",
+                SubTipo = ""
+            };
 
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "BUILDING",
-            //    TipoV3 = "COMMERCIAL_BUILDING",
-            //    Perfil = "COMMERCIAL",
-            //    SubTipo = ""
-            //};
-
-
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "ALLOTMENT_LAND",
-            //    TipoV3 = "COMMERCIAL_ALLOTMENT_LAND",
-            //    Perfil = "COMMERCIAL",
-            //    SubTipo = ""
-            //};
-
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "SHED_DEPOSIT_WAREHOUSE",
-            //    TipoV3 = "SHED_DEPOSIT_WAREHOUSE",
-            //    Perfil = "COMMERCIAL",
-            //    SubTipo = ""
-            //};
+            FiltroZap f15 = new FiltroZap
+            {
+                Tipo = "BUILDING",
+                TipoV3 = "COMMERCIAL_BUILDING",
+                Perfil = "COMMERCIAL",
+                SubTipo = ""
+            };
 
 
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "PARKING_SPACE",
-            //    TipoV3 = "PARKING_SPACE",
-            //    Perfil = "COMMERCIAL",
-            //    SubTipo = ""
-            //};
+            FiltroZap f16 = new FiltroZap
+            {
+                Tipo = "ALLOTMENT_LAND",
+                TipoV3 = "COMMERCIAL_ALLOTMENT_LAND",
+                Perfil = "COMMERCIAL",
+                SubTipo = ""
+            };
 
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "APARTMENT",
-            //    TipoV3 = "PENTHOUSE",
-            //    Perfil = "RESIDENTIAL",
-            //    SubTipo = "PENTHOUSE"
-            //};
+            FiltroZap f17 = new FiltroZap
+            {
+                Tipo = "SHED_DEPOSIT_WAREHOUSE",
+                TipoV3 = "SHED_DEPOSIT_WAREHOUSE",
+                Perfil = "COMMERCIAL",
+                SubTipo = ""
+            };
 
-            //FiltroZap f2 = new FiltroZap
-            //{
-            //    Tipo = "APARTMENT",
-            //    TipoV3 = "APARTMENT",
-            //    Perfil = "RESIDENTIAL",
-            //    SubTipo = ""
-            //};
 
+            FiltroZap f18 = new FiltroZap
+            {
+                Tipo = "PARKING_SPACE",
+                TipoV3 = "PARKING_SPACE",
+                Perfil = "COMMERCIAL",
+                SubTipo = ""
+            };
+
+            FiltroZap f19 = new FiltroZap
+            {
+                Tipo = "APARTMENT",
+                TipoV3 = "PENTHOUSE",
+                Perfil = "RESIDENTIAL",
+                SubTipo = "PENTHOUSE"
+            };
+
+            FiltroZap f20 = new FiltroZap
+            {
+                Tipo = "APARTMENT",
+                TipoV3 = "APARTMENT",
+                Perfil = "RESIDENTIAL",
+                SubTipo = ""
+            };
+
+            lstTiposSubTipos.Add(f1);
             lstTiposSubTipos.Add(f2);
+            lstTiposSubTipos.Add(f3);
+            lstTiposSubTipos.Add(f4);
+            lstTiposSubTipos.Add(f5);
+            lstTiposSubTipos.Add(f6);
+            lstTiposSubTipos.Add(f7);
+            lstTiposSubTipos.Add(f8);
+            lstTiposSubTipos.Add(f9);
+            lstTiposSubTipos.Add(f10);
+            lstTiposSubTipos.Add(f11);
+            lstTiposSubTipos.Add(f12);
+            lstTiposSubTipos.Add(f13);
+            lstTiposSubTipos.Add(f14);
+            lstTiposSubTipos.Add(f15);
+            lstTiposSubTipos.Add(f16);
+            lstTiposSubTipos.Add(f17);
+            lstTiposSubTipos.Add(f18);
+            lstTiposSubTipos.Add(f19);
+            lstTiposSubTipos.Add(f20);
 
             foreach (var tipo in lstTiposSubTipos)
             {

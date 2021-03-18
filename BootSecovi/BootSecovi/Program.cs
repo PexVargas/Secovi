@@ -7,8 +7,8 @@ namespace BootSecovi
     {
         static void Main(string[] args)
         {
-            Zap zap = new Zap();
-            zap.Coletar("RJ", "Rio de Janeiro", 2);
+            VivaReal vivaReal = new VivaReal();
+            vivaReal.Coletar("RJ", "Rio de Janeiro", 2);
 
 
             Console.WriteLine("Processo finalizado com sucesso!");

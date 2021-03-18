@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj": {}
+    "C:\\Users\\Lúcia\\git\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj": {
+    "C:\\Users\\Lúcia\\git\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+        "projectUniqueName": "C:\\Users\\Lúcia\\git\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
         "projectName": "BootSecovi",
-        "projectPath": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\BootSecovi\\BootSecovi\\obj\\",
+        "projectPath": "C:\\Users\\Lúcia\\git\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+        "packagesPath": "C:\\Users\\Lúcia\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Lúcia\\git\\Secovi\\BootSecovi\\BootSecovi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Lúcia\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -82,7 +82,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
