@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\WINDOWS\\source\\repos\\BootSecovi\\BootSecovi\\BootSecovi.csproj": {}
+    "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\WINDOWS\\source\\repos\\BootSecovi\\BootSecovi\\BootSecovi.csproj": {
+    "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\WINDOWS\\source\\repos\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
         "projectName": "BootSecovi",
-        "projectPath": "C:\\Users\\WINDOWS\\source\\repos\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
-        "packagesPath": "C:\\Users\\WINDOWS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\WINDOWS\\source\\repos\\BootSecovi\\BootSecovi\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\BootSecovi\\BootSecovi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\WINDOWS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
