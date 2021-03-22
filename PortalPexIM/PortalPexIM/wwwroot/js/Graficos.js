@@ -1,4 +1,6 @@
-﻿// Create the chart
+﻿
+// Evolutivo
+
 Highcharts.chart('Evolutivo', {
     chart: {
         type: 'column'
@@ -139,6 +141,8 @@ Highcharts.chart('Evolutivo', {
     }
 });
 
+//Bairros
+
 Highcharts.chart('Bairros', {
     chart: {
         type: 'bar'
@@ -168,6 +172,8 @@ Highcharts.chart('Bairros', {
         data: [5, 3, 4]
     }]
 });
+
+//Cidades
 
 Highcharts.chart('Cidades', {
     chart: {
@@ -199,6 +205,8 @@ Highcharts.chart('Cidades', {
     }]
 });
 
+//Tipo de Imovel
+
 Highcharts.chart('Tipo de Imovel', {
     chart: {
         type: 'bar'
@@ -229,7 +237,113 @@ Highcharts.chart('Tipo de Imovel', {
     }]
 });
 
+//Perfil do imovel
 
+  Highcharts.chart('Perfil do Imovel', {
+    chart: {
+        type: 'variablepie'
+    },
+    title: {
+        text: 'Perfil do Imóvel'
+    },
+    tooltip: {
+        headerFormat: '',
+        pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
+            'Area (square km): <b>{point.y}</b><br/>' +
+            'Population density (people per square km): <b>{point.z}</b><br/>'
+    },
+    series: [{
+        minPointSize: 10,
+        innerSize: '20%',
+        zMin: 0,
+        name: 'Quantidade de ofertas',
+        data: [{
+            name: 'Comercial',
+            y: 505370,
+            z: 92.9
+        }, {
+            name: 'Residencial',
+            y: 551500,
+            z: 118.7
+        }, {
+            name: 'Outros',
+            y: 312685,
+            z: 124.6
+        }]
+    }]
+  });
+
+//Suítes
+
+Highcharts.chart('Suites', {
+    chart: {
+        type: 'variablepie'
+    },
+    title: {
+        text: 'Suítes'
+    },
+    tooltip: {
+        headerFormat: '',
+        pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
+            'Area (square km): <b>{point.y}</b><br/>' +
+            'Population density (people per square km): <b>{point.z}</b><br/>'
+    },
+    series: [{
+        minPointSize: 10,
+        innerSize: '20%',
+        zMin: 0,
+        name: 'Quantidade de ofertas',
+        data: [{
+            name: 'Não possui ',
+            y: 505370,
+            z: 92.9
+        }, {
+            name: 'Possui',
+            y: 551500,
+            z: 118.7
+        }]
+    }]
+});
+
+//Garagens
+
+Highcharts.chart('Garagens', {
+    chart: {
+        type: 'variablepie'
+    },
+    title: {
+        text: 'Garagens'
+    },
+    tooltip: {
+        headerFormat: '',
+        pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
+            'Area (square km): <b>{point.y}</b><br/>' +
+            'Population density (people per square km): <b>{point.z}</b><br/>'
+    },
+    series: [{
+        minPointSize: 10,
+        innerSize: '20%',
+        zMin: 0,
+        name: 'Quantidade de ofertas',
+        data: [{
+            name: '1 Garagem',
+            y: 505370,
+            z: 92.9
+        }, {
+            name: '2 Garagens',
+            y: 551500,
+            z: 118.7
+        }, {
+            name: '>2 Garagens',
+            y: 312685,
+            z: 124.6
+            }, {
+                name: 'NI/NP',
+                y: 312685,
+                z: 124.6
+            }]
+    }]
+});
 
 
 
