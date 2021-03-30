@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace BootSecovi
 {
-
     class VivaReal
     {
         PexIMContext dbx = new PexIMContext();
@@ -36,10 +35,6 @@ namespace BootSecovi
                 SubTipo = "STUDIO"
             };
 
-
-
-
-
             FiltroZap f3 = new FiltroZap
             {
                 Tipo = "HOME",
@@ -56,7 +51,6 @@ namespace BootSecovi
                 SubTipo = "VILLAGE_HOUSE"
             };
 
-
             FiltroZap f5 = new FiltroZap
             {
                 Tipo = "HOME",
@@ -64,9 +58,6 @@ namespace BootSecovi
                 Perfil = "RESIDENTIAL",
                 SubTipo = "CONDOMINIUM"
             };
-
-
-
 
             FiltroZap f6 = new FiltroZap
             {
@@ -112,7 +103,6 @@ namespace BootSecovi
                 SubTipo = ""
             };
 
-
             FiltroZap f11 = new FiltroZap
             {
                 Tipo = "OFFICE",
@@ -121,8 +111,6 @@ namespace BootSecovi
                 SubTipo = ""
             };
 
-
-
             FiltroZap f12 = new FiltroZap
             {
                 Tipo = "HOME",
@@ -130,7 +118,6 @@ namespace BootSecovi
                 Perfil = "COMMERCIAL",
                 SubTipo = ""
             };
-
 
             FiltroZap f13 = new FiltroZap
             {
@@ -156,7 +143,6 @@ namespace BootSecovi
                 SubTipo = ""
             };
 
-
             FiltroZap f16 = new FiltroZap
             {
                 Tipo = "ALLOTMENT_LAND",
@@ -172,7 +158,6 @@ namespace BootSecovi
                 Perfil = "COMMERCIAL",
                 SubTipo = ""
             };
-
 
             FiltroZap f18 = new FiltroZap
             {
@@ -199,25 +184,25 @@ namespace BootSecovi
             };
 
             lstTiposSubTipos.Add(f1);
-            //lstTiposSubTipos.Add(f2);
-            //lstTiposSubTipos.Add(f3);
-            //lstTiposSubTipos.Add(f4);
-            //lstTiposSubTipos.Add(f5);
-            //lstTiposSubTipos.Add(f6);
-            //lstTiposSubTipos.Add(f7);
-            //lstTiposSubTipos.Add(f8);
-            //lstTiposSubTipos.Add(f9);
-            //lstTiposSubTipos.Add(f10);
-            //lstTiposSubTipos.Add(f11);
-            //lstTiposSubTipos.Add(f12);
-            //lstTiposSubTipos.Add(f13);
-            //lstTiposSubTipos.Add(f14);
-            //lstTiposSubTipos.Add(f15);
-            //lstTiposSubTipos.Add(f16);
-            //lstTiposSubTipos.Add(f17);
-            //lstTiposSubTipos.Add(f18);
-            //lstTiposSubTipos.Add(f19);
-            //lstTiposSubTipos.Add(f20);
+            lstTiposSubTipos.Add(f2);
+            lstTiposSubTipos.Add(f3);
+            lstTiposSubTipos.Add(f4);
+            lstTiposSubTipos.Add(f5);
+            lstTiposSubTipos.Add(f6);
+            lstTiposSubTipos.Add(f7);
+            lstTiposSubTipos.Add(f8);
+            lstTiposSubTipos.Add(f9);
+            lstTiposSubTipos.Add(f10);
+            lstTiposSubTipos.Add(f11);
+            lstTiposSubTipos.Add(f12);
+            lstTiposSubTipos.Add(f13);
+            lstTiposSubTipos.Add(f14);
+            lstTiposSubTipos.Add(f15);
+            lstTiposSubTipos.Add(f16);
+            lstTiposSubTipos.Add(f17);
+            lstTiposSubTipos.Add(f18);
+            lstTiposSubTipos.Add(f19);
+            lstTiposSubTipos.Add(f20);
 
             foreach (var tipo in lstTiposSubTipos)
             {
@@ -254,21 +239,39 @@ namespace BootSecovi
                         valorMaximo = "";
                     }
 
-                    var paginas = (totalFaixa / 24) + 1;
+                    var paginas = (totalFaixa / 36) + 1;
 
                     Console.WriteLine(string.Format("Total de paginas {0}", paginas));
 
                     int from = 0;
-                    var options = new ParallelOptions { MaxDegreeOfParallelism = 5 };
+                    var options = new ParallelOptions { MaxDegreeOfParallelism = 3 };
 
 
+                    List<Paginacao> lstPaginacao = new List<Paginacao>();
 
                     for (int i = 0; i < paginas; i++)
                     {
-                        Console.WriteLine(string.Format("Pagina {0}  -  from:{1}", i, from));
-                        ColetarFaixa(siglaEstado, estado, tipoImovel, valorMinimo, valorMaximo, tipo.Tipo, from.ToString(), i.ToString(), tipo.TipoV3, tipo.Perfil, tipo.SubTipo);
-                        from += 24;
+                        Paginacao p = new Paginacao();
+                        p.i = i;
+                        p.from = from;
+                        lstPaginacao.Add(p);
+
+                        from += 36;
                     }
+
+
+                    Parallel.ForEach(lstPaginacao, options, item =>
+                    {
+                        Console.WriteLine(string.Format("Pagina {0}  -  from:{1}", item.i, item.from));
+                        ColetarFaixa(siglaEstado, estado, tipoImovel, valorMinimo, valorMaximo, tipo.Tipo, item.from.ToString(), item.i.ToString(), tipo.TipoV3, tipo.Perfil, tipo.SubTipo);
+                    });
+
+                    //for (int i = 0; i < paginas; i++)
+                    //{
+                    //    Console.WriteLine(string.Format("Pagina {0}  -  from:{1}", i, from));
+                    //    ColetarFaixa(siglaEstado, estado, tipoImovel, valorMinimo, valorMaximo, tipo.Tipo, from.ToString(), i.ToString(), tipo.TipoV3, tipo.Perfil, tipo.SubTipo);
+                    //    from += 36;
+                    //}
 
 
                     Console.WriteLine("");
@@ -295,23 +298,23 @@ namespace BootSecovi
             try
             {
 
-                var url = "https://glue-api.vivareal.com.br/v2/listings?unitSubTypes=" + subTipo + "&unitTypes=" + tipo + "&usageTypes=" + usageTypes + "&unitTypesV3=" + tipov3 + "&priceMax=" + valorMax + "&priceMin=" + valorMin + "&business=" + strTipoImovel + "&categoryPage=RESULT&parentId=null&listingType=USED&size=24&from=0&includeFields=search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount)%2Cexpansion(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cnearby(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cpage%2CfullUriFragments%2Cdevelopments(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2CsuperPremium(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cowners(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))&cityWiseStreet=1&developmentsSize=3&superPremiumSize=3&addressCountry=&addressState=" + estado + "&addressCity=&addressZone=&addressNeighborhood=&addressStreet=&addressAccounts=&addressType=&addressPointLat=&addressPointLon=&__zt=ama%3A";
-
-                // HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://glue-api.vivareal.com.br/v2/listings?business=" + strTipoImovel + "&unitTypes=" + tipo + "&unitTypesV3=" + tipov3+ "&priceMax=" + valorMax + "&priceMin=" + valorMin + "&categoryPage=RESULT&parentId=null&listingType=USED&portal=ZAP&size=18&from=0&includeFields=search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount)%2Cexpansion(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cnearby(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cpage%2CfullUriFragments%2Cdevelopments(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2CsuperPremium(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cowners(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))&cityWiseStreet=1&developmentsSize=3&superPremiumSize=3&addressCountry=&addressState=" + estado + "&__zt=smb%3Ac%2Cama%3Ab");
-
+                //var urlold = "https://glue-api.vivareal.com.br/v2/listings?unitSubTypes=" + subTipo + "&unitTypes=" + tipo + "&usageTypes=" + usageTypes + "&unitTypesV3=" + tipov3 + "&priceMax=" + valorMax + "&priceMin=" + valorMin + "&business=" + strTipoImovel + "&categoryPage=RESULT&parentId=null&listingType=USED&size=24&from=0&includeFields=search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount)%2Cexpansion(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cnearby(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cpage%2CfullUriFragments%2Cdevelopments(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2CsuperPremium(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cowners(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))&cityWiseStreet=1&developmentsSize=3&superPremiumSize=3&addressCountry=&addressState=" + estado + "&addressCity=&addressZone=&addressNeighborhood=&addressStreet=&addressAccounts=&addressType=&addressPointLat=&addressPointLon=&__zt=ama%3A";
+               
+                var url = "https://glue-api.vivareal.com/v2/listings?addressNeighborhood=&addressState="+estado+ "&unitTypes=" + tipo + "&usageTypes=" + usageTypes + "&unitTypesV3=" + tipov3 + "&priceMax=" + valorMax + "&priceMin=" + valorMin +"&addressCountry=&addressStreet=&addressZone=&addressPointLat=-22.710669&addressPointLon=-43.552226&business=" + strTipoImovel + "&facets=amenities&unitSubTypes="+subTipo+"&unitTypesV3=&usageTypes=&listingType=USED&parentId=null&categoryPage=RESULT&includeFields=search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CunitTypes%2CnonActivationReason%2CpropertyType%2CunitSubTypes%2Cid%2Cportal%2CparkingSpaces%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2Cbedrooms%2CpricingInfos%2CshowPrice%2Cstatus%2CadvertiserContact%2CvideoTourLink%2CwhatsappNumber%2Cstamps)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2Cphones)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount)%2Cpage%2CseasonalCampaigns%2CfullUriFragments%2Cnearby(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CunitTypes%2CnonActivationReason%2CpropertyType%2CunitSubTypes%2Cid%2Cportal%2CparkingSpaces%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2Cbedrooms%2CpricingInfos%2CshowPrice%2Cstatus%2CadvertiserContact%2CvideoTourLink%2CwhatsappNumber%2Cstamps)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2Cphones)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cexpansion(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CunitTypes%2CnonActivationReason%2CpropertyType%2CunitSubTypes%2Cid%2Cportal%2CparkingSpaces%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2Cbedrooms%2CpricingInfos%2CshowPrice%2Cstatus%2CadvertiserContact%2CvideoTourLink%2CwhatsappNumber%2Cstamps)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2Cphones)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2Cphones%2Cphones)%2Cowners(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CunitTypes%2CnonActivationReason%2CpropertyType%2CunitSubTypes%2Cid%2Cportal%2CparkingSpaces%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2Cbedrooms%2CpricingInfos%2CshowPrice%2Cstatus%2CadvertiserContact%2CvideoTourLink%2CwhatsappNumber%2Cstamps)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2Cphones)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))&size=36&from=72&q=&developmentsSize=5";
+                
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                // WebProxy myproxy = new WebProxy("83.149.70.159:13012");
+  
                 WebProxy myproxy = new WebProxy("163.172.48.109:15001");
 
                 myproxy.BypassProxyOnLocal = false;
                 request.Proxy = myproxy;
                 request.Timeout = 30000;
-                request.Headers.Add("postman-token", "2e0477cb-9439-97ef-fef9-0dc29dc4ed1f");
+                request.Headers.Add("postman-token", "976ec713-3289-1bea-d10d-230ccb763594");
                 request.Headers.Add("cache-control", "no-cache");
                 request.Headers.Add("x-domain", "www.vivareal.com.br");
                 request.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36");
                 request.Headers.Add("sec-ch-ua-mobile", "?0");
-                request.Headers.Add("accept", "application/json, text/javascript, */*; q=0.01");
+                request.Headers.Add("accept", "application/json, text/plain, */*");
                 request.Headers.Add("sec-ch-ua", "\"Google Chrome\";v=\"89\", \"Chromium\";v=\"89\", \";Not A Brand\";v=\"99\"");
 
                 request.Method = "GET";
@@ -382,23 +385,26 @@ namespace BootSecovi
                     else
                         strTipoImovel = "RENTAL";
 
-                    var url = "https://glue-api.zapimoveis.com.br/v2/listings?unitSubTypes=" + subTipo + "&unitTypes=" + tipo + "&usageTypes=" + usageTypes + "&unitTypesV3=" + tipov3 + "&priceMax=" + valorMax + "&priceMin=" + valorMin + "&business=" + strTipoImovel + "&categoryPage=RESULT&parentId=null&listingType=USED&size=24&from=" + from + "&page=" + pagina + "&includeFields=search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount)%2Cexpansion(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cnearby(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cpage%2CfullUriFragments%2Cdevelopments(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2CsuperPremium(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cowners(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))&cityWiseStreet=1&developmentsSize=3&superPremiumSize=3&addressCountry=&addressState=" + estado + "&addressCity=&addressZone=&addressNeighborhood=&addressStreet=&addressAccounts=&addressType=&addressPointLat=&addressPointLon=&__zt=ama%3A";
+                    var urlOld = "https://glue-api.zapimoveis.com.br/v2/listings?unitSubTypes=" + subTipo + "&unitTypes=" + tipo + "&usageTypes=" + usageTypes + "&unitTypesV3=" + tipov3 + "&priceMax=" + valorMax + "&priceMin=" + valorMin + "&business=" + strTipoImovel + "&categoryPage=RESULT&parentId=null&listingType=USED&size=24&from=" + from + "&page=" + pagina + "&includeFields=search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount)%2Cexpansion(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cnearby(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cpage%2CfullUriFragments%2Cdevelopments(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2CsuperPremium(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cowners(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))&cityWiseStreet=1&developmentsSize=3&superPremiumSize=3&addressCountry=&addressState=" + estado + "&addressCity=&addressZone=&addressNeighborhood=&addressStreet=&addressAccounts=&addressType=&addressPointLat=&addressPointLon=&__zt=ama%3A";
+                    
+                    var url = "https://glue-api.vivareal.com/v2/listings?addressNeighborhood=&addressState=" + estado + "&unitTypes=" + tipo + "&usageTypes=" + usageTypes + "&unitTypesV3=" + tipov3 + "&priceMax=" + valorMax + "&priceMin=" + valorMin + "&addressCountry=&addressStreet=&addressZone=&addressPointLat=-22.710669&addressPointLon=-43.552226&business=" + strTipoImovel + "&facets=amenities&unitSubTypes=" + subTipo + "&unitTypesV3=&usageTypes=&listingType=USED&parentId=null&categoryPage=RESULT&includeFields=search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CunitTypes%2CnonActivationReason%2CpropertyType%2CunitSubTypes%2Cid%2Cportal%2CparkingSpaces%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2Cbedrooms%2CpricingInfos%2CshowPrice%2Cstatus%2CadvertiserContact%2CvideoTourLink%2CwhatsappNumber%2Cstamps)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2Cphones)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount)%2Cpage%2CseasonalCampaigns%2CfullUriFragments%2Cnearby(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CunitTypes%2CnonActivationReason%2CpropertyType%2CunitSubTypes%2Cid%2Cportal%2CparkingSpaces%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2Cbedrooms%2CpricingInfos%2CshowPrice%2Cstatus%2CadvertiserContact%2CvideoTourLink%2CwhatsappNumber%2Cstamps)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2Cphones)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cexpansion(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CunitTypes%2CnonActivationReason%2CpropertyType%2CunitSubTypes%2Cid%2Cportal%2CparkingSpaces%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2Cbedrooms%2CpricingInfos%2CshowPrice%2Cstatus%2CadvertiserContact%2CvideoTourLink%2CwhatsappNumber%2Cstamps)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2Cphones)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2Cphones%2Cphones)%2Cowners(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CunitTypes%2CnonActivationReason%2CpropertyType%2CunitSubTypes%2Cid%2Cportal%2CparkingSpaces%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2Cbedrooms%2CpricingInfos%2CshowPrice%2Cstatus%2CadvertiserContact%2CvideoTourLink%2CwhatsappNumber%2Cstamps)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2Cphones)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))&size=36&from=" + from + "&page=" + pagina + "&q=&developmentsSize=5";
 
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
                     WebProxy myproxy = new WebProxy("163.172.48.109:15001");
 
+    
+
                     myproxy.BypassProxyOnLocal = false;
                     request.Proxy = myproxy;
                     request.Timeout = 30000;
-                    request.Headers.Add("postman-token", "71c850b8-7d01-1ab7-8ef8-8dcda8e27d6f");
+                    request.Headers.Add("postman-token", "976ec713-3289-1bea-d10d-230ccb763594");
                     request.Headers.Add("cache-control", "no-cache");
-                    request.Headers.Add("x-domain", "www.zapimoveis.com.br");
+                    request.Headers.Add("x-domain", "www.vivareal.com.br");
                     request.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36");
                     request.Headers.Add("sec-ch-ua-mobile", "?0");
                     request.Headers.Add("accept", "application/json, text/plain, */*");
                     request.Headers.Add("sec-ch-ua", "\"Google Chrome\";v=\"89\", \"Chromium\";v=\"89\", \";Not A Brand\";v=\"99\"");
-
                     request.Method = "GET";
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
@@ -435,7 +441,7 @@ namespace BootSecovi
                                         imovelCapturado.SiglaEstado = siglaEstado;
                                         imovelCapturado.TipoImovel = tipoImovel;
 
-                                        imovelCapturado.Url = "https://www.zapimoveis.com.br" + Convert.ToString(link["href"]);
+                                        imovelCapturado.Url = "https://www.vivareal.com.br" + Convert.ToString(link["href"]);
                                         var streetNumber = Convert.ToString(link["data"]["streetNumber"]);
 
                                         var urlImg = "";
@@ -452,7 +458,8 @@ namespace BootSecovi
                                         var id = Convert.ToString(imovel["id"]);
 
 
-                                        imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableArea"]);
+                                        imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]).Replace("[", "").Replace("]", "").Replace("\"", "");
+                                        // Convert.ToString(imovel["usableAreas"]);
                                         imovelCapturado.Descricao = descricao;
 
                                         imovelCapturado.Quartos = Convert.ToString(imovel["bedrooms"]).Replace("[", "").Replace("]", "");
@@ -476,7 +483,7 @@ namespace BootSecovi
                                         imovelCapturado.Bairro = Convert.ToString(address["neighborhood"]);
                                         imovelCapturado.Cep = Convert.ToString(address["zipCode"]);
                                         imovelCapturado.Rua = Convert.ToString(address["street"]);
-
+                                        imovelCapturado.Localidade = Convert.ToString(address["zone"]);
 
                                         imovelCapturado.Suites = Convert.ToString(imovel["suites"]).Replace("[", "").Replace("]", "").Replace("\"", "").Trim();
 
@@ -523,7 +530,7 @@ namespace BootSecovi
                                         imovelCapturado.SiglaEstado = siglaEstado;
                                         imovelCapturado.TipoImovel = tipoImovel;
 
-                                        imovelCapturado.Url = "https://www.zapimoveis.com.br" + Convert.ToString(link["href"]);
+                                        imovelCapturado.Url = "https://www.vivareal.com.br" + Convert.ToString(link["href"]);
                                         var streetNumber = Convert.ToString(link["data"]["streetNumber"]);
 
                                         var urlImg = "";
@@ -539,8 +546,8 @@ namespace BootSecovi
                                         var descricao = Convert.ToString(imovel["description"]);
                                         var id = Convert.ToString(imovel["id"]);
 
-
-                                        imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableArea"]);
+                                        imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]).Replace("[", "").Replace("]", "").Replace("\"", "");
+                                        //  imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]);
                                         imovelCapturado.Descricao = descricao;
 
                                         imovelCapturado.Quartos = Convert.ToString(imovel["bedrooms"]).Replace("[", "").Replace("]", "");
@@ -565,7 +572,7 @@ namespace BootSecovi
                                         imovelCapturado.Bairro = Convert.ToString(address["neighborhood"]);
                                         imovelCapturado.Cep = Convert.ToString(address["zipCode"]);
                                         imovelCapturado.Rua = Convert.ToString(address["street"]);
-
+                                        imovelCapturado.Localidade = Convert.ToString(address["zone"]);
 
                                         imovelCapturado.Suites = Convert.ToString(imovel["suites"]).Replace("[", "").Replace("]", "").Replace("\"", "").Trim();
 
@@ -588,6 +595,9 @@ namespace BootSecovi
                                     {
 
                                         Console.WriteLine("Erro");
+                                        Console.WriteLine("Aguardando 5 segundos...");
+                                        Thread.Sleep(5000);
+                                        Console.WriteLine("Recoletando!");
                                         ColetarFaixa(siglaEstado, estado, tipoImovel, valorMin, valorMax, tipo, from, pagina, tipov3, usageTypes, subTipo);
                                     }
                                 }
@@ -612,7 +622,7 @@ namespace BootSecovi
                                     imovelCapturado.SiglaEstado = siglaEstado;
                                     imovelCapturado.TipoImovel = tipoImovel;
 
-                                    imovelCapturado.Url = "https://www.zapimoveis.com.br" + Convert.ToString(link["href"]);
+                                    imovelCapturado.Url = "https://www.vivareal.com.br" + Convert.ToString(link["href"]);
                                     var streetNumber = Convert.ToString(link["data"]["streetNumber"]);
 
                                     var urlImg = "";
@@ -629,7 +639,8 @@ namespace BootSecovi
                                     var id = Convert.ToString(imovel["id"]);
 
 
-                                    imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]);
+                                    // imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]);
+                                    imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]).Replace("[", "").Replace("]", "").Replace("\"", "");
                                     imovelCapturado.Descricao = descricao;
 
                                     imovelCapturado.Quartos = Convert.ToString(imovel["bedrooms"]).Replace("[", "").Replace("]", "");
@@ -686,6 +697,9 @@ namespace BootSecovi
                         catch (Exception ex1)
                         {
                             Console.WriteLine(string.Format("OBS: Faixa não coletada Tipo {0},  Faixa {1} a {2}", tipo, valorMin, valorMax));
+                            Console.WriteLine("Aguardando 5 segundos...");
+                            Thread.Sleep(5000);
+                            Console.WriteLine("Recoletando!");
                             ColetarFaixa(siglaEstado, estado, tipoImovel, valorMin, valorMax, tipo, from, pagina, tipov3, usageTypes, subTipo);
                         }
                     }
@@ -698,7 +712,4 @@ namespace BootSecovi
             }
         }
     }
-
 }
-
-        

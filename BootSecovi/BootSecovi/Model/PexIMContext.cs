@@ -27,6 +27,7 @@ namespace BootSecovi.Model
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+               // optionsBuilder.UseMySQL("Data Source=127.0.0.1,3306;Initial Catalog=pexim;User ID=root;Password=Pietro2011#");
                 optionsBuilder.UseMySQL("Data Source=database-1.czclmi3p5njz.us-east-2.rds.amazonaws.com,3306;Initial Catalog=PexIM;User ID=admin;Password=Pietro2011#");
             }
         }

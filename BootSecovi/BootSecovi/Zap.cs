@@ -258,16 +258,43 @@ namespace BootSecovi
                     Console.WriteLine(string.Format("Total de paginas {0}", paginas));
 
                     int from = 0;
+
                     var options = new ParallelOptions { MaxDegreeOfParallelism = 5 };
 
 
+                
+
+                    List<Paginacao> lstPaginacao = new List<Paginacao>();
 
                     for (int i = 0; i < paginas; i++)
                     {
-                        Console.WriteLine(string.Format("Pagina {0}  -  from:{1}", i, from));
-                        ColetarFaixa(siglaEstado, estado, tipoImovel, valorMinimo, valorMaximo, tipo.Tipo, from.ToString(), i.ToString(), tipo.TipoV3, tipo.Perfil, tipo.SubTipo);
+                        Paginacao p = new Paginacao();
+                        p.i = i;
+                        p.from = from;
+                        lstPaginacao.Add(p);
+
                         from += 24;
                     }
+
+                    Parallel.ForEach(lstPaginacao,options, item =>
+                    {
+                        Console.WriteLine(string.Format("Pagina {0}  -  from:{1}", item.i, item.from));
+                        ColetarFaixa(siglaEstado, estado, tipoImovel, valorMinimo, valorMaximo, tipo.Tipo, item.from.ToString(), item.i.ToString(), tipo.TipoV3, tipo.Perfil, tipo.SubTipo);
+                    });
+
+                    //foreach (var item in lstPaginacao)
+                    //{
+                    //    Console.WriteLine(string.Format("Pagina {0}  -  from:{1}", item.i, item.from));
+                    //    ColetarFaixa(siglaEstado, estado, tipoImovel, valorMinimo, valorMaximo, tipo.Tipo, item.from.ToString(), item.i.ToString(), tipo.TipoV3, tipo.Perfil, tipo.SubTipo);
+                    //}
+
+
+                    //for (int i = 0; i < paginas; i++)
+                    //{
+                    //    Console.WriteLine(string.Format("Pagina {0}  -  from:{1}", i, from));
+                    //    ColetarFaixa(siglaEstado, estado, tipoImovel, valorMinimo, valorMaximo, tipo.Tipo, from.ToString(), i.ToString(), tipo.TipoV3, tipo.Perfil, tipo.SubTipo);
+                    //    from += 24;
+                    //}
 
 
                     Console.WriteLine("");
@@ -299,8 +326,8 @@ namespace BootSecovi
                 // HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://glue-api.zapimoveis.com.br/v2/listings?business=" + strTipoImovel + "&unitTypes=" + tipo + "&unitTypesV3=" + tipov3+ "&priceMax=" + valorMax + "&priceMin=" + valorMin + "&categoryPage=RESULT&parentId=null&listingType=USED&portal=ZAP&size=18&from=0&includeFields=search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount)%2Cexpansion(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cnearby(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cpage%2CfullUriFragments%2Cdevelopments(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2CsuperPremium(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))%2Cowners(search(result(listings(listing(displayAddressType%2Camenities%2CusableAreas%2CconstructionStatus%2ClistingType%2Cdescription%2Ctitle%2CcreatedAt%2Cfloors%2CunitTypes%2CnonActivationReason%2CproviderId%2CpropertyType%2CunitSubTypes%2CunitsOnTheFloor%2ClegacyId%2Cid%2Cportal%2CunitFloor%2CparkingSpaces%2CupdatedAt%2Caddress%2Csuites%2CpublicationType%2CexternalId%2Cbathrooms%2CusageTypes%2CtotalAreas%2CadvertiserId%2CadvertiserContact%2CwhatsappNumber%2Cbedrooms%2CacceptExchange%2CpricingInfos%2CshowPrice%2Cresale%2Cbuildings%2CcapacityLimit%2Cstatus)%2Caccount(id%2Cname%2ClogoUrl%2ClicenseNumber%2CshowAddress%2ClegacyVivarealId%2ClegacyZapId%2Cminisite)%2Cmedias%2CaccountLink%2Clink))%2CtotalCount))&cityWiseStreet=1&developmentsSize=3&superPremiumSize=3&addressCountry=&addressState=" + estado + "&__zt=smb%3Ac%2Cama%3Ab");
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                // WebProxy myproxy = new WebProxy("83.149.70.159:13012");
-                WebProxy myproxy = new WebProxy("163.172.48.109:15001");
+
+                WebProxy myproxy = new WebProxy("163.172.36.181:15001");
 
                 myproxy.BypassProxyOnLocal = false;
                 request.Proxy = myproxy;
@@ -385,7 +412,9 @@ namespace BootSecovi
 
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
-                    WebProxy myproxy = new WebProxy("163.172.48.109:15001");
+                    WebProxy myproxy = new WebProxy("163.172.36.181:15001");
+
+
 
                     myproxy.BypassProxyOnLocal = false;
                     request.Proxy = myproxy;
@@ -445,13 +474,14 @@ namespace BootSecovi
 
                                         urlImg = urlImg.Replace("{action}/{width}x{height}", "fit-in/800x360");
 
-                                        imovelCapturado.Imagens = urlImg;
+                                        imovelCapturado.Imagens = urlImg.Trim();
 
                                         var descricao = Convert.ToString(imovel["description"]);
                                         var id = Convert.ToString(imovel["id"]);
 
 
-                                        imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableArea"]);
+                                        imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]).Replace("[", "").Replace("]", "").Replace("\"", "");
+                                        // Convert.ToString(imovel["usableAreas"]);
                                         imovelCapturado.Descricao = descricao;
 
                                         imovelCapturado.Quartos = Convert.ToString(imovel["bedrooms"]).Replace("[", "").Replace("]", "");
@@ -475,7 +505,7 @@ namespace BootSecovi
                                         imovelCapturado.Bairro = Convert.ToString(address["neighborhood"]);
                                         imovelCapturado.Cep = Convert.ToString(address["zipCode"]);
                                         imovelCapturado.Rua = Convert.ToString(address["street"]);
-
+                                        imovelCapturado.Localidade = Convert.ToString(address["zone"]);
 
                                         imovelCapturado.Suites = Convert.ToString(imovel["suites"]).Replace("[", "").Replace("]", "").Replace("\"", "").Trim();
 
@@ -526,20 +556,22 @@ namespace BootSecovi
                                         var streetNumber = Convert.ToString(link["data"]["streetNumber"]);
 
                                         var urlImg = "";
+
                                         foreach (var media in medias)
                                         {
                                             urlImg += media["url"] + ";";
+
                                         }
 
                                         urlImg = urlImg.Replace("{action}/{width}x{height}", "fit-in/800x360");
 
-                                        imovelCapturado.Imagens = urlImg;
+                                        imovelCapturado.Imagens = urlImg.Trim();
 
                                         var descricao = Convert.ToString(imovel["description"]);
                                         var id = Convert.ToString(imovel["id"]);
 
-
-                                        imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableArea"]);
+                                        imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]).Replace("[", "").Replace("]", "").Replace("\"", "");
+                                        //  imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]);
                                         imovelCapturado.Descricao = descricao;
 
                                         imovelCapturado.Quartos = Convert.ToString(imovel["bedrooms"]).Replace("[", "").Replace("]", "");
@@ -564,7 +596,7 @@ namespace BootSecovi
                                         imovelCapturado.Bairro = Convert.ToString(address["neighborhood"]);
                                         imovelCapturado.Cep = Convert.ToString(address["zipCode"]);
                                         imovelCapturado.Rua = Convert.ToString(address["street"]);
-
+                                        imovelCapturado.Localidade = Convert.ToString(address["zone"]);
 
                                         imovelCapturado.Suites = Convert.ToString(imovel["suites"]).Replace("[", "").Replace("]", "").Replace("\"", "").Trim();
 
@@ -622,13 +654,14 @@ namespace BootSecovi
 
                                     urlImg = urlImg.Replace("{action}/{width}x{height}", "fit-in/800x360");
 
-                                    imovelCapturado.Imagens = urlImg;
+                                    imovelCapturado.Imagens = urlImg.Trim();
 
                                     var descricao = Convert.ToString(imovel["description"]);
                                     var id = Convert.ToString(imovel["id"]);
 
 
-                                    imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]);
+                                    // imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]);
+                                    imovelCapturado.AreaPrivativa = Convert.ToString(imovel["usableAreas"]).Replace("[", "").Replace("]", "").Replace("\"", "");
                                     imovelCapturado.Descricao = descricao;
 
                                     imovelCapturado.Quartos = Convert.ToString(imovel["bedrooms"]).Replace("[", "").Replace("]", "");
@@ -685,6 +718,9 @@ namespace BootSecovi
                         catch (Exception ex1)
                         {
                             Console.WriteLine(string.Format("OBS: Faixa não coletada Tipo {0},  Faixa {1} a {2}", tipo, valorMin, valorMax));
+                            Console.WriteLine("Aguardando 5 segundos...");
+                            Thread.Sleep(5000);
+                            Console.WriteLine("Recoletando!");
                             ColetarFaixa(siglaEstado, estado, tipoImovel, valorMin, valorMax, tipo, from, pagina, tipov3, usageTypes, subTipo);
                         }
                     }
