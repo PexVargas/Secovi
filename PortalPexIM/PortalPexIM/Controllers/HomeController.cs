@@ -27,9 +27,6 @@ namespace PortalPexIM.Controllers
             filtro.Bairro = db.ImoveisClassificados.Select(x => x.Bairro).Distinct().ToList();
             filtro.Tipo = db.ImoveisClassificados.Select(x => x.Tipo).Distinct().ToList();
 
-
-
-
             return View(filtro);
         }
 
@@ -47,7 +44,7 @@ namespace PortalPexIM.Controllers
         [HttpPost]
         public JsonResult Evolutivo() 
         {
-            //var imoveis = db.ImoveisCapturados.ToList();
+       
             var imoveis = (from i in db.ImoveisClassificados
                            where i.Tipo!=null
                            group i by new { i.Tipo } into g
@@ -63,7 +60,7 @@ namespace PortalPexIM.Controllers
         [HttpPost]
         public JsonResult Cidades()
         {
-            //var imoveis = db.ImoveisCapturados.ToList();
+          
             var imoveis = (from i in db.ImoveisClassificados
                           where i.Cidade!=null
                            group i by new { i.Cidade } into g
@@ -79,7 +76,7 @@ namespace PortalPexIM.Controllers
         [HttpPost]
         public JsonResult Bairros()
         {
-            //var imoveis = db.ImoveisCapturados.ToList();
+ 
             var imoveis = (from i in db.ImoveisClassificados
                            group i by new { i.Bairro } into g
                            select new
