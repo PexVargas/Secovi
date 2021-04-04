@@ -18,10 +18,10 @@ namespace ImobiliariasCrawler.Main.Extensions
         }
 
 
-        public static string ReFirst(this HtmlNode htmlNode, string expression)
+        public static string ReFirst(this HtmlNode htmlNode, string expression, RegexOptions regexOptions = RegexOptions.Multiline)
         {
             if (htmlNode is null || htmlNode.InnerText is null) return null;
-            var re = Regex.Match(htmlNode.InnerText, expression, RegexOptions.Multiline);
+            var re = Regex.Match(htmlNode.InnerText, expression, regexOptions);
             if (!re.Success) return null;
             return re.Groups.Values.ToList().Last().Value;
         }
