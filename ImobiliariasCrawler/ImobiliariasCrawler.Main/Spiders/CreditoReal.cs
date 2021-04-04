@@ -40,7 +40,7 @@ namespace ImobiliariasCrawler.Main.Spiders
         public async void ParseResult(Response response)
         {
             var contentString = await response.HttpResponse.Content.ReadAsStringAsync();
-            var formatedContent = contentString.Replace("realties_callback(", "").Replace(");", "");
+            var formatedContent = contentString.Replace("vistasoftrest_realties_callback(", "").Replace("realties_callback(", "").Replace(");", "");
             var desserialize = JsonSerializer.Deserialize<JsonImoveis>(formatedContent);
 
             foreach (var item in desserialize.Items)
@@ -67,7 +67,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Valor = item.FormattedFullPrice,
                 };
                 _context.Imoveiscapturados.Add(imovel.ToImoveiscapturados());
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 Console.WriteLine($"Item inserido: {imovel.Url}");
             }
         }
