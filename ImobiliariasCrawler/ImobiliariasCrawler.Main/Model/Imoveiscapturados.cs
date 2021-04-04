@@ -30,13 +30,13 @@ namespace ImobiliariasCrawler.Main.Model
         }
         protected Imoveiscapturados() { }
 
-        protected int? CodImobiliaria { get; set; }
-        protected DateTime? DataCaptura { get; set; }
-        protected int? Excluido { get; set; }
-        protected int CodImovelcapturado { get; set; }
-        protected string Finalidade { get; set; }
-        protected int? TipoImovel { get; set; }
-        protected string Satus { get; set; }
+        public int? CodImobiliaria { get; private set; }
+        public DateTime? DataCaptura { get; private set; }
+        public int? Excluido { get; private set; }
+        public int CodImovelcapturado { get; private set; }
+        public string Finalidade { get; private set; }
+        public int? TipoImovel { get; private set; }
+        public string Satus { get; private set; }
 
         public string Tipo { get; set; }
         public string Cidade { get; set; }
