@@ -56,8 +56,15 @@ namespace ImobiliariasCrawler.Main.Spiders
 
                 foreach (var div in response.Selector.SelectNodes("//div[@class='property-card']"))
                 {
+                    var newDictArgs = new Dictionary<string, object>()
+                    {
+                        { "Tipo", div.SelectSingleNode(".//p[@class='cod']/small").TextOrNull() },
+                        { "bairro", response.DictArgs["bairro"] },
+                        { "TipoImovel", response.DictArgs["TipoImovel"] },
+                    };
+
                     var url = div.SelectSingleNode(".//a").GetAttributeValue("href", null);
-                    await Request.Get(url, ParseImovel, dictArgs: response.DictArgs);
+                    await Request.Get(url, ParseImovel, dictArgs: newDictArgs);
                 }
             }
         }
@@ -69,13 +76,14 @@ namespace ImobiliariasCrawler.Main.Spiders
             var tipoImovel = int.Parse(response.DictArgs["TipoImovel"].ToString());
 
             var tipoEnum = tipoImovel == 1 ? TipoImovelEnum.Comprar : TipoImovelEnum.Comprar;
-            var imob = new Imoveiscapturados(SpiderEnum.DLegend, tipoEnum)
+            var imob = new ImoveiscapturadosDto(SpiderEnum.DLegend, tipoEnum)
             {
                 Url = response.Url,
                 Bairro = response.DictArgs["bairro"].ToString(),
                 Cidade = "Porto Alegre",
                 SiglaEstado = "RS",
 
+                Tipo = response.DictArgs["Tipo"].ToString(),
                 AreaPrivativa = ul.SelectSingleNode(".//use/@*[contains(.,'#svg-metreage')]/../../..").ReFirst("(.*?) -"),
                 AreaTotal = ul.SelectSingleNode(".//use/@*[contains(.,'#svg-metreage')]/../../..").ReFirst("- (.*)"),
                 Quartos = ul.SelectSingleNode("./li[@class='dormitorio-icon']/div[2]").TextOrNull(),
@@ -86,8 +94,9 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Valor = response.Selector.SelectSingleNode("//p[@class='price-por']/span[@class='value']").TextOrNull(),
                 Rua = response.Selector.SelectSingleNode("//h1[@class='property-title']").TextOrNull(),
                 Descricao = descriptionSelector.TextOrNull(),
+                
             };
-            _context.Imoveiscapturados.Add(imob);
+            _context.Imoveiscapturados.Add(imob.ToImoveiscapturados());
             await _context.SaveChangesAsync();
             Console.WriteLine($"Item inserido: {imob.Url}");
         }

@@ -46,7 +46,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             foreach (var item in desserialize.Items)
             {
                 var tipoEnum = item.CurrentNegotiationTypeTitle == "Venda" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
-                var imovel = new Imoveiscapturados(SpiderEnum.CreditoReal, tipoEnum)
+                var imovel = new ImoveiscapturadosDto(SpiderEnum.CreditoReal, tipoEnum)
                 {
                     Url = $"https://www.creditoreal.com.br/{item.CurrentNegotiationTypeTitle}/{item.ReferenceId}",
                     AreaPrivativa = item.FormattedArea,
@@ -65,9 +65,8 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Iptu = item.FormattedIPTUValue,
                     Suites = item.Suites.ToString(),
                     Valor = item.FormattedFullPrice,
-                    Condominio = item.FormattedCondominiumValue,
                 };
-                _context.Imoveiscapturados.Add(imovel);
+                _context.Imoveiscapturados.Add(imovel.ToImoveiscapturados());
                 await _context.SaveChangesAsync();
                 Console.WriteLine($"Item inserido: {imovel.Url}");
             }
