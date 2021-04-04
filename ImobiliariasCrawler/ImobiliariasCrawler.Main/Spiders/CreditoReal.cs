@@ -10,8 +10,8 @@ namespace ImobiliariasCrawler.Main.Spiders
 {
     public class CreditoReal : SpiderBase
     {
-        public string UrlBaseVenda { get; } = "https://www.creditoreal.com.br/Services/RealEstate/JSONP/List.aspx?mode=realties&currentPage=0&pageSize=28&numberOfImages=1&lancamento=0&tem_foto=1&tipo_negociacao=-2&nt=-2&ordem=0&valor_completo=0&estado={0}&cidade={1}&_1617542582010=";
-        public string UrlBaseAluguel { get; } = "https://www.creditoreal.com.br/Services/RealEstate/JSONP/List.aspx?mode=realties&currentPage=0&pageSize=28&numberOfImages=1&tipo_negociacao=-4&nt=-4&ordem=0&valor_completo=0&estado={0}&cidade={1}&_1617543989530=";
+        public string UrlBaseVenda { get; } = "https://www.creditoreal.com.br/Services/RealEstate/JSONP/List.aspx?mode=realties&currentPage={0}&pageSize=28&numberOfImages=1&lancamento=0&tem_foto=1&tipo_negociacao=-2&nt=-2&ordem=0&valor_completo=0&estado={1}&cidade={2}&_1617542582010=";
+        public string UrlBaseAluguel { get; } = "https://www.creditoreal.com.br/Services/RealEstate/JSONP/List.aspx?mode=realties&currentPage={0}&pageSize=28&numberOfImages=1&tipo_negociacao=-4&nt=-4&ordem=0&valor_completo=0&estado={1}&cidade={2}&_1617543989530=";
         public override async Task StartRequest()
         {
             await Request.Get("https://www.creditoreal.com.br/", callback: Parse);
@@ -28,10 +28,10 @@ namespace ImobiliariasCrawler.Main.Spiders
 
                 var dictCidadeEstado = new Dictionary<string, object> { { "cidade", cidade }, { "estado", estado } };
 
-                var urlAluguel = string.Format(UrlBaseAluguel, estado, cidade);
+                var urlAluguel = string.Format(UrlBaseAluguel, 1, estado, cidade);
                 await Request.Get(urlAluguel, callback: ParseResult, dictArgs: dictCidadeEstado);
 
-                var urlVenda = string.Format(UrlBaseVenda, estado, cidade);
+                var urlVenda = string.Format(UrlBaseVenda, 1, estado, cidade);
                 await Request.Get(urlVenda, callback: ParseResult, dictArgs: dictCidadeEstado);
 
             }
@@ -42,6 +42,12 @@ namespace ImobiliariasCrawler.Main.Spiders
             var contentString = await response.HttpResponse.Content.ReadAsStringAsync();
             var formatedContent = contentString.Replace("vistasoftrest_realties_callback(", "").Replace("realties_callback(", "").Replace(");", "");
             var desserialize = JsonSerializer.Deserialize<JsonImoveis>(formatedContent);
+
+            if (desserialize.CurrentPage < desserialize.NumberOfPages)
+            {
+                var urlNextPage = string.Format(UrlBaseAluguel, desserialize.CurrentPage+1, response.DictArgs["estado"].ToString(), response.DictArgs["cidade"]);
+                await Request.Get(urlNextPage, callback: ParseResult, dictArgs: response.DictArgs);
+            }
 
             foreach (var item in desserialize.Items)
             {
