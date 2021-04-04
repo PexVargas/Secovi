@@ -72,9 +72,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Suites = item.Suites.ToString(),
                     Valor = item.FormattedFullPrice,
                 };
-                _context.Imoveiscapturados.Add(imovel.ToImoveiscapturados());
-                _context.SaveChanges();
-                Console.WriteLine($"Item inserido: {imovel.Url}");
+                Save(imovel);
             }
         }
     }

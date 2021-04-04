@@ -10,7 +10,7 @@ using ImobiliariasCrawler.Main.Model;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
-    public class DLegendSpider : SpiderBase
+    public class DLegend : SpiderBase
     {
         public override async Task StartRequest()
         {
@@ -69,7 +69,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             }
         }
 
-        public async void ParseImovel(Response response)
+        public void ParseImovel(Response response)
         {
             var ul = response.Selector.SelectSingleNode("//ul[@class='property-info-list']");
             var descriptionSelector = response.Selector.SelectSingleNode("//section[@class='property-description wrap']/div/p");
@@ -96,9 +96,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Descricao = descriptionSelector.TextOrNull(),
                 
             };
-            _context.Imoveiscapturados.Add(imob.ToImoveiscapturados());
-            await _context.SaveChangesAsync();
-            Console.WriteLine($"Item inserido: {imob.Url}");
+            Save(imob);
         }
     }
 

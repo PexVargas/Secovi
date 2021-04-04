@@ -16,7 +16,7 @@ namespace ImobiliariasCrawler.Main.Spiders
     {
         public List<Imoveiscapturados> Items { get; set; }
         public RequestService Request { get; set; }
-        protected readonly PexinContext _context;
+        private readonly PexinContext _context;
 
         public SpiderBase()
         {
@@ -32,6 +32,15 @@ namespace ImobiliariasCrawler.Main.Spiders
         public abstract Task StartRequest();
         public abstract void Parse(Response response);
 
+        public void Save(ImoveiscapturadosDto imoveiscapturados)
+        {
+            lock (_context)
+            {
+                _context.Imoveiscapturados.Add(imoveiscapturados.ToImoveiscapturados());
+                _context.SaveChanges();
+                Console.WriteLine($"Item inserido: {imoveiscapturados.Url}");
+            }
+        }
 
         public void Dispose()
         {

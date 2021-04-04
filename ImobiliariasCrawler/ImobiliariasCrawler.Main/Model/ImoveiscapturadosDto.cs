@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ImobiliariasCrawler.Main.Model
 {
-    class ImoveiscapturadosDto
+    public class ImoveiscapturadosDto
     {
         public ImoveiscapturadosDto(SpiderEnum spider, TipoImovelEnum tipoImovel)
         {
