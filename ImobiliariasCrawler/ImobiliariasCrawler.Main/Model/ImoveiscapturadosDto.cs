@@ -17,7 +17,6 @@ namespace ImobiliariasCrawler.Main.Model
         {
             return new Imoveiscapturados(Spider, TipoImovel)
             {
-                Anunciante = Anunciante,
                 Url = Url,
                 Valor = Valor,
                 Tipo = Tipo,
@@ -64,7 +63,6 @@ namespace ImobiliariasCrawler.Main.Model
         public string Cep { get; set; }
         public string Rua { get; set; }
         public string Banheiros { get; set; }
-        public string Anunciante { get; set; }
         public string Localidade { get; set; }
     }
 }

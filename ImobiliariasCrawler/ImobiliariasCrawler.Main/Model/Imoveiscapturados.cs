@@ -11,6 +11,7 @@ namespace ImobiliariasCrawler.Main.Model
     {
         DLegend = 5,
         CreditoReal = 6,
+        Garcia = 7,
     }
 
     public enum TipoImovelEnum
@@ -23,10 +24,13 @@ namespace ImobiliariasCrawler.Main.Model
         public Imoveiscapturados(SpiderEnum spiderEnum, TipoImovelEnum tipoImovel)
         {
             DataCaptura = DateTime.Now;
+
             CodImobiliaria = (int)spiderEnum;
+            Anunciante = spiderEnum.ToString();            
 
             TipoImovel = (int)tipoImovel;
             Finalidade = tipoImovel.ToString();
+
         }
         protected Imoveiscapturados() { }
 
@@ -37,6 +41,7 @@ namespace ImobiliariasCrawler.Main.Model
         public string Finalidade { get; private set; }
         public int? TipoImovel { get; private set; }
         public string Satus { get; private set; }
+        public string Anunciante { get; private set; }
 
         public string Tipo { get; set; }
         public string Cidade { get; set; }
@@ -57,7 +62,6 @@ namespace ImobiliariasCrawler.Main.Model
         public string Cep { get; set; }
         public string Rua { get; set; }
         public string Banheiros { get; set; }
-        public string Anunciante { get; set; }
         public string Localidade { get; set; }
     }
 }
