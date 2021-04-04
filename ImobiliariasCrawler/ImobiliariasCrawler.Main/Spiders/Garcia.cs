@@ -69,9 +69,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             if (imovel.Valor is null)
                 imovel.Valor = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Venda' )]/strong").TextOrNull();
 
-            _context.Imoveiscapturados.Add(imovel.ToImoveiscapturados());
-            _context.SaveChanges();
-            Console.WriteLine($"Item inserido: {imovel.Url}");
+            Save(imovel);
         }
     }
 }
