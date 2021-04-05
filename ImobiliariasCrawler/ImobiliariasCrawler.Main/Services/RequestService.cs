@@ -1,4 +1,4 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
 using ImobiliariasCrawler.Main.Extensions;
 using System;
 using System.Collections.Generic;
@@ -50,9 +50,9 @@ namespace ImobiliariasCrawler.Main.Services
             callback.Invoke(CreateResponse(httpResponse, selector, dictArgs));
         }
 
-        public async Task FormPost(string url, object body, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
+        public async Task FormPost(string url, Callback callback, object objBody=null, Dictionary<string,string> dictBody=null, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
-            var keyValue = body.ToKeyValue();
+            var keyValue = objBody != null ? objBody.ToKeyValue() : dictBody.ToList();
             var formContent = new FormUrlEncodedContent(keyValue);
             MakeHeaders(formContent.Headers, headers);
             var httpResponse = await _httpClient.PostAsync(url, formContent);

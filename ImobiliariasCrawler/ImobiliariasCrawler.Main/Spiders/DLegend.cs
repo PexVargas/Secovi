@@ -26,11 +26,11 @@ namespace ImobiliariasCrawler.Main.Spiders
             {
                 var searchMapLocacao = new SearchMapsFilter(goal: "locacao", neighborhood: bairro);
                 var dictLocacao = new Dictionary<string, object> { { "bairro", bairro }, { "TipoImovel", "2" } };
-                await Request.FormPost("https://www.dlegend.com.br/search/search_maps", searchMapLocacao, ParseGoals, headers, dictArgs: dictLocacao);
+                await Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapLocacao, headers, dictArgs: dictLocacao);
 
                 var searchMapVenda = new SearchMapsFilter(goal: "venda", neighborhood: bairro);
                 var dictVenda = new Dictionary<string, object> { { "bairro", bairro }, { "TipoImovel", "1" } };
-                await Request.FormPost("https://www.dlegend.com.br/search/search_maps", searchMapVenda, ParseGoals, headers, dictArgs: dictVenda);
+                await Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapVenda, headers, dictArgs: dictVenda);
             }
         }
 
@@ -40,7 +40,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             var deserialize = response.Selector.Deserialize<SearchMapResult>();
             var searchListCard = new SearchListCard(deserialize.Imoveis.Select(i => i.Id.ToString()).ToList(), goal: response.DictArgs["TipoImovel"].ToString());
             response.DictArgs.Add("form", searchListCard);
-            await Request.FormPost("https://www.dlegend.com.br/search/searchListCard", searchListCard, ParseResult, headers, dictArgs: response.DictArgs);
+            await Request.FormPost("https://www.dlegend.com.br/search/searchListCard", ParseResult, searchListCard, headers, dictArgs: response.DictArgs);
         }
 
         public async void ParseResult(Response response)
@@ -52,7 +52,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 var headers = new Dictionary<string, string> { { "x-requested-with", "XMLHttpRequest" } };
                 var searchListCard = response.DictArgs["form"] as SearchListCard;
                 searchListCard.NextPage();
-                await Request.FormPost("https://www.dlegend.com.br/search/searchListCard", searchListCard, ParseResult, headers, dictArgs: response.DictArgs);
+                await Request.FormPost("https://www.dlegend.com.br/search/searchListCard", ParseResult, searchListCard, headers, dictArgs: response.DictArgs);
 
                 foreach (var div in response.Selector.SelectNodes("//div[@class='property-card']"))
                 {
