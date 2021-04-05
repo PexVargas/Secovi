@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImobiliariasCrawler.Main.Model
+namespace ImobiliariasCrawler.Main
 {
     public class ImoveiscapturadosDto
     {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace ImobiliariasCrawler.Main.Model
+namespace ImobiliariasCrawler.Main
 {
     public enum SpiderEnum
     {
@@ -13,6 +13,7 @@ namespace ImobiliariasCrawler.Main.Model
         CreditoReal = 6,
         Garcia = 7,
         Guarita = 8,
+        Leindecker = 9
     }
 
     public enum TipoImovelEnum

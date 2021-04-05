@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Linq;
 
-namespace ImobiliariasCrawler.Main.Extensions
+namespace ImobiliariasCrawler.Main
 {
     public static class SelectorExtension
     {
