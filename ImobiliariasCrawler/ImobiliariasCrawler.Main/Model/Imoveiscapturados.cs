@@ -12,6 +12,7 @@ namespace ImobiliariasCrawler.Main.Model
         DLegend = 5,
         CreditoReal = 6,
         Garcia = 7,
+        Guarita = 8,
     }
 
     public enum TipoImovelEnum
