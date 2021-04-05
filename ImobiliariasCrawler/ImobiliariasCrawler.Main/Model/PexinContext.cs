@@ -25,7 +25,7 @@ namespace ImobiliariasCrawler.Main.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql(Configuration.ConnectionString, x => x.ServerVersion("5.7.33-mysql"));
+                optionsBuilder.UseMySql(Configuration.ConnectionStringProd, x => x.ServerVersion("5.7.33-mysql"));
             }
         }
 
@@ -36,7 +36,7 @@ namespace ImobiliariasCrawler.Main.Model
                 entity.HasKey(e => e.CodImovelcapturado)
                     .HasName("PRIMARY");
 
-                entity.ToTable("imoveiscapturados");
+                entity.ToTable("ImoveisCapturados");
 
                 entity.Property(e => e.CodImovelcapturado)
                     .HasColumnName("codImovelcapturado")
