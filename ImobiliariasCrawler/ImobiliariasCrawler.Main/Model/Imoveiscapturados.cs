@@ -13,7 +13,10 @@ namespace ImobiliariasCrawler.Main
         CreditoReal = 6,
         Garcia = 7,
         Guarita = 8,
-        Leindecker = 9
+        Leindecker = 9,
+        Sperinde = 10,
+        ChaveFacil = 11,
+        ExpoImovel = 12,
     }
 
     public enum TipoImovelEnum

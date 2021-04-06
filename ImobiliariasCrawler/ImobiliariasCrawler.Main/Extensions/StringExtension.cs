@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace ImobiliariasCrawler.Main.Extensions
@@ -12,6 +13,18 @@ namespace ImobiliariasCrawler.Main.Extensions
             if (value.Length > end) return value[start..end];
             if (value.Length > start) return value[start..];
             return value;
+        }
+
+        public static string RemoveAccents(this string text)
+        {
+            StringBuilder sbReturn = new StringBuilder();
+            var arrayText = text.Normalize(NormalizationForm.FormD).ToCharArray();
+            foreach (char letter in arrayText)
+            {
+                if (CharUnicodeInfo.GetUnicodeCategory(letter) != UnicodeCategory.NonSpacingMark)
+                    sbReturn.Append(letter);
+            }
+            return sbReturn.ToString();
         }
     }
 }
