@@ -90,6 +90,8 @@ namespace ImobiliariasCrawler.Main.Spiders
         public string Bairro { get; set; }
         public string TipoImovel { get; set; }
         public int Pagina { get; private set; } = 0;
+
+        public void NextPage() => Pagina += 12;
         public string Url => string.Format("https://www.leindecker.com.br/busca/{0}/cidade/{1}/bairros/{2}/{3}/", TipoImovel, Cidade, Bairro, Pagina);
     }
 }
