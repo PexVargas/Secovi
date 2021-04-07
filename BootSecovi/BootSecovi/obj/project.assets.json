@@ -2157,11 +2157,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\WINDOWS\\source\\repos\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+      "projectUniqueName": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
       "projectName": "BootSecovi",
-      "projectPath": "C:\\Users\\WINDOWS\\source\\repos\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+      "projectPath": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
       "packagesPath": "C:\\Users\\WINDOWS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\WINDOWS\\source\\repos\\BootSecovi\\BootSecovi\\obj\\",
+      "outputPath": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\WINDOWS\\AppData\\Roaming\\NuGet\\NuGet.Config",
