@@ -4,9 +4,10 @@ using System.Text;
 
 namespace ImobiliariasCrawler.Main.DataObjectTransfer
 {
-    public abstract class Filter
+    public class Filter
     {
-        public string TipoImovel { get; set; }
+        public string TipoImovel { get; set; } // Comprar | Alugar
+        public string SubTipo { get; set; } // Residencial, comercial, casa, apt...
         public string Bairro { get; set; }
         public string Cidade { get; set; }
         public string Estado { get; set; }
