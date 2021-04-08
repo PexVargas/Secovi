@@ -34,36 +34,54 @@ namespace ImobiliariasCrawler.Main.Services
 
         public async Task Get(string url, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
-            var httpResponse = await _httpClient.GetAsync(url);
-            var selector = await ContentToHtmlDocument(httpResponse);
-            callback.Invoke(CreateResponse(httpResponse, selector, dictArgs));
+            Request(url, callback, dictArgs: dictArgs);
+
         }
         public async Task Post(string url, object body, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
             var payload = JsonSerializer.Serialize(body, JsonOptions);
-
             var jsonContent = new StringContent(payload, Encoding.UTF8, "application/json");
-            MakeHeaders(jsonContent.Headers, headers);
 
-            var httpResponse = await _httpClient.PostAsync(url, jsonContent);
-            var selector = await ContentToHtmlDocument(httpResponse);
-            callback.Invoke(CreateResponse(httpResponse, selector, dictArgs));
+            MakeHeaders(jsonContent.Headers, headers);
+            Request(url, callback, stringContent: jsonContent, dictArgs: dictArgs);
+
         }
 
         public async Task FormPost(string url, Callback callback, object objBody=null, Dictionary<string,string> dictBody=null, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
             var keyValue = objBody != null ? objBody.ToKeyValue() : dictBody.ToList();
             var formContent = new FormUrlEncodedContent(keyValue);
+
             MakeHeaders(formContent.Headers, headers);
-            var httpResponse = await _httpClient.PostAsync(url, formContent);
-            var selector = await ContentToHtmlDocument(httpResponse);
-            callback.Invoke(CreateResponse(httpResponse, selector, dictArgs));
+            Request(url, callback, formContent, dictArgs: dictArgs);
         }
 
-        public static Response CreateResponse(HttpResponseMessage httpResponse, HtmlDocument selector, Dictionary<string, object> dictArgs) 
+        private async void Request(string url, Callback callback, FormUrlEncodedContent formContent=null, StringContent stringContent = null, Dictionary<string, object> dictArgs=null)
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = null;
+                if (formContent is null && stringContent is null)
+                    httpResponse = await _httpClient.GetAsync(url);
+                else if (formContent is null)
+                    httpResponse = await _httpClient.PostAsync(url, stringContent);
+                else
+                    httpResponse = await _httpClient.PostAsync(url, formContent);
+
+                var selector = await ContentToHtmlDocument(httpResponse);
+                callback.Invoke(CreateResponse(httpResponse, selector, dictArgs));
+            }
+            catch
+            {
+                Console.WriteLine($"Erro ao efetuar request para url: {url}");
+            }
+        }
+
+
+        private static Response CreateResponse(HttpResponseMessage httpResponse, HtmlDocument selector, Dictionary<string, object> dictArgs) 
             => new Response { HttpResponse = httpResponse, Selector = selector.DocumentNode, DictArgs = dictArgs, Url = httpResponse.RequestMessage.RequestUri.AbsoluteUri };
 
-        public void MakeHeaders(HttpContentHeaders source, Dictionary<string, string> headers = null)
+        private void MakeHeaders(HttpContentHeaders source, Dictionary<string, string> headers = null)
         {
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36");
             if (headers != null)
