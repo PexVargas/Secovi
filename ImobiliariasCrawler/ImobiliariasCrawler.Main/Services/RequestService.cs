@@ -34,7 +34,7 @@ namespace ImobiliariasCrawler.Main.Services
 
         public async Task Get(string url, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
-            Request(url, callback, dictArgs: dictArgs);
+            await Request(url, callback, dictArgs: dictArgs);
 
         }
         public async Task Post(string url, object body, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
@@ -43,7 +43,7 @@ namespace ImobiliariasCrawler.Main.Services
             var jsonContent = new StringContent(payload, Encoding.UTF8, "application/json");
 
             MakeHeaders(jsonContent.Headers, headers);
-            Request(url, callback, stringContent: jsonContent, dictArgs: dictArgs);
+            await Request(url, callback, stringContent: jsonContent, dictArgs: dictArgs);
 
         }
 
@@ -53,14 +53,14 @@ namespace ImobiliariasCrawler.Main.Services
             var formContent = new FormUrlEncodedContent(keyValue);
 
             MakeHeaders(formContent.Headers, headers);
-            Request(url, callback, formContent, dictArgs: dictArgs);
+            await Request(url, callback, formContent, dictArgs: dictArgs);
         }
 
-        private async void Request(string url, Callback callback, FormUrlEncodedContent formContent=null, StringContent stringContent = null, Dictionary<string, object> dictArgs=null)
+        private async Task Request(string url, Callback callback, FormUrlEncodedContent formContent=null, StringContent stringContent = null, Dictionary<string, object> dictArgs=null)
         {
             try
             {
-                HttpResponseMessage httpResponse = null;
+                HttpResponseMessage httpResponse = await _httpClient.GetAsync(url);
                 if (formContent is null && stringContent is null)
                     httpResponse = await _httpClient.GetAsync(url);
                 else if (formContent is null)
