@@ -10,15 +10,15 @@ namespace PortalPexIM.Controllers
 {
     public class UploadController : Controller
     {
-        PexIMContext db = new PexIMContext();
+        peximContext db = new peximContext();
         public IActionResult Index()
         {
-            var result = (from i in db.Estados
-                          select new FiltroEstados
-                          {
-                              CodEstado = i.CodEstado,
-                              NomeEstado = i.NomeEstado,
-                          }).ToList();
+            //var result = (from i in db.Estados
+            //              select new FiltroEstados
+            //              {
+            //                  CodEstado = i.CodEstado,
+            //                  NomeEstado = i.NomeEstado,
+            //              }).ToList();
 
             return View();
         }

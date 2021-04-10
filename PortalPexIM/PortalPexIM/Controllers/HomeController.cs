@@ -14,7 +14,7 @@ namespace PortalPexIM.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        PexIMContext db = new PexIMContext();
+        peximContext db = new peximContext();
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -23,11 +23,11 @@ namespace PortalPexIM.Controllers
         public IActionResult Index()
         {
             FiltroPesquisa filtro = new FiltroPesquisa();
-            filtro.Cidades = db.ImoveisClassificados.Select(x => x.Cidade).Distinct().ToList();
-            filtro.Bairro = db.ImoveisClassificados.Select(x => x.Bairro).Distinct().ToList();
-            filtro.Tipo = db.ImoveisClassificados.Select(x => x.Tipo).Distinct().ToList();
+            filtro.Cidades = db.Imoveisclassificados.Select(x => x.Cidade).Distinct().ToList();
+            filtro.Bairros = db.Imoveisclassificados.Select(x => x.Bairro).Distinct().ToList();
+            filtro.Tipos = db.Imoveisclassificados.Select(x => x.Tipo).Distinct().ToList();
 
-            return View(filtro);
+            return View();
         }
 
         public IActionResult Privacy()
@@ -42,26 +42,170 @@ namespace PortalPexIM.Controllers
         }
 
         [HttpPost]
-        public JsonResult Evolutivo() 
+        public JsonResult GetEvolutivo([FromBody] FiltroPesquisa filtro) 
         {
-       
-            var imoveis = (from i in db.ImoveisClassificados
-                           where i.Tipo!=null
-                           group i by new { i.Tipo } into g
+            peximContext dbe = new peximContext();
+
+            var imoveis = (from i in dbe.Imoveisclassificados
+                           where i.Tipo!=null //&& filtro.Cidades.Contains(i.Cidade)
+
+                           group i by new { i.DataClassificacao.Value.Year, i.DataClassificacao.Value.Month } into g
+                           
                            select new
                            {
-                               tipo = g.Key.Tipo,
-                               valor = g.Count(),    
-                           });
+                               key = FormatarMesAno(g.Key.Year, g.Key.Month),
+                               value = g.Count(),    
+                           }).ToList();
 
             return Json(imoveis);
+        }
+
+        [HttpPost]
+        public JsonResult GetTipos([FromBody] FiltroPesquisa filtro)
+        {
+            peximContext dbt = new peximContext();
+
+            var imoveis = (from i in dbt.Imoveisclassificados
+                           where i.Tipo != null
+                           group i by new { i.Tipo } into g
+
+                           select new
+                           {
+                               key = g.Key.Tipo,
+                               value = g.Count(),
+                           }).ToList().OrderByDescending(x=>x.value);
+
+            return Json(imoveis);
+        }
+
+
+        [HttpPost]
+        public JsonResult GetCidades([FromBody] FiltroPesquisa filtro)
+        {
+            peximContext dbc = new peximContext();
+            var imoveis = (from i in dbc.Imoveisclassificados
+                           where i.Cidade != null
+                           group i by new { i.Cidade } into g
+
+                           select new
+                           {
+                               key = g.Key.Cidade,
+                               value = g.Count(),
+                           }).ToList().OrderByDescending(x=>x.value);
+
+            return Json(imoveis);
+        }
+
+        [HttpPost]
+        public JsonResult GetBairros([FromBody] FiltroPesquisa filtro)
+        {
+            peximContext dbc = new peximContext();
+            var imoveis = (from i in dbc.Imoveisclassificados
+                           where i.Bairro != null
+                           group i by new { i.Bairro } into g
+
+                           select new
+                           {
+                               key = g.Key.Bairro,
+                               value = g.Count(),
+                           }).ToList().OrderByDescending(x => x.value);
+
+            return Json(imoveis);
+        }
+
+        [HttpPost]
+        public JsonResult GetGaragens([FromBody] FiltroPesquisa filtro)
+        {
+            peximContext dbc = new peximContext();
+            var imoveis = (from i in dbc.Imoveisclassificados
+                           group i by new { i.Garagens } into g
+
+                           select new
+                           {
+                               key = FormatarGaragem(g.Key.Garagens),
+                               value = g.Count(),
+                           }).ToList();
+
+            return Json(imoveis);
+        }
+
+        static string FormatarGaragem(int? garagens)
+        {
+            string garagem = "";
+
+            switch (garagens)
+            {
+                case null:
+                case 0:
+                    garagem = "NI/NP";
+                    break;
+                case 1:
+                    garagem = "1 GARAGEM";
+                    break;
+                case 2:
+                    garagem = "2 GARAGENS";
+                    break;
+            }
+
+            if(garagens > 2)
+                    garagem = ">2 GARAGENS";
+        
+
+            return garagem;
+        }
+
+        static string FormatarMesAno(int ano,  int mes) 
+        {
+            string mesNumero = "";
+
+               switch (mes)
+                {
+                    case 1:
+                        mesNumero = "jan";
+                        break;
+                    case 2:
+                        mesNumero = "fev";
+                        break;
+                    case 3:
+                        mesNumero = "mar";
+                        break;
+                    case 4:
+                        mesNumero = "abr";
+                        break;
+                    case 5:
+                        mesNumero = "mai";
+                        break;
+                    case 6:
+                        mesNumero = "jun";
+                        break;
+                    case 7:
+                        mesNumero = "jul";
+                        break;
+                    case 8:
+                        mesNumero = "ago";
+                        break;
+                    case 9:
+                        mesNumero = "set";
+                        break;
+                    case 10:
+                        mesNumero = "out";
+                        break;
+                    case 11:
+                        mesNumero = "nov";
+                        break;
+                    case 12:
+                        mesNumero = "dez";
+                        break;
+                }
+
+            return string.Format("{0}/{1}", mesNumero, ano.ToString());
         }
 
         [HttpPost]
         public JsonResult Cidades()
         {
           
-            var imoveis = (from i in db.ImoveisClassificados
+            var imoveis = (from i in db.Imoveisclassificados
                           where i.Cidade!=null
                            group i by new { i.Cidade } into g
                            select new
@@ -77,7 +221,7 @@ namespace PortalPexIM.Controllers
         public JsonResult Bairros()
         {
  
-            var imoveis = (from i in db.ImoveisClassificados
+            var imoveis = (from i in db.Imoveisclassificados
                            group i by new { i.Bairro } into g
                            select new
                            {

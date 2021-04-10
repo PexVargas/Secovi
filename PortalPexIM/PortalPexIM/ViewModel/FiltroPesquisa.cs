@@ -8,8 +8,9 @@ namespace PortalPexIM.ViewModel
     public class FiltroPesquisa
     {
         public List<string> Cidades = new List<string>();
-        public List<string> Bairro = new List<string>();
-        public List<string> Tipo = new List<string>();
+        public List<string> Bairros = new List<string>();
+        public List<string> Tipos = new List<string>();
+        public int TipoImovel { get; set; }
     }
 
 }
