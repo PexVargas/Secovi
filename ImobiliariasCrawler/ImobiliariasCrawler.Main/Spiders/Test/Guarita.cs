@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
-    class Guarita : SpiderBase
+    public class Guarita : SpiderBase
     {
-        public override async Task StartRequest()
+        public override void StartRequest()
         {
             var codCidadeList = new string[] {"4237", "4402", "3973", "3991", "4399", "4096", "4405", "4397"};
             foreach (var codCidade in codCidadeList)
@@ -27,12 +27,12 @@ namespace ImobiliariasCrawler.Main.Spiders
                         { "order", "codigo-desc" },
                     };
                     var newDictForm = new Dictionary<string, object>() { { "form", dictForm } };
-                    await Request.FormPost(url: "https://www.guarida.com.br/alugueis/index/filtro", dictBody: dictForm, callback: Parse, dictArgs: newDictForm);
+                    Request.FormPost(url: "https://www.guarida.com.br/alugueis/index/filtro", dictBody: dictForm, callback: Parse, dictArgs: newDictForm);
                 }
             }
         }
 
-        public override async void Parse(Response response)
+        public override void Parse(Response response)
         {
             var dictForm = response.DictArgs["form"] as Dictionary<string, string>;
             var desserialize = response.Selector.Deserialize<JsonImovelGuarita>();
@@ -41,7 +41,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             {
                 dictForm["page"] = currentPage.ToString();
                 var newDictForm = new Dictionary<string, object>() { { "form", dictForm } };
-                await Request.FormPost(url: "https://www.guarida.com.br/alugueis/index/filtro", dictBody: dictForm, callback: Parse, dictArgs: newDictForm);
+                Request.FormPost(url: "https://www.guarida.com.br/alugueis/index/filtro", dictBody: dictForm, callback: Parse, dictArgs: newDictForm);
             }
 
             foreach (var item in desserialize.Imoveis)

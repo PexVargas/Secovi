@@ -3,7 +3,9 @@ using ImobiliariasCrawler.Main.Model;
 using ImobiliariasCrawler.Main.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -14,31 +16,31 @@ namespace ImobiliariasCrawler.Main.Spiders
 
     public abstract class SpiderBase : IDisposable
     {
-        public List<Imoveiscapturados> Items { get; set; }
+        public List<ImoveiscapturadosDto> Items { get; set; }
         public RequestService Request { get; set; }
         private readonly PexinContext _context;
 
         public SpiderBase()
         {
-            Items = new List<Imoveiscapturados>();
+            Items = new List<ImoveiscapturadosDto>();
             Request = new RequestService(new HttpClient());
             _context = new PexinContext();
         }
-
         public void Init() {
             StartRequest();
         }
 
-        public abstract Task StartRequest();
+        public abstract void StartRequest();
         public abstract void Parse(Response response);
 
         public void Save(ImoveiscapturadosDto imoveiscapturados)
         {
             lock (_context)
             {
-                _context.Imoveiscapturados.Add(imoveiscapturados.ToImoveiscapturados());
+                Console.SetCursorPosition(0, 15);
+                Console.WriteLine(imoveiscapturados.Url);
+                _context.Imoveiscapturados.AddRange(Items.Select(i => i.ToImoveiscapturados()));
                 _context.SaveChanges();
-                Console.WriteLine($"Item inserido: {imoveiscapturados.Url}");
             }
         }
 

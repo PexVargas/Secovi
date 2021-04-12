@@ -9,24 +9,24 @@ namespace ImobiliariasCrawler.Main.Spiders
     class Garcia : SpiderBase
     {
        
-        public override async Task StartRequest()
+        public override void StartRequest()
         {
             var dictVenda = new Dictionary<string, object> { { "TipoImovel", "1" } };
-            await Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=venda&finalidade=venda&cidade=", callback: Parse, dictArgs: dictVenda);
-            await Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=lancamentos&finalidade=venda&lancamentos=true&cidade=", callback: Parse, dictArgs: dictVenda);
+            Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=venda&finalidade=venda&cidade=", callback: Parse, dictArgs: dictVenda);
+            Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=lancamentos&finalidade=venda&lancamentos=true&cidade=", callback: Parse, dictArgs: dictVenda);
 
             var dictAluguel = new Dictionary<string, object> { { "TipoImovel", "2" } };
-            await Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=aluguel&finalidade=aluguel&cidade=", callback: Parse, dictArgs: dictAluguel);
+            Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=aluguel&finalidade=aluguel&cidade=", callback: Parse, dictArgs: dictAluguel);
 
         }
 
-        public override async void Parse(Response response)
+        public override void Parse(Response response)
         {
             var partialNextUrl = response.Selector.SelectSingleNode("//i[@class='fa fa-chevron-right']/..").GetAttributeValue("href", null);
             if (partialNextUrl != null)
             {
                 var nextUrl = "http://www.garciaimoveisrs.com.br/imoveis.php" + partialNextUrl;
-                await Request.Get(nextUrl, callback: Parse, dictArgs: response.DictArgs);
+                Request.Get(nextUrl, callback: Parse, dictArgs: response.DictArgs);
             }
 
             foreach (var div in response.Selector.SelectNodes("//div[@class='imoveis clearfix']//div[@class='row']/div"))
@@ -34,7 +34,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 var partialUrl = div.SelectSingleNode(".//a").GetAttributeValue("href", null);
                 var url = "http://www.garciaimoveisrs.com.br/" + partialUrl;
 
-                await Request.Get(url, callback: ParseResult, dictArgs: response.DictArgs);
+                Request.Get(url, callback: ParseResult, dictArgs: response.DictArgs);
             }
         }
 

@@ -11,7 +11,7 @@ namespace ImobiliariasCrawler.Main.Spiders
     public class ChaveFacil : SpiderBase
     {
 
-        public override async Task StartRequest()
+        public override void StartRequest()
         {
             foreach (var estado in new[] { "PE", "MG" })
             {
@@ -20,11 +20,11 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Estado = estado
                 };
                 var url = $"https://servicodados.ibge.gov.br/api/v1/localidades/estados/{estado}/municipios";
-                await Request.Get(url, callback: Parse, dictArgs: new Dictionary<string, object> { { "filter", filter } });
+                Request.Get(url, callback: Parse, dictArgs: new Dictionary<string, object> { { "filter", filter } });
             }
         }
 
-        public override async void Parse(Response response)
+        public override void Parse(Response response)
         {
             
             var cidadeList = response.Selector.Deserialize<List<CidadeIBGE>>();
@@ -44,14 +44,14 @@ namespace ImobiliariasCrawler.Main.Spiders
                         var url = $"http://chavefacil.com.br/imoveis/{tipoImovel}/{subTipo}/qualquer-tipo-imovel/{filter.Estado}{filter.Cidade}";
 
                         var dictArgs = new Dictionary<string, object> { { "filter", filter } };
-                        await Request.Get(url, ParseResultList, dictArgs: dictArgs);
+                        Request.Get(url, ParseResultList, dictArgs: dictArgs);
                         return;
                     }
                 }
             }
         }
 
-        private async void ParseResultList(Response response)
+        private void ParseResultList(Response response)
         {
             var urlList = response.Selector.SelectNodes("//div[@class='row titulo ir-ficha-imovel']//a").Select(a => a.GetAttributeValue("href", null));
             var filter = response.DictArgs["filter"] as FilterChaveFacil;
@@ -59,12 +59,12 @@ namespace ImobiliariasCrawler.Main.Spiders
             {
                 var headers = new Dictionary<string, string> { { "X-Requested-With", "XMLHttpRequest" } };
                 var formNextPage = filter.CreateFormPost(response.Url);
-                //await Request.FormPost(response.Url, callback: ParseResultList, dictBody: formNextPage, headers: headers, dictArgs: response.DictArgs);
+                //Request.FormPost(response.Url, callback: ParseResultList, dictBody: formNextPage, headers: headers, dictArgs: response.DictArgs);
 
                 foreach (var url in urlList)
                 {
                     var formatedUrl = $"http://chavefacil.com.br{url}";
-                    await Request.Get(formatedUrl, callback: ParseImovel, dictArgs: response.DictArgs);
+                    Request.Get(formatedUrl, callback: ParseImovel, dictArgs: response.DictArgs);
                     break;
                 }
 

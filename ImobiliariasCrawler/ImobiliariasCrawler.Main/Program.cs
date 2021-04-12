@@ -12,9 +12,9 @@ namespace ImobiliariasCrawler.Main
             //dLegend.Init();
             //Console.ReadKey();
 
-            //var creditoReal = new CreditoReal();
-            //creditoReal.Init();
-            //Console.ReadKey();
+            var creditoReal = new CreditoReal();
+            creditoReal.Init();
+            Console.ReadKey();
 
             //var garcia = new Garcia();
             //garcia.Init();
@@ -24,9 +24,9 @@ namespace ImobiliariasCrawler.Main
             //guarita.Init();
             //Console.ReadKey();
 
-            var leindecker = new Leindecker();
-            leindecker.Init();
-            Console.ReadKey();
+            //var leindecker = new Leindecker();
+            //leindecker.Init();
+            //Console.ReadKey();
 
         }
     }

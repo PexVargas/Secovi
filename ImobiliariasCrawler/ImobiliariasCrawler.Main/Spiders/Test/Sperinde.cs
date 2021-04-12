@@ -19,9 +19,9 @@ namespace ImobiliariasCrawler.Main.Spiders
             public string MountUrl() => $"https://www.sperinde.com/busca/site/{Site}/modo/{TipoImovel}/cidade/{Cidade.Replace(" ", ";")}/bairros/{Bairro}/hv/S/{Page}/";
         }
 
-        public async override Task StartRequest() => await Request.Get("https://www.sperinde.com/", callback: Parse);
+        public override void StartRequest() => Request.Get("https://www.sperinde.com/", callback: Parse);
 
-        public override async void Parse(Response response)
+        public override void Parse(Response response)
         {
             foreach (var tipoImovel in new []{"aluguel", "venda" })
             {
@@ -50,13 +50,13 @@ namespace ImobiliariasCrawler.Main.Spiders
                             Site = site,
                         };
                         var url = filter.MountUrl();
-                        await Request.Get(url, callback: ParseResultList, dictArgs: new Dictionary<string, object> { { "filter", filter } });
+                        Request.Get(url, callback: ParseResultList, dictArgs: new Dictionary<string, object> { { "filter", filter } });
                     }
                 }
             }
         }
 
-        public async void ParseResultList(Response response)
+        public void ParseResultList(Response response)
         {
             var urlList = response.Selector.SelectNodes("//div[@class='container']/div[contains(@class,'fleft100')]/a");
             if (urlList != null)
@@ -64,12 +64,12 @@ namespace ImobiliariasCrawler.Main.Spiders
                 var filter = response.DictArgs["filter"] as FilterSperinde;
                 filter.NextPage(12);
                 var nextUrl = filter.MountUrl();
-                await Request.Get(nextUrl, callback: ParseResultList, dictArgs: response.DictArgs);
+                Request.Get(nextUrl, callback: ParseResultList, dictArgs: response.DictArgs);
 
                 foreach (var a in urlList)
                 {
                     var url = a.GetAttributeValue("href", null);
-                    await Request.Get(url, callback: ParseImovel, dictArgs: response.DictArgs);
+                    Request.Get(url, callback: ParseImovel, dictArgs: response.DictArgs);
                 }
             }
         }

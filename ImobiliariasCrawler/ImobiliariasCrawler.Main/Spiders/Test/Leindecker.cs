@@ -10,12 +10,12 @@ namespace ImobiliariasCrawler.Main.Spiders
     class Leindecker : SpiderBase
     {
 
-        public async override Task StartRequest()
+        public override void StartRequest()
         {
-            await Request.Get("https://www.leindecker.com.br/", callback: Parse);
+            Request.Get("https://www.leindecker.com.br/", callback: Parse);
         }
 
-        public override async void Parse(Response response)
+        public override void Parse(Response response)
         {
             foreach (var tipoImovel in new string[] { "locacao", "venda" })
             {
@@ -31,27 +31,27 @@ namespace ImobiliariasCrawler.Main.Spiders
                             Cidade = cidade,
                             TipoImovel = tipoImovel
                         };
-                        await Request.Get(filter.Url, callback: ParseResultList, dictArgs: new Dictionary<string, object> { { "filter", filter } });
+                        Request.Get(filter.Url, callback: ParseResultList, dictArgs: new Dictionary<string, object> { { "filter", filter } });
                         return;
                     }
                 }
             }
         }
 
-        public async void ParseResultList(Response response)
+        public void ParseResultList(Response response)
         {
             var filter = response.DictArgs["filter"] as FilterLeindecker;
             var listImoveis = response.Selector.SelectNodes("//div[contains(@class,'imovel ')]");
             if (listImoveis != null)
             {
                 filter.NextPage();
-                await Request.Get(url: filter.Url, callback: ParseResultList, dictArgs: response.DictArgs);
+                Request.Get(url: filter.Url, callback: ParseResultList, dictArgs: response.DictArgs);
             }
 
             foreach (var div in listImoveis)
             {
                 var url = div.SelectSingleNode(".//a").GetAttributeValue("href", null);
-                await Request.Get(url: url, callback: ParseImovel, dictArgs: response.DictArgs);
+                Request.Get(url: url, callback: ParseImovel, dictArgs: response.DictArgs);
             }
         }
 
