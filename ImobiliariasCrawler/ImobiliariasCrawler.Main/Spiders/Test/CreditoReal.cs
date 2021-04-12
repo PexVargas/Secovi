@@ -1,4 +1,4 @@
-﻿using ImobiliariasCrawler.Main.Model;
+using ImobiliariasCrawler.Main.Model;
 using ImobiliariasCrawler.Main.Services;
 using System;
 using System.Collections.Generic;
@@ -40,9 +40,11 @@ namespace ImobiliariasCrawler.Main.Spiders
             var formatedContent = contentString.Replace("vistasoftrest_realties_callback(", "").Replace("realties_callback(", "").Replace(");", "");
             var desserialize = JsonSerializer.Deserialize<JsonImoveis>(formatedContent);
 
+
+            var urlBase = response.Url.Contains("tipo_negociacao=-2") ? UrlBaseVenda : UrlBaseAluguel;
             if (desserialize.CurrentPage < desserialize.NumberOfPages)
             {
-                var urlNextPage = string.Format(UrlBaseAluguel, desserialize.CurrentPage+1, response.DictArgs["estado"].ToString(), response.DictArgs["cidade"]);
+                var urlNextPage = string.Format(urlBase, desserialize.CurrentPage+1, response.DictArgs["estado"].ToString(), response.DictArgs["cidade"]);
                 Request.Get(urlNextPage, callback: ParseResult, dictArgs: response.DictArgs);
             }
 
