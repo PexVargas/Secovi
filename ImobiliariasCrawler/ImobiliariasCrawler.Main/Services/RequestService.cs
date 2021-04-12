@@ -1,4 +1,5 @@
 using HtmlAgilityPack;
+using ImobiliariasCrawler.Main.DataObjectTransfer;
 using ImobiliariasCrawler.Main.Extensions;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,9 @@ namespace ImobiliariasCrawler.Main.Services
     public class RequestService : IDisposable
     {
         private readonly HttpClient _httpClient;
+        private readonly Scheduling _scheduling;
+        private int _controlStop = 0;
+        private Action _callbackFinish;
 
         public readonly static JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
         {
@@ -27,54 +31,56 @@ namespace ImobiliariasCrawler.Main.Services
         };
 
 
-        public RequestService(HttpClient httpClient)
+        public RequestService(HttpClient httpClient, LoggingPerMinuteDto logging, Action callbackFinish)
         {
+            _callbackFinish = callbackFinish;
             _httpClient = httpClient;
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36");
+            _scheduling = new Scheduling(10, logging);
         }
 
-        public async Task Get(string url, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
+        public void Get(string url, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
-            await Request(url, callback, dictArgs: dictArgs);
+            Request(url, callback, dictArgs: dictArgs);
 
         }
-        public async Task Post(string url, object body, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
+        public void Post(string url, object body, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
             var payload = JsonSerializer.Serialize(body, JsonOptions);
             var jsonContent = new StringContent(payload, Encoding.UTF8, "application/json");
 
             MakeHeaders(jsonContent.Headers, headers);
-            await Request(url, callback, stringContent: jsonContent, dictArgs: dictArgs);
+            Request(url, callback, stringContent: jsonContent, dictArgs: dictArgs);
 
         }
 
-        public async Task FormPost(string url, Callback callback, object objBody=null, Dictionary<string,string> dictBody=null, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
+        public void FormPost(string url, Callback callback, object objBody=null, Dictionary<string,string> dictBody=null, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
             var keyValue = objBody != null ? objBody.ToKeyValue() : dictBody.ToList();
             var formContent = new FormUrlEncodedContent(keyValue);
 
             MakeHeaders(formContent.Headers, headers);
-            await Request(url, callback, formContent, dictArgs: dictArgs);
+            Request(url, callback, formContent, dictArgs: dictArgs);
         }
 
-        private async Task Request(string url, Callback callback, FormUrlEncodedContent formContent=null, StringContent stringContent = null, Dictionary<string, object> dictArgs=null)
+        private void Request(string url, Callback callback, FormUrlEncodedContent formContent=null, StringContent stringContent = null, Dictionary<string, object> dictArgs=null)
         {
-            try
+            _controlStop++;
+            _scheduling.Add(async () =>
             {
-                HttpResponseMessage httpResponse = await _httpClient.GetAsync(url);
+                HttpResponseMessage httpResponse;
                 if (formContent is null && stringContent is null)
                     httpResponse = await _httpClient.GetAsync(url);
                 else if (formContent is null)
                     httpResponse = await _httpClient.PostAsync(url, stringContent);
                 else
                     httpResponse = await _httpClient.PostAsync(url, formContent);
-
+                
                 var selector = await ContentToHtmlDocument(httpResponse);
                 callback.Invoke(CreateResponse(httpResponse, selector, dictArgs));
-            }
-            catch
-            {
-                Console.WriteLine($"Erro ao efetuar request para url: {url}");
-            }
+                _controlStop--;
+                if (_controlStop == 0) _callbackFinish.Invoke();
+            });
         }
 
 
@@ -86,9 +92,7 @@ namespace ImobiliariasCrawler.Main.Services
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36");
             if (headers != null)
                 foreach (var key in headers.Keys)
-                {
                     source.Add(key, headers[key]);
-                }
         }
 
         private async Task<HtmlDocument> ContentToHtmlDocument(HttpResponseMessage response)

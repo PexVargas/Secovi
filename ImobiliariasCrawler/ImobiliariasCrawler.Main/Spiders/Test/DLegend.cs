@@ -12,9 +12,9 @@ namespace ImobiliariasCrawler.Main.Spiders
 {
     public class DLegend : SpiderBase
     {
-        public override async Task StartRequest() => await Request.Get("https://www.dlegend.com.br", Parse);
+        public override void StartRequest() => Request.Get("https://www.dlegend.com.br", Parse);
 
-        public async override void Parse(Response response)
+        public override void Parse(Response response)
         {
             var bairrosList = new List<string> { "Auxiliadora", "Bela Vista", "Boa Vista", "Chacara das Pedras", "Higienópolis", "Jardim Europa", "Moinhos de Vento", "Mont Serrat", "Petrópolis", "Rio Branco", "Santa Cecília", "Três Figueiras", "Azenha", "Bom Fim", "Centro", "Centro Histórico", "Cidade Baixa", "Independência", "Menino Deus", "Praia de Belas", "Santana", "Anchieta", "Cristo Redentor", "Farrapos", "Floresta", "Jardim Lindóia", "Jardim Planalto", "Humaitá", "Navegantes", "Passo da Areia", "Passo das Pedras", "Rubem Berta", "Santa Maria Goretti", "Sarandi", "São Geraldo", "São João", "São José", "São Sebastião", "Vila Ipiranga", "Vila Jardim", "Cavalhada", "Cristal", "Teresópolis", "Central Parque", "Agronomia", "Bom Jesus", "Jardim Botânico", "Jardim Carvalho", "Jardim Sabará", "Jardim do Salso", "Lomba do Pinheiro", "Medianeira", "Partenon", "Canoas", "Distrito Industrial", "Esteio", "Gravataí", "Auxiliadora", "Bela Vista", "Boa Vista", "Chacara das Pedras", "Higienópolis", "Jardim Europa", "Moinhos de Vento", "Mont Serrat", "Petrópolis", "Rio Branco", "Santa Cecília", "Três Figueiras", "Azenha", "Bom Fim", "Centro", "Centro Histórico", "Cidade Baixa", "Independência", "Menino Deus", "Praia de Belas", "Santana", "Anchieta", "Cristo Redentor", "Farrapos", "Floresta", "Jardim Lindóia", "Jardim Planalto", "Humaitá", "Navegantes", "Passo da Areia", "Passo das Pedras", "Rubem Berta", "Santa Maria Goretti", "Sarandi", "São Geraldo", "São João", "São José", "São Sebastião", "Vila Ipiranga", "Vila Jardim", "Cavalhada", "Cristal", "Teresópolis", "Central Parque", "Agronomia", "Bom Jesus", "Jardim Botânico", "Jardim Carvalho", "Jardim Sabará", "Jardim do Salso", "Lomba do Pinheiro", "Medianeira", "Partenon", "Canoas", "Distrito Industrial", "Esteio", "Gravataí" };
             var headers = new Dictionary<string, string> { { "x-requested-with", "XMLHttpRequest" } };
@@ -23,24 +23,24 @@ namespace ImobiliariasCrawler.Main.Spiders
             {
                 var searchMapLocacao = new SearchMapsFilter(goal: "locacao", neighborhood: bairro);
                 var dictLocacao = new Dictionary<string, object> { { "bairro", bairro }, { "TipoImovel", "2" } };
-                await Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapLocacao, headers, dictArgs: dictLocacao);
+                Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapLocacao, headers, dictArgs: dictLocacao);
 
                 var searchMapVenda = new SearchMapsFilter(goal: "venda", neighborhood: bairro);
                 var dictVenda = new Dictionary<string, object> { { "bairro", bairro }, { "TipoImovel", "1" } };
-                await Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapVenda, headers, dictArgs: dictVenda);
+                Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapVenda, headers, dictArgs: dictVenda);
             }
         }
 
-        public async void ParseGoals(Response response)
+        public void ParseGoals(Response response)
         {
             var headers = new Dictionary<string, string> { { "x-requested-with", "XMLHttpRequest" } };
             var deserialize = response.Selector.Deserialize<SearchMapResult>();
             var searchListCard = new SearchListCard(deserialize.Imoveis.Select(i => i.Id.ToString()).ToList(), goal: response.DictArgs["TipoImovel"].ToString());
             response.DictArgs.Add("form", searchListCard);
-            await Request.FormPost("https://www.dlegend.com.br/search/searchListCard", ParseResult, searchListCard, headers, dictArgs: response.DictArgs);
+            Request.FormPost("https://www.dlegend.com.br/search/searchListCard", ParseResult, searchListCard, headers, dictArgs: response.DictArgs);
         }
 
-        public async void ParseResult(Response response)
+        public void ParseResult(Response response)
         {
             var listUrls = response.Selector.SelectNodes("//div[@class='property-card']");
 
@@ -49,7 +49,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 var headers = new Dictionary<string, string> { { "x-requested-with", "XMLHttpRequest" } };
                 var searchListCard = response.DictArgs["form"] as SearchListCard;
                 searchListCard.NextPage();
-                await Request.FormPost("https://www.dlegend.com.br/search/searchListCard", ParseResult, searchListCard, headers, dictArgs: response.DictArgs);
+                Request.FormPost("https://www.dlegend.com.br/search/searchListCard", ParseResult, searchListCard, headers, dictArgs: response.DictArgs);
 
                 foreach (var div in response.Selector.SelectNodes("//div[@class='property-card']"))
                 {
@@ -61,7 +61,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                     };
 
                     var url = div.SelectSingleNode(".//a").GetAttributeValue("href", null);
-                    await Request.Get(url, ParseImovel, dictArgs: newDictArgs);
+                    Request.Get(url, ParseImovel, dictArgs: newDictArgs);
                 }
             }
         }

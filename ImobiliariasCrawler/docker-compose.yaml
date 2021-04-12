@@ -13,3 +13,4 @@ services:
             MYSQL_ROOT_PASSWORD: peximob
             MYSQL_DATABASE: imob
             MYSQL_USER: peximob
+            MYSQL_PASSWORD: peximob
