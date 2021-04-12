@@ -10,12 +10,23 @@ namespace BootSecovi
         {
 
 
-            //Zap zap = new Zap();
-            // zap.Coletar("RJ", "Rio de Janeiro", 1);
+            Zap zap = new Zap();
+            zap.Coletar("RJ", "Rio de Janeiro", 1);
+            //zap.Coletar("RJ", "Rio de Janeiro", 2);
 
-            VivaReal vivaReal = new VivaReal();
-            vivaReal.Coletar("RJ", "Rio de Janeiro", 1);
-            vivaReal.Coletar("RJ", "Rio de Janeiro", 2);
+            //zap.Coletar("PE", "Pernambuco", 2);
+            //zap.Coletar("PE", "Pernambuco", 1);
+
+
+
+
+
+
+
+
+            //VivaReal vivaReal = new VivaReal();
+            //vivaReal.Coletar("RJ", "Rio de Janeiro", 1);
+            //vivaReal.Coletar("RJ", "Rio de Janeiro", 2);
 
             Console.WriteLine("Processo finalizado com sucesso!");
              Console.ReadKey();
