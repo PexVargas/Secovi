@@ -1,4 +1,4 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
 using ImobiliariasCrawler.Main.DataObjectTransfer;
 using ImobiliariasCrawler.Main.Model;
 using ImobiliariasCrawler.Main.Services;
@@ -21,6 +21,7 @@ namespace ImobiliariasCrawler.Main.Spiders
         public RequestService Request { get; set; }
         private readonly PexinContext _context;
         private LoggingPerMinuteDto _logging;
+        private int insertItems = 0;
 
         public SpiderBase()
         {
@@ -39,7 +40,20 @@ namespace ImobiliariasCrawler.Main.Spiders
         public void Save(ImoveiscapturadosDto imoveiscapturados)
         {
             _logging.CountItems++;
-            lock(_context) _context.Add(imoveiscapturados.ToImoveiscapturados());
+            insertItems++;
+            lock (_context)
+            {
+                _context.Add(imoveiscapturados.ToImoveiscapturados());
+                if (insertItems > 30)
+                {
+                    try{
+                        _context.SaveChanges();
+                    }
+                    finally{
+                        insertItems = 0;
+                    }
+                }
+            }
         }
 
         public virtual void Close()
