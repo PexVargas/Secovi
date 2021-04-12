@@ -28,7 +28,7 @@ namespace ImobiliariasCrawler.Main.Services
 
                 Console.WriteLine("SPIDER [{0}]: TEMPO TOTAL DECORRIDO [{1,10}] - REQUESTS {2,-5} - REQUEST/MINUTOS {3,-5} - ITEMS {4,-5} - ITEMS/MINUTOS {5,-5}",
                     _logging.Spider, timeInterval, _logging.CounRequests, requestsPorMinuto, _logging.CountItems, itemsPorMinuto);
-                await Task.Delay(30 * 1000);
+                await Task.Delay(60 * 1000);
             }
         }
 
