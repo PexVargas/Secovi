@@ -17,7 +17,6 @@ namespace ImobiliariasCrawler.Main.Spiders
 
             var dictAluguel = new Dictionary<string, object> { { "TipoImovel", "2" } };
             Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=aluguel&finalidade=aluguel&cidade=", callback: Parse, dictArgs: dictAluguel);
-
         }
 
         public override void Parse(Response response)

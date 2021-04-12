@@ -21,13 +21,9 @@ namespace ImobiliariasCrawler.Main.Spiders
         public RequestService Request { get; set; }
         private readonly PexinContext _context;
         private LoggingPerMinuteDto _logging;
-        private readonly int _buffer;
-        private int countTotalInsert = 0;
-        private int lastSkip = 0;
 
-        public SpiderBase(int buffer = 10, int concurrentRequests = 10)
+        public SpiderBase()
         {
-            _buffer = buffer;
             _logging = new LoggingPerMinuteDto() { Spider = GetType().Name };
             Items = new List<Imoveiscapturados>();
             Request = new RequestService(new HttpClient(), _logging, Close);
@@ -43,28 +39,14 @@ namespace ImobiliariasCrawler.Main.Spiders
         public void Save(ImoveiscapturadosDto imoveiscapturados)
         {
             _logging.CountItems++;
-            Items.Add(imoveiscapturados.ToImoveiscapturados());
-            InsertItems();
-        }
-
-        private void InsertItems(bool close = false)
-        {
-            if (Items.Count <= _buffer && !close) return;
-            lock (_context)
-            {
-                var newList = Items.Skip(lastSkip).Take(_buffer).ToList();
-                countTotalInsert += newList.Count;
-                lastSkip += _buffer;
-                _context.AddRange(newList);
-                _context.SaveChanges();
-            }
+            lock(_context) _context.Add(imoveiscapturados.ToImoveiscapturados());
         }
 
         public virtual void Close()
         {
-            InsertItems();
+            lock (_context) _context.SaveChanges();
+            Console.WriteLine($"FINISH SPIDER [{_logging.Spider}] - Requests [{_logging.CounRequests}] - Items [{_logging.CountItems}]");
             Dispose();
-            Console.WriteLine($"FINISH SPIDER [{_logging.Spider}] - Inseridos [{countTotalInsert}] - Requests [{_logging.CounRequests}] - Items [{_logging.CountItems}]");
         }
 
         public void Dispose()

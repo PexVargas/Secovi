@@ -1,4 +1,5 @@
 using HtmlAgilityPack;
+using ImobiliariasCrawler.Main.DataObjectTransfer;
 using ImobiliariasCrawler.Main.Extensions;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace ImobiliariasCrawler.Main.Services
     {
         private readonly HttpClient _httpClient;
         private readonly Scheduling _scheduling;
+        private int _controlStop = 0;
+        private Action _callbackFinish;
 
         public readonly static JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
         {
@@ -28,11 +31,12 @@ namespace ImobiliariasCrawler.Main.Services
         };
 
 
-        public RequestService(HttpClient httpClient)
-        { 
+        public RequestService(HttpClient httpClient, LoggingPerMinuteDto logging, Action callbackFinish)
+        {
+            _callbackFinish = callbackFinish;
             _httpClient = httpClient;
             httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36");
-            _scheduling = new Scheduling(10);
+            _scheduling = new Scheduling(10, logging);
         }
 
         public void Get(string url, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
@@ -61,28 +65,22 @@ namespace ImobiliariasCrawler.Main.Services
 
         private void Request(string url, Callback callback, FormUrlEncodedContent formContent=null, StringContent stringContent = null, Dictionary<string, object> dictArgs=null)
         {
-            var task = new Task(async () =>
+            _controlStop++;
+            _scheduling.Add(async () =>
             {
-                try
-                {
-                    HttpResponseMessage httpResponse;
-                    if (formContent is null && stringContent is null)
-                        httpResponse = await _httpClient.GetAsync(url);
-                    else if (formContent is null)
-                        httpResponse = await _httpClient.PostAsync(url, stringContent);
-                    else
-                        httpResponse = await _httpClient.PostAsync(url, formContent);
+                HttpResponseMessage httpResponse;
+                if (formContent is null && stringContent is null)
+                    httpResponse = await _httpClient.GetAsync(url);
+                else if (formContent is null)
+                    httpResponse = await _httpClient.PostAsync(url, stringContent);
+                else
+                    httpResponse = await _httpClient.PostAsync(url, formContent);
                 
-                    var selector = await ContentToHtmlDocument(httpResponse);
-                    callback.Invoke(CreateResponse(httpResponse, selector, dictArgs));
-                    _scheduling.Remove(url);
-                }
-                catch
-                {
-                    Console.WriteLine($"Erro ao efetuar request para url: {url}");
-                }
+                var selector = await ContentToHtmlDocument(httpResponse);
+                callback.Invoke(CreateResponse(httpResponse, selector, dictArgs));
+                _controlStop--;
+                if (_controlStop == 0) _callbackFinish.Invoke();
             });
-            _scheduling.Add(task, url);
         }
 
 

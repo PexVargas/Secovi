@@ -32,7 +32,6 @@ namespace ImobiliariasCrawler.Main.Spiders
                             TipoImovel = tipoImovel
                         };
                         Request.Get(filter.Url, callback: ParseResultList, dictArgs: new Dictionary<string, object> { { "filter", filter } });
-                        return;
                     }
                 }
             }
