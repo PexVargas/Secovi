@@ -15,10 +15,7 @@ namespace ImobiliariasCrawler.Main.Spiders
         {
             foreach (var estado in new[] { "PE", "MG" })
             {
-                var filter = new FilterChaveFacil
-                {
-                    Estado = estado
-                };
+                var filter = new FilterChaveFacil {Estado = estado};
                 var url = $"https://servicodados.ibge.gov.br/api/v1/localidades/estados/{estado}/municipios";
                 Request.Get(url, callback: Parse, dictArgs: new Dictionary<string, object> { { "filter", filter } });
             }
@@ -38,14 +35,20 @@ namespace ImobiliariasCrawler.Main.Spiders
                 {
                     foreach (var cidade in cidadeList)
                     {
-                        if (cidade.Nome != "Recife") continue;
+                        var filter = new FilterChaveFacil { 
+                            Estado = filterBase.Estado,
+                            Cidade = cidade.Nome, 
+                            TipoImovel = tipoImovel, 
+                            SubTipo = subTipo,
+                            Url = $"http://chavefacil.com.br/imoveis/{tipoImovel}/{subTipo}/qualquer-tipo-imovel/{filterBase.Estado}/{cidade.Nome.Replace(" ", "-")}"
+                        };
+                        var urlFormPost = $"http://chavefacil.com.br/imoveis/{tipoImovel}/{subTipo}/qualquer-tipo-imovel/{filter.Estado}/ajax-buscar-imoveis";
 
-                        var filter = new FilterChaveFacil { Estado = filterBase.Estado, Cidade = cidade.Nome, TipoImovel = tipoImovel, SubTipo = subTipo };
-                        var url = $"http://chavefacil.com.br/imoveis/{tipoImovel}/{subTipo}/qualquer-tipo-imovel/{filter.Estado}{filter.Cidade}";
+                        filter.NextPage(1);
+                        var formData = filter.CreateFormPost();
 
                         var dictArgs = new Dictionary<string, object> { { "filter", filter } };
-                        Request.Get(url, ParseResultList, dictArgs: dictArgs);
-                        return;
+                        Request.FormPost(urlFormPost, callback: ParseResultList, dictBody: formData, headers: headers, dictArgs: dictArgs);
                     }
                 }
             }
@@ -55,17 +58,17 @@ namespace ImobiliariasCrawler.Main.Spiders
         {
             var urlList = response.Selector.SelectNodes("//div[@class='row titulo ir-ficha-imovel']//a").Select(a => a.GetAttributeValue("href", null));
             var filter = response.DictArgs["filter"] as FilterChaveFacil;
+            filter.NextPage(1);
+
             if (urlList != null)
             {
-                var headers = new Dictionary<string, string> { { "X-Requested-With", "XMLHttpRequest" } };
-                var formNextPage = filter.CreateFormPost(response.Url);
-                //Request.FormPost(response.Url, callback: ParseResultList, dictBody: formNextPage, headers: headers, dictArgs: response.DictArgs);
+                var formNextPage = filter.CreateFormPost();
+                Request.FormPost(response.Url, callback: ParseResultList, dictBody: formNextPage, dictArgs: response.DictArgs);
 
                 foreach (var url in urlList)
                 {
                     var formatedUrl = $"http://chavefacil.com.br{url}";
                     Request.Get(formatedUrl, callback: ParseImovel, dictArgs: response.DictArgs);
-                    break;
                 }
 
             }
@@ -105,12 +108,13 @@ namespace ImobiliariasCrawler.Main.Spiders
 
         public class FilterChaveFacil : Filter
         {
-            public Dictionary<string, string> CreateFormPost(string url)
+            public string Url { get; set; }
+            public Dictionary<string, string> CreateFormPost()
             {
                 return new Dictionary<string, string>
                 {
-                    { "url", url },
-                    { "transacao", "8" },
+                    { "url", Url },
+                    { "transacao", "1" },
                     { "tipo-imovel", "" },
                     { "ids-tipos-imoveis", "" },
                     { "tipo", "grupo" },
@@ -121,6 +125,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                     { "area-maxima", "" },
                     { "dormitorios", "" },
                     { "vagas-garagem", "" },
+                    { "id-imobiliaria", "" },
                     { "banheiros", "" },
                     { "pagina", Page.ToString() },
                     { "outras-caracteristicas", "0000000000000000" },
