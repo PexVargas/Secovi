@@ -73,7 +73,8 @@ namespace ImobiliariasCrawler.Main.Services
                 else
                     request = new HttpRequestMessage(HttpMethod.Post, url) { Content = formContent };
 
-                var response =  await new HttpClient().SendAsync(request);
+                using var httpClient = new HttpClient();
+                var response = await httpClient.SendAsync(request);
                 var selector = await ContentToHtmlDocument(response);
                 callback.Invoke(CreateResponse(response, selector, dictArgs));
                 _controlStop--;
