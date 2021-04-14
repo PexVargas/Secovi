@@ -3,14 +3,16 @@ using System;
 using ImobiliariasCrawler.Main.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ImobiliariasCrawler.Main.Migrations
 {
     [DbContext(typeof(PexinContext))]
-    partial class PexinContextModelSnapshot : ModelSnapshot
+    [Migration("20210414162408_FixEncode")]
+    partial class FixEncode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

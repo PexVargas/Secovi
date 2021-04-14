@@ -36,6 +36,8 @@ namespace ImobiliariasCrawler.Main.Model
                 entity.HasKey(e => e.CodImovelcapturado)
                     .HasName("PRIMARY");
 
+                entity.ToTable("ImoveisCapturados");
+
                 entity.Property(e => e.CodImovelcapturado).HasColumnName("codImovelcapturado");
 
                 entity.Property(e => e.Anunciante)
