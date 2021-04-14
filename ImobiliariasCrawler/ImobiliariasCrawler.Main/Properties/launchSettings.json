@@ -8,6 +8,10 @@
       "commandName": "Project",
       "commandLineArgs": "CreditoReal"
     },
+    "ChaveFacil": {
+      "commandName": "Project",
+      "commandLineArgs": "ChaveFacil"
+    },
     "Garcia": {
       "commandName": "Project",
       "commandLineArgs": "Garcia"
