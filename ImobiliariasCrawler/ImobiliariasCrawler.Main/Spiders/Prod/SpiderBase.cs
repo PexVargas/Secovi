@@ -10,12 +10,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
 
-    public abstract class SpiderBase : IDisposable
+    public abstract class SpiderBase
     {
         public List<Imoveiscapturados> Items { get; set; }
         public RequestService Request { get; set; }
@@ -25,21 +26,26 @@ namespace ImobiliariasCrawler.Main.Spiders
 
         public SpiderBase()
         {
-            _logging = new LoggingPerMinuteDto() { Spider = GetType().Name };
+            _logging = new LoggingPerMinuteDto(GetType().Name, Close);
             Items = new List<Imoveiscapturados>();
-            Request = new RequestService(_logging, Close);
+            Request = new RequestService(_logging);
             _context = new PexinContext();
         }
         public void Init() {
-            StartRequest();
+            var thread = new Thread(() =>
+            {
+                _logging.Init();
+                StartRequest();
+            });
+            thread.Start();
         }
-    
+
 
         public abstract void StartRequest();
         public abstract void Parse(Response response);
         public void Save(ImoveiscapturadosDto imoveiscapturados)
         {
-            _logging.CountItems++;
+            _logging.AddCountItem();
             insertItems++;
             lock (_context)
             {
@@ -58,14 +64,12 @@ namespace ImobiliariasCrawler.Main.Spiders
 
         public virtual void Close()
         {
-            lock (_context) _context.SaveChanges();
-            Console.WriteLine($"FINISH SPIDER [{_logging.Spider}] - Requests [{_logging.CounRequests}] - Items [{_logging.CountItems}]");
-            Dispose();
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
+            lock (_context)
+            {
+                _context.SaveChanges();
+                _context.Dispose();
+                Console.WriteLine($"FINISH SPIDER [{_logging.Spider}] - Requests [{_logging.CountTotalRequests}] - Items [{_logging.CountItems}]");
+            }
         }
     }
 }

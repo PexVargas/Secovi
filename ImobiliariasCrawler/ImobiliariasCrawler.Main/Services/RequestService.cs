@@ -21,7 +21,8 @@ namespace ImobiliariasCrawler.Main.Services
     public class RequestService
     {
         private readonly Scheduling _scheduling;
-        private HashSet<byte[]> _fingerPrintRequest;
+        private readonly HashSet<byte[]> _fingerPrintRequest;
+        private readonly LoggingPerMinuteDto _logging;
 
         public readonly static JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
         {
@@ -30,10 +31,11 @@ namespace ImobiliariasCrawler.Main.Services
         };
 
 
-        public RequestService(LoggingPerMinuteDto logging, Action callbackFinish)
+        public RequestService(LoggingPerMinuteDto logging)
         {
+            _logging = logging;
             _fingerPrintRequest = new HashSet<byte[]>();
-            _scheduling = new Scheduling(10, new TimeSpan(0, 0, 0, 0, 1000), logging, callbackFinish);
+            _scheduling = new Scheduling(10, new TimeSpan(0, 0, 0, 0, 1000), logging);
         }
 
         public void Get(string url, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
@@ -50,7 +52,6 @@ namespace ImobiliariasCrawler.Main.Services
             Request(url, callback, stringContent: jsonContent, dictArgs: dictArgs);
 
         }
-
         public void FormPost(string url, Callback callback, object objBody=null, Dictionary<string,string> dictBody=null, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
             var keyValue = objBody != null ? objBody.ToKeyValue() : dictBody.ToList();
@@ -89,7 +90,11 @@ namespace ImobiliariasCrawler.Main.Services
                     throw new DuplicateRequestException($"Request duplicado: {url} / {payload}");
 
                 using var httpClient = new HttpClient();
+
+                _logging.AddCountRequest();
                 var response = await httpClient.SendAsync(request);
+                _logging.CloseRequest();
+
                 var selector = await ContentToHtmlDocument(response);
                 callback.Invoke(CreateResponse(response, selector, dictArgs));
             });
