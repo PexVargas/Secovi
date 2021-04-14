@@ -33,7 +33,6 @@ namespace ImobiliariasCrawler.Main.Services
         public RequestService(LoggingPerMinuteDto logging, Action callbackFinish)
         {
             _fingerPrintRequest = new HashSet<byte[]>();
-            _callbackFinish = callbackFinish;
             _scheduling = new Scheduling(10, new TimeSpan(0, 0, 0, 0, 1000), logging, callbackFinish);
         }
 
