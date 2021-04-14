@@ -17,9 +17,8 @@ namespace ImobiliariasCrawler.Main.Services
     public delegate void Callback(Response response);
 
 
-    public class RequestService : IDisposable
+    public class RequestService
     {
-        private readonly HttpClient _httpClient;
         private readonly Scheduling _scheduling;
         private int _controlStop = 0;
         private Action _callbackFinish;
@@ -31,12 +30,10 @@ namespace ImobiliariasCrawler.Main.Services
         };
 
 
-        public RequestService(HttpClient httpClient, LoggingPerMinuteDto logging, Action callbackFinish)
+        public RequestService(LoggingPerMinuteDto logging, Action callbackFinish)
         {
             _callbackFinish = callbackFinish;
-            _httpClient = httpClient;
-            httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36");
-            _scheduling = new Scheduling(10, logging);
+            _scheduling = new Scheduling(10, new TimeSpan(0, 0, 0, 0, 1000), logging);
         }
 
         public void Get(string url, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
@@ -68,16 +65,17 @@ namespace ImobiliariasCrawler.Main.Services
             _controlStop++;
             _scheduling.Add(async () =>
             {
-                HttpResponseMessage httpResponse;
+                HttpRequestMessage request = null;
                 if (formContent is null && stringContent is null)
-                    httpResponse = await _httpClient.GetAsync(url);
+                    request = new HttpRequestMessage(HttpMethod.Get, url);
                 else if (formContent is null)
-                    httpResponse = await _httpClient.PostAsync(url, stringContent);
+                    request = new HttpRequestMessage(HttpMethod.Post, url) { Content = stringContent };
                 else
-                    httpResponse = await _httpClient.PostAsync(url, formContent);
-                
-                var selector = await ContentToHtmlDocument(httpResponse);
-                callback.Invoke(CreateResponse(httpResponse, selector, dictArgs));
+                    request = new HttpRequestMessage(HttpMethod.Post, url) { Content = formContent };
+
+                var response =  await new HttpClient().SendAsync(request);
+                var selector = await ContentToHtmlDocument(response);
+                callback.Invoke(CreateResponse(response, selector, dictArgs));
                 _controlStop--;
                 if (_controlStop == 0) _callbackFinish.Invoke();
             });
@@ -89,7 +87,6 @@ namespace ImobiliariasCrawler.Main.Services
 
         private void MakeHeaders(HttpContentHeaders source, Dictionary<string, string> headers = null)
         {
-            _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36");
             if (headers != null)
                 foreach (var key in headers.Keys)
                     source.Add(key, headers[key]);
@@ -102,7 +99,5 @@ namespace ImobiliariasCrawler.Main.Services
             htmlDocument.LoadHtml(responseString);
             return htmlDocument;
         }
-
-        public void Dispose() => _httpClient.Dispose();
     }
 }
