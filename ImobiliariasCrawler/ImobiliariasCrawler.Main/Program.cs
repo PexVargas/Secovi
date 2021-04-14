@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using ImobiliariasCrawler.Main.Spiders;
 
 namespace ImobiliariasCrawler.Main
@@ -8,26 +9,11 @@ namespace ImobiliariasCrawler.Main
     {
         static void Main(string[] args)
         {
-            //var dLegend = new DLegend();
-            //dLegend.Init();
-            //Console.ReadKey();
+            var typeSpider = Type.GetType($"ImobiliariasCrawler.Main.Spiders.{args[0]}");
+            var assemblySpiders = Activator.CreateInstance(typeSpider) as SpiderBase;
+            assemblySpiders.Init();
 
-            var creditoReal = new CreditoReal();
-            creditoReal.Init();
-            Console.ReadKey();
-
-            //var garcia = new Garcia();
-            //garcia.Init();
-            //Console.ReadKey();
-
-            //var guarita = new Guarita();
-            //guarita.Init();
-            //Console.ReadKey();
-
-            //var leindecker = new Leindecker();
-            //leindecker.Init();
-            //Console.ReadKey();
-
+            Console.Read();
         }
     }
 }
