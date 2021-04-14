@@ -1,0 +1,28 @@
+{
+  "profiles": {
+    "DLegend": {
+      "commandName": "Project",
+      "commandLineArgs": "DLegend"
+    },
+    "CreditoReal": {
+      "commandName": "Project",
+      "commandLineArgs": "CreditoReal"
+    },
+    "Garcia": {
+      "commandName": "Project",
+      "commandLineArgs": "Garcia"
+    },
+    "Guarita": {
+      "commandName": "Project",
+      "commandLineArgs": "Guarita"
+    },
+    "Leindecker": {
+      "commandName": "Project",
+      "commandLineArgs": "Leindecker"
+    },
+    "Sperinde": {
+      "commandName": "Project",
+      "commandLineArgs": "Sperinde"
+    }
+  }
+}
