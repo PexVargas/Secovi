@@ -12,5 +12,6 @@ namespace ImobiliariasCrawler.Main
         public HtmlNode Selector { get; set; }
         public Dictionary<string, object> DictArgs { get; set; }
         public string Url { get; set; }
+        public HtmlNodeCollection Xpath(string expression) => Selector.SelectNodes(expression) ?? new HtmlNodeCollection(null);
     }
 }
