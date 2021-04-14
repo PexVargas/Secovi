@@ -12,8 +12,11 @@ namespace ImobiliariasCrawler.Main.Services
         private readonly SemaphoreSlim _semaphore;
         private LoggingPerMinuteDto _logging;
         private readonly TimeSpan _timeIntervalOpenTask;
-        public Scheduling(int concurrentTasks, TimeSpan timeIntervalOpenTask, LoggingPerMinuteDto logging)
+        private readonly Action _callbackFinish;
+        private int _countControlStop = 0;
+        public Scheduling(int concurrentTasks, TimeSpan timeIntervalOpenTask, LoggingPerMinuteDto logging, Action callbackFinish)
         {
+            _callbackFinish = callbackFinish;
             _timeIntervalOpenTask = timeIntervalOpenTask;
             _semaphore = new SemaphoreSlim(concurrentTasks, concurrentTasks);
             _logging = logging;
@@ -41,13 +44,17 @@ namespace ImobiliariasCrawler.Main.Services
             _logging.CounRequests++;
             var t = Task.Run(() =>{
                 try{
+                    _countControlStop++;
                     action.Invoke();
                 }
                 catch(Exception ex){
                     Console.WriteLine($"Erro ao executar a ação: {ex.Message}");
                 }
                 finally {
+                    _countControlStop--;
                     _semaphore.Release();
+                    if (_countControlStop == 0)
+                        _callbackFinish.Invoke();
                 }
             });
         }

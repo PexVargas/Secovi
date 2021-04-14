@@ -1,5 +1,6 @@
 using HtmlAgilityPack;
 using ImobiliariasCrawler.Main.DataObjectTransfer;
+using ImobiliariasCrawler.Main.Exceptions;
 using ImobiliariasCrawler.Main.Extensions;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,7 @@ namespace ImobiliariasCrawler.Main.Services
     public class RequestService
     {
         private readonly Scheduling _scheduling;
-        private int _controlStop = 0;
-        private Action _callbackFinish;
+        private HashSet<byte[]> _fingerPrintRequest;
 
         public readonly static JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
         {
@@ -32,8 +32,8 @@ namespace ImobiliariasCrawler.Main.Services
 
         public RequestService(LoggingPerMinuteDto logging, Action callbackFinish)
         {
-            _callbackFinish = callbackFinish;
-            _scheduling = new Scheduling(10, new TimeSpan(0, 0, 0, 0, 1000), logging);
+            _fingerPrintRequest = new HashSet<byte[]>();
+            _scheduling = new Scheduling(10, new TimeSpan(0, 0, 0, 0, 1000), logging, callbackFinish);
         }
 
         public void Get(string url, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
@@ -62,23 +62,36 @@ namespace ImobiliariasCrawler.Main.Services
 
         private void Request(string url, Callback callback, FormUrlEncodedContent formContent=null, StringContent stringContent = null, Dictionary<string, object> dictArgs=null)
         {
-            _controlStop++;
             _scheduling.Add(async () =>
             {
+                byte[] hashFingerPrint = null;
+                string payload = null;
                 HttpRequestMessage request = null;
+
                 if (formContent is null && stringContent is null)
+                {
                     request = new HttpRequestMessage(HttpMethod.Get, url);
+                    hashFingerPrint = HandleHash.BytesSHA256(url);
+                }
                 else if (formContent is null)
+                {
                     request = new HttpRequestMessage(HttpMethod.Post, url) { Content = stringContent };
+                    payload = stringContent.ReadAsStringAsync().Result;
+                }
                 else
+                {
                     request = new HttpRequestMessage(HttpMethod.Post, url) { Content = formContent };
+                    payload = formContent.ReadAsStringAsync().Result;
+                }
+
+                hashFingerPrint = HandleHash.BytesSHA256($"{url}{payload}");
+                if (_fingerPrintRequest.Contains(hashFingerPrint))
+                    throw new DuplicateRequestException($"Request duplicado: {url} / {payload}");
 
                 using var httpClient = new HttpClient();
                 var response = await httpClient.SendAsync(request);
                 var selector = await ContentToHtmlDocument(response);
                 callback.Invoke(CreateResponse(response, selector, dictArgs));
-                _controlStop--;
-                if (_controlStop == 0) _callbackFinish.Invoke();
             });
         }
 
