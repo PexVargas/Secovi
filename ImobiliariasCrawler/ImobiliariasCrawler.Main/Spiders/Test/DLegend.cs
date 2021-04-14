@@ -34,10 +34,17 @@ namespace ImobiliariasCrawler.Main.Spiders
         public void ParseGoals(Response response)
         {
             var headers = new Dictionary<string, string> { { "x-requested-with", "XMLHttpRequest" } };
-            var deserialize = response.Selector.Deserialize<SearchMapResult>();
-            var searchListCard = new SearchListCard(deserialize.Imoveis.Select(i => i.Id.ToString()).ToList(), goal: response.DictArgs["TipoImovel"].ToString());
-            response.DictArgs.Add("form", searchListCard);
-            Request.FormPost("https://www.dlegend.com.br/search/searchListCard", ParseResult, searchListCard, headers, dictArgs: response.DictArgs);
+            try
+            {
+                var deserialize = response.Selector.Deserialize<SearchMapResult>();
+                var searchListCard = new SearchListCard(deserialize.Imoveis.Select(i => i.Id.ToString()).ToList(), goal: response.DictArgs["TipoImovel"].ToString());
+                response.DictArgs.Add("form", searchListCard);
+                Request.FormPost("https://www.dlegend.com.br/search/searchListCard", ParseResult, searchListCard, headers, dictArgs: response.DictArgs);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Erro na url com os seguintes parâmetros: {response.HttpResponse.RequestMessage.Content.ReadAsStringAsync().Result}");
+            }
         }
 
         public void ParseResult(Response response)
@@ -87,7 +94,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Banheiros = ul.SelectSingleNode(".//use/@*[contains(.,'#svg-bathroom')]/../../..").TextOrNull(),
                 Garagens = ul.SelectSingleNode(".//use/@*[contains(.,'#svg-garage')]/../../..").TextOrNull(),
                 Churrasqueiras = descriptionSelector.ReHas("churrasqueira") ? "1" : "0",
-                Imagens = string.Join(", ", response.Selector.SelectNodes("//div[@class='b-lazy img-background']").Select(n => n.GetAttributeValue("data-src", null)).Take(5)),
+                Imagens = string.Join(", ", response.Xpath("//div[@class='b-lazy img-background']").Select(n => n.GetAttributeValue("data-src", null)).Take(5)),
                 Valor = response.Selector.SelectSingleNode("//p[@class='price-por']/span[@class='value']").TextOrNull(),
                 Rua = response.Selector.SelectSingleNode("//h1[@class='property-title']").TextOrNull(),
                 Descricao = descriptionSelector.TextOrNull(),

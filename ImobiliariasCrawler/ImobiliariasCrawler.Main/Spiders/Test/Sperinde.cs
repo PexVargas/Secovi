@@ -26,7 +26,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             foreach (var tipoImovel in new []{"aluguel", "venda" })
             {
                 var site = "poa";
-                foreach (var option in response.Selector.SelectNodes("//select[@id='cidade']/option"))
+                foreach (var option in response.Xpath("//select[@id='cidade']/option"))
                 {
                     var isDisable = option.GetAttributeValue("disabled", null);
                     if (isDisable == "disabled")
@@ -58,8 +58,8 @@ namespace ImobiliariasCrawler.Main.Spiders
 
         public void ParseResultList(Response response)
         {
-            var urlList = response.Selector.SelectNodes("//div[@class='container']/div[contains(@class,'fleft100')]/a");
-            if (urlList != null)
+            var urlList = response.Xpath("//div[@class='container']/div[contains(@class,'fleft100')]/a");
+            if (urlList.Count > 0)
             {
                 var filter = response.DictArgs["filter"] as FilterSperinde;
                 filter.NextPage(12);

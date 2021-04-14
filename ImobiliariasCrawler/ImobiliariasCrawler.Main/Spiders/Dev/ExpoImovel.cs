@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
-    class ExpoImovel
+    public class ExpoImovel
     {
     }
 }

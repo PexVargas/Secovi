@@ -15,9 +15,8 @@ namespace ImobiliariasCrawler.Main.Spiders
         {
             foreach (var estado in new[] { "PE", "MG" })
             {
-                var filter = new FilterChaveFacil {Estado = estado};
                 var url = $"https://servicodados.ibge.gov.br/api/v1/localidades/estados/{estado}/municipios";
-                Request.Get(url, callback: Parse, dictArgs: new Dictionary<string, object> { { "filter", filter } });
+                Request.Get(url, callback: Parse, dictArgs: new Dictionary<string, object> { { "estado", estado } });
             }
         }
 
@@ -25,9 +24,7 @@ namespace ImobiliariasCrawler.Main.Spiders
         {
             
             var cidadeList = response.Selector.Deserialize<List<CidadeIBGE>>();
-            var filterBase = response.DictArgs["filter"] as FilterChaveFacil;
-
-            var headers = new Dictionary<string, string> { { "X-Requested-With", "XMLHttpRequest" } };
+            var estado = response.DictArgs["estado"] as string;
 
             foreach (var tipoImovel in new[] { "comprar", "alugar" })
             {
@@ -36,11 +33,11 @@ namespace ImobiliariasCrawler.Main.Spiders
                     foreach (var cidade in cidadeList)
                     {
                         var filter = new FilterChaveFacil { 
-                            Estado = filterBase.Estado,
+                            Estado = estado,
                             Cidade = cidade.Nome, 
                             TipoImovel = tipoImovel, 
                             SubTipo = subTipo,
-                            Url = $"http://chavefacil.com.br/imoveis/{tipoImovel}/{subTipo}/qualquer-tipo-imovel/{filterBase.Estado}/{cidade.Nome.Replace(" ", "-")}"
+                            Url = $"http://chavefacil.com.br/imoveis/{tipoImovel}/{subTipo}/qualquer-tipo-imovel/{estado}/{cidade.Nome.Replace(" ", "-")}"
                         };
                         var urlFormPost = $"http://chavefacil.com.br/imoveis/{tipoImovel}/{subTipo}/qualquer-tipo-imovel/{filter.Estado}/ajax-buscar-imoveis";
 
@@ -48,7 +45,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                         var formData = filter.CreateFormPost();
 
                         var dictArgs = new Dictionary<string, object> { { "filter", filter } };
-                        Request.FormPost(urlFormPost, callback: ParseResultList, dictBody: formData, headers: headers, dictArgs: dictArgs);
+                        Request.FormPost(urlFormPost, callback: ParseResultList, dictBody: formData, dictArgs: dictArgs);
                     }
                 }
             }
@@ -56,7 +53,7 @@ namespace ImobiliariasCrawler.Main.Spiders
 
         private void ParseResultList(Response response)
         {
-            var urlList = response.Selector.SelectNodes("//div[@class='row titulo ir-ficha-imovel']//a").Select(a => a.GetAttributeValue("href", null));
+            var urlList = response.Xpath("//div[@class='row titulo ir-ficha-imovel']//a").Select(a => a.GetAttributeValue("href", null));
             var filter = response.DictArgs["filter"] as FilterChaveFacil;
             filter.NextPage(1);
 
@@ -70,7 +67,6 @@ namespace ImobiliariasCrawler.Main.Spiders
                     var formatedUrl = $"http://chavefacil.com.br{url}";
                     Request.Get(formatedUrl, callback: ParseImovel, dictArgs: response.DictArgs);
                 }
-
             }
         }
 

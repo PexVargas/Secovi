@@ -27,7 +27,7 @@ namespace ImobiliariasCrawler.Main.Spiders
         {
             _logging = new LoggingPerMinuteDto() { Spider = GetType().Name };
             Items = new List<Imoveiscapturados>();
-            Request = new RequestService(new HttpClient(), _logging, Close);
+            Request = new RequestService(_logging, Close);
             _context = new PexinContext();
         }
         public void Init() {
@@ -66,7 +66,6 @@ namespace ImobiliariasCrawler.Main.Spiders
         public void Dispose()
         {
             _context.Dispose();
-            Request.Dispose();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 {
                     var cidade = option.InnerHtml.Replace(" ", ";");
                     var cidadePartialId = option.InnerHtml.Replace(" ", "-").ToLower();
-                    foreach (var input in response.Selector.SelectNodes($"//input[contains(@id,'{cidadePartialId}')]"))
+                    foreach (var input in response.Xpath($"//input[contains(@id,'{cidadePartialId}')]"))
                     {
                         var filter = new FilterLeindecker
                         {
@@ -40,8 +40,8 @@ namespace ImobiliariasCrawler.Main.Spiders
         public void ParseResultList(Response response)
         {
             var filter = response.DictArgs["filter"] as FilterLeindecker;
-            var listImoveis = response.Selector.SelectNodes("//div[contains(@class,'imovel ')]");
-            if (listImoveis != null)
+            var listImoveis = response.Xpath("//div[contains(@class,'imovel ')]");
+            if (listImoveis.Count > 0)
             {
                 filter.NextPage();
                 Request.Get(url: filter.Url, callback: ParseResultList, dictArgs: response.DictArgs);
