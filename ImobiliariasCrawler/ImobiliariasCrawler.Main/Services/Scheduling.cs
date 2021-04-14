@@ -11,8 +11,10 @@ namespace ImobiliariasCrawler.Main.Services
     {
         private readonly SemaphoreSlim _semaphore;
         private LoggingPerMinuteDto _logging;
-        public Scheduling(int concurrentTasks, LoggingPerMinuteDto logging)
+        private readonly TimeSpan _timeIntervalOpenTask;
+        public Scheduling(int concurrentTasks, TimeSpan timeIntervalOpenTask, LoggingPerMinuteDto logging)
         {
+            _timeIntervalOpenTask = timeIntervalOpenTask;
             _semaphore = new SemaphoreSlim(concurrentTasks, concurrentTasks);
             _logging = logging;
             LoggingProcesser();
@@ -26,16 +28,17 @@ namespace ImobiliariasCrawler.Main.Services
                 var requestsPorMinuto = Math.Round(_logging.CounRequests / timeInterval.TotalMinutes);
                 var itemsPorMinuto = Math.Round(_logging.CountItems / timeInterval.TotalMinutes);
 
-                Console.WriteLine("SPIDER [{0}]: TEMPO TOTAL DECORRIDO [{1,10}] - REQUESTS {2,-5} - REQUEST/MINUTOS {3,-5} - ITEMS {4,-5} - ITEMS/MINUTOS {5,-5}",
-                    _logging.Spider, timeInterval, _logging.CounRequests, requestsPorMinuto, _logging.CountItems, itemsPorMinuto);
+                Console.WriteLine("[{0}] - SPIDER [{1}] - REQUESTS {2,-5} - REQUEST/MINUTOS {3,-5} - ITEMS {4,-5} - ITEMS/MINUTOS {5,-5}",
+                    timeInterval, _logging.Spider, _logging.CounRequests, requestsPorMinuto, _logging.CountItems, itemsPorMinuto);
                 await Task.Delay(60 * 1000);
             }
         }
 
         public async void Add(Action action)
         {
-            _logging.CounRequests++;
             await _semaphore.WaitAsync();
+            await Task.Delay(_timeIntervalOpenTask);
+            _logging.CounRequests++;
             var t = Task.Run(() =>{
                 try{
                     action.Invoke();
