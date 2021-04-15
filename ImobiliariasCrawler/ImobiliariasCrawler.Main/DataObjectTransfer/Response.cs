@@ -9,6 +9,7 @@ namespace ImobiliariasCrawler.Main
     public class Response
     {
         public HttpResponseMessage HttpResponse { get; set; }
+        public HttpContent Content { get; set; }
         public HtmlNode Selector { get; set; }
         public Dictionary<string, object> DictArgs { get; set; }
         public string Url { get; set; }

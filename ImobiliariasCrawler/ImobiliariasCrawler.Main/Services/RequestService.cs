@@ -85,7 +85,7 @@ namespace ImobiliariasCrawler.Main.Services
                 }
                 var hashFingerPrint = HandleHash.StringSHA256($"{url}{payload}");
                 if (_fingerPrintRequest.Contains(hashFingerPrint))
-                    Console.WriteLine($"Request duplicado: {hashFingerPrint}");
+                    _logging.AddCountDuplicateRequest();
                 else
                 {
                     _fingerPrintRequest.Add(hashFingerPrint);
@@ -104,7 +104,13 @@ namespace ImobiliariasCrawler.Main.Services
 
 
         private static Response CreateResponse(HttpResponseMessage httpResponse, HtmlDocument selector, Dictionary<string, object> dictArgs) 
-            => new Response { HttpResponse = httpResponse, Selector = selector.DocumentNode, DictArgs = dictArgs, Url = httpResponse.RequestMessage.RequestUri.AbsoluteUri };
+            => new Response { 
+                HttpResponse = httpResponse,
+                Content = httpResponse.Content,
+                Selector = selector.DocumentNode, 
+                DictArgs = dictArgs, 
+                Url = httpResponse.RequestMessage.RequestUri.AbsoluteUri 
+            };
 
         private void MakeHeaders(HttpContentHeaders source, Dictionary<string, string> headers = null)
         {

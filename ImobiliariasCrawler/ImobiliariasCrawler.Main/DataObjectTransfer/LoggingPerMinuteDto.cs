@@ -11,6 +11,7 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
         public int CountItems { get; private set; }
         public int CountTotalRequests { get; private set; }
         public int CountOpenRequests { get; private set; }
+        public int CountDuplicateRequests { get; private set; }
         public DateTime StartProcess { get; private set; } = DateTime.Now;
 
         private DateTime lastUpdateSpider;
@@ -18,6 +19,7 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
 
         public bool Finish { get; private set; } = false;
 
+        public void AddCountDuplicateRequest() => CountDuplicateRequests++;
         public void AddCountItem() {
             lastUpdateSpider = DateTime.Now;
             CountItems++;
@@ -38,6 +40,17 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
             MonitoringFinishSpider();
         }
 
+        private void Print()
+        {
+            var timeInterval = DateTime.Now - StartProcess;
+            var requestsPorMinuto = Math.Round(CountTotalRequests / timeInterval.TotalMinutes);
+            var itemsPorMinuto = Math.Round(CountItems / timeInterval.TotalMinutes);
+
+            var message = String.Format("[{0}] - SPIDER [{1}] - REQUESTS {2,-5} - REQUEST/MINUTOS {3,-5} - ITEMS {4,-5} - ITEMS/MINUTOS {5,-5} - REQUESTS/DUPLICADOS {6,-5}",
+                                        timeInterval, Spider, CountTotalRequests, requestsPorMinuto, CountItems, itemsPorMinuto, CountDuplicateRequests);
+            Console.WriteLine(message);
+        }
+
         private void StatisticsCollect()
         {
             Task.Run(async () =>
@@ -45,13 +58,7 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
                 Console.Clear();
                 while (true && !Finish)
                 {
-                    var timeInterval = DateTime.Now - StartProcess;
-                    var requestsPorMinuto = Math.Round(CountTotalRequests / timeInterval.TotalMinutes);
-                    var itemsPorMinuto = Math.Round(CountItems / timeInterval.TotalMinutes);
-
-                    var message = String.Format("[{0}] - SPIDER [{1}] - REQUESTS {2,-5} - REQUEST/MINUTOS {3,-5} - ITEMS {4,-5} - ITEMS/MINUTOS {5,-5}",
-                                                timeInterval, Spider, CountTotalRequests, requestsPorMinuto, CountItems, itemsPorMinuto);
-                    Console.WriteLine(message);
+                    Print();
                     await Task.Delay(60 * 1000);
                 }
             });
@@ -67,6 +74,8 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
                     await Task.Delay(10 * 1000);
                     if ((DateTime.Now - lastUpdateSpider).TotalSeconds > 30 && !Finish)
                     {
+                         Console.WriteLine("---------------------------------------------- FINISH ----------------------------------------------");
+                        Print();
                         Finish = true;
                         _callbackFinish.Invoke();
                     }
