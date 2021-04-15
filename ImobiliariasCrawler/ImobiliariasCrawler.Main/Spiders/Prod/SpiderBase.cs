@@ -1,60 +1,42 @@
-using ImobiliariasCrawler.Main.DataObjectTransfer;
-using ImobiliariasCrawler.Main.Model;
-using ImobiliariasCrawler.Main.Services;
+﻿using ImobiliariasCrawler.Main.Model;
 using System;
 using System.Collections.Generic;
-
+using System.Text;
 using System.Threading;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
-    public abstract class SpiderBase
+    public abstract class SpiderBase : SpiderAbstract
     {
-        public List<Imoveiscapturados> Items { get; set; }
-        public RequestService Request { get; set; }
+        public MenageRequest Request { get; set; }
         private readonly PexinContext _context;
-        private readonly LoggingPerMinuteDto _logging;
-        private int insertItems = 0;
+        private readonly MonitorSpiders _logging;
+        private int _bufferInsertItems = 0;
 
-        public SpiderBase()
+        public SpiderBase() : base()
         {
-            _logging = new LoggingPerMinuteDto(GetType().Name, Close);
-            Items = new List<Imoveiscapturados>();
-            Request = new RequestService(_logging);
             _context = new PexinContext();
         }
-        public void Init() {
-            var thread = new Thread(() =>
-            {
-                _logging.Init();
-                StartRequest();
-            });
-            thread.Start();
-        }
 
-
-        public abstract void StartRequest();
-        public abstract void Parse(Response response);
         public void Save(ImoveiscapturadosDto imoveiscapturados)
         {
             _logging.AddCountItem();
-            insertItems++;
             lock (_context)
             {
                 _context.Add(imoveiscapturados.ToImoveiscapturados());
-                if (insertItems > 30)
+                if (_bufferInsertItems++ % 100 == 0)
                 {
-                    try{
+                    _bufferInsertItems = 0;
+                    try
+                    {
                         _context.SaveChanges();
                     }
-                    finally{
-                        insertItems = 0;
-                    }
+                    finally { }
                 }
             }
         }
 
-        public virtual void Close()
+        public override void Close()
         {
             lock (_context)
             {
@@ -62,6 +44,28 @@ namespace ImobiliariasCrawler.Main.Spiders
                 _context.Dispose();
                 Console.WriteLine($"FINISH SPIDER [{_logging.Spider}] - Requests [{_logging.CountTotalRequests}] - Items [{_logging.CountItems}]");
             }
+        }
+    }
+
+
+    public class Widgets { }
+
+    public abstract class AbstractClass<T>
+    {
+        public int Id { get; set; }
+        public int Name { get; set; }
+
+        public abstract List<T> Items { get; set; }
+        public abstract void Add<T>(T item);
+    }
+
+    public class Container : AbstractClass<Widgets>
+    {
+        public override List<Widgets> Items { get; set; }
+
+        public override void Add<T>(T item)
+        {
+            throw new NotImplementedException();
         }
     }
 }

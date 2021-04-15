@@ -1,12 +1,8 @@
 ﻿using ImobiliariasCrawler.Main.DataObjectTransfer;
 using ImobiliariasCrawler.Main.Extensions;
-using ImobiliariasCrawler.Main.Services;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
@@ -82,7 +78,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             var jsonText = response.Selector.SelectSingleNode("//script[contains(text(),'SOH.Exec')]").TextOrNull().Replace("SOH.Exec(", "").Replace(");", "");
             var fixQuotes = jsonText.Replace("'", "\"").Replace("href=\"", "href='").Replace("void(0\"", "void(0'");
             var fixComma = new Regex(",", RegexOptions.RightToLeft).Replace(fixQuotes, "", 1);
-            var imovelSperinde = JsonSerializer.Deserialize<ImovelSperinde>(fixComma, RequestService.JsonOptions);
+            var imovelSperinde = JsonSerializer.Deserialize<ImovelSperinde>(fixComma, MenageRequest.JsonOptions);
 
             var imovel = new ImoveiscapturadosDto(SpiderEnum.Sperinde, tipoImovel)
             {

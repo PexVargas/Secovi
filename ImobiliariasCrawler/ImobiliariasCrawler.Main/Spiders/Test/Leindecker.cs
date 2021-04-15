@@ -7,7 +7,7 @@ using ImobiliariasCrawler.Main.Model;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
-    class Leindecker : SpiderBase
+    public class Leindecker : SpiderBase
     {
 
         public override void StartRequest()
