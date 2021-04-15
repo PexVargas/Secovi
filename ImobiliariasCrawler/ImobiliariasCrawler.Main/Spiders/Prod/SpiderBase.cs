@@ -1,27 +1,19 @@
-using HtmlAgilityPack;
 using ImobiliariasCrawler.Main.DataObjectTransfer;
 using ImobiliariasCrawler.Main.Model;
 using ImobiliariasCrawler.Main.Services;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
+
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
-
     public abstract class SpiderBase
     {
         public List<Imoveiscapturados> Items { get; set; }
         public RequestService Request { get; set; }
         private readonly PexinContext _context;
-        private LoggingPerMinuteDto _logging;
+        private readonly LoggingPerMinuteDto _logging;
         private int insertItems = 0;
 
         public SpiderBase()

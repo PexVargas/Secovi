@@ -11,7 +11,6 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace ImobiliariasCrawler.Main.Services
 {
@@ -21,7 +20,9 @@ namespace ImobiliariasCrawler.Main.Services
     public class RequestService
     {
         private readonly Scheduling _scheduling;
-        private readonly HashSet<byte[]> _fingerPrintRequest;
+        private readonly HashSet<string> _fingerPrintRequest;
+        private readonly List<string> tmp = new List<string>();
+
         private readonly LoggingPerMinuteDto _logging;
 
         public readonly static JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
@@ -34,7 +35,7 @@ namespace ImobiliariasCrawler.Main.Services
         public RequestService(LoggingPerMinuteDto logging)
         {
             _logging = logging;
-            _fingerPrintRequest = new HashSet<byte[]>();
+            _fingerPrintRequest = new HashSet<string>();
             _scheduling = new Scheduling(10, new TimeSpan(0, 0, 0, 0, 1000), logging);
         }
 
@@ -65,14 +66,12 @@ namespace ImobiliariasCrawler.Main.Services
         {
             _scheduling.Add(async () =>
             {
-                byte[] hashFingerPrint = null;
                 string payload = null;
                 HttpRequestMessage request = null;
 
                 if (formContent is null && stringContent is null)
                 {
                     request = new HttpRequestMessage(HttpMethod.Get, url);
-                    hashFingerPrint = HandleHash.BytesSHA256(url);
                 }
                 else if (formContent is null)
                 {
@@ -84,19 +83,22 @@ namespace ImobiliariasCrawler.Main.Services
                     request = new HttpRequestMessage(HttpMethod.Post, url) { Content = formContent };
                     payload = formContent.ReadAsStringAsync().Result;
                 }
-
-                hashFingerPrint = HandleHash.BytesSHA256($"{url}{payload}");
+                var hashFingerPrint = HandleHash.StringSHA256($"{url}{payload}");
                 if (_fingerPrintRequest.Contains(hashFingerPrint))
-                    throw new DuplicateRequestException($"Request duplicado: {url} / {payload}");
+                    Console.WriteLine($"Request duplicado: {hashFingerPrint}");
+                else
+                {
+                    _fingerPrintRequest.Add(hashFingerPrint);
 
-                using var httpClient = new HttpClient();
+                    using var httpClient = new HttpClient();
 
-                _logging.AddCountRequest();
-                var response = await httpClient.SendAsync(request);
-                _logging.CloseRequest();
+                    _logging.AddCountRequest();
+                    var response = await httpClient.SendAsync(request);
+                    _logging.CloseRequest();
 
-                var selector = await ContentToHtmlDocument(response);
-                callback.Invoke(CreateResponse(response, selector, dictArgs));
+                    var selector = await ContentToHtmlDocument(response);
+                    callback.Invoke(CreateResponse(response, selector, dictArgs));
+                }
             });
         }
 
