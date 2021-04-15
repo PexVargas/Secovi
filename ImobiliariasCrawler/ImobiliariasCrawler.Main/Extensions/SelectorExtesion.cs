@@ -1,5 +1,5 @@
 ﻿using HtmlAgilityPack;
-using ImobiliariasCrawler.Main.Services;
+using ImobiliariasCrawler.Main;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,7 +35,7 @@ namespace ImobiliariasCrawler.Main
 
         public static T Deserialize<T>(this HtmlNode htmlNode)
         {
-            return JsonSerializer.Deserialize<T>(htmlNode.InnerText, RequestService.JsonOptions);
+            return JsonSerializer.Deserialize<T>(htmlNode.InnerText, MenageRequest.JsonOptions);
         }
     }
 }
