@@ -6,13 +6,13 @@ namespace ImobiliariasCrawler.Main
 {
     public abstract class SpiderAbstract
     {
-        public MenageRequest Request { get; set; }
-        private readonly MonitorSpiders _logging;
+        protected ManageRequests Request { get; set; }
+        protected readonly MonitorSpiders _logging;
 
         public SpiderAbstract()
         {
             _logging = new MonitorSpiders(GetType().Name, Close);
-            Request = new MenageRequest(_logging);
+            Request = new ManageRequests(_logging);
         }
         public void Init() {
             var thread = new Thread(() =>
@@ -25,6 +25,6 @@ namespace ImobiliariasCrawler.Main
 
         public abstract void StartRequest();
         public abstract void Parse(Response response);
-        public abstract void Close();
+        public virtual void Close() { }
     }
 }

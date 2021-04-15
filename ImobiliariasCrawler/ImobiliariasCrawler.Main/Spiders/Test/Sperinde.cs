@@ -78,7 +78,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             var jsonText = response.Selector.SelectSingleNode("//script[contains(text(),'SOH.Exec')]").TextOrNull().Replace("SOH.Exec(", "").Replace(");", "");
             var fixQuotes = jsonText.Replace("'", "\"").Replace("href=\"", "href='").Replace("void(0\"", "void(0'");
             var fixComma = new Regex(",", RegexOptions.RightToLeft).Replace(fixQuotes, "", 1);
-            var imovelSperinde = JsonSerializer.Deserialize<ImovelSperinde>(fixComma, MenageRequest.JsonOptions);
+            var imovelSperinde = JsonSerializer.Deserialize<ImovelSperinde>(fixComma, ManageRequests.JsonOptions);
 
             var imovel = new ImoveiscapturadosDto(SpiderEnum.Sperinde, tipoImovel)
             {

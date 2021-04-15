@@ -16,7 +16,7 @@ namespace ImobiliariasCrawler.Main
     public delegate void Callback(Response response);
 
 
-    public class MenageRequest
+    public class ManageRequests
     {
         private readonly HashSet<string> _fingerPrintRequest;
         private readonly SemaphoreSlim _semaphore;
@@ -29,7 +29,7 @@ namespace ImobiliariasCrawler.Main
             Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
         };
 
-        public MenageRequest(MonitorSpiders logging)
+        public ManageRequests(MonitorSpiders logging)
         {
             _semaphore = new SemaphoreSlim(10);
             _logging = logging;
@@ -53,36 +53,47 @@ namespace ImobiliariasCrawler.Main
             Request(url, callback, httpContent: formContent, dictArgs: dictArgs, headers: headers);
         }
 
-        private async void Request(string url, Callback callback, HttpContent httpContent = null, Dictionary<string, object> dictArgs=null, Dictionary<string, string> headers=null)
+        private void Request(string url, Callback callback, HttpContent httpContent = null, Dictionary<string, object> dictArgs=null, Dictionary<string, string> headers=null)
         {
-            await _semaphore.WaitAsync();
-            await Task.Delay(_intervalRequest);
-
-            MakeHeaders(httpContent.Headers, headers);
-
-            string payload = httpContent != null ? await httpContent.ReadAsStringAsync() : null;
-            var hashFingerPrint = HandleHash.StringSHA256($"{url}{payload}");
-
-            if (_fingerPrintRequest.Contains(hashFingerPrint))
-                _logging.AddCountDuplicateRequest();
-            else
+            Task.Run(async () =>
             {
-                _fingerPrintRequest.Add(hashFingerPrint);
+                await _semaphore.WaitAsync();
+                await Task.Delay(_intervalRequest);
 
-                using var httpClient = new HttpClient();
+                if (httpContent != null) MakeHeaders(httpContent.Headers, headers);
 
-                _logging.AddCountRequest();
-                var request = CreateRequest(url, httpContent);
+                string payload = httpContent != null ? await httpContent.ReadAsStringAsync() : null;
+                var hashFingerPrint = HandleHash.StringSHA256($"{url}{payload}");
 
-                try { 
-                    var response = await httpClient.SendAsync(request);
-                    var selector = await ContentToHtmlDocument(response);
-                    callback.Invoke(CreateResponse(response, selector, dictArgs));
+                if (_fingerPrintRequest.Contains(hashFingerPrint))
+                    _logging.AddCountDuplicateRequest();
+                else
+                {
+                    _fingerPrintRequest.Add(hashFingerPrint);
+
+                    using var httpClient = new HttpClient();
+
+                    _logging.AddCountRequest();
+                    var request = CreateRequest(url, httpContent);
+
+                    try
+                    {
+                        var response = await httpClient.SendAsync(request);
+                        var selector = await ContentToHtmlDocument(response);
+                        callback.Invoke(CreateResponse(response, selector, dictArgs));
+                    }
+                    catch { 
+                        Console.WriteLine($"ERRO REQUEST {hashFingerPrint}");
+                        _logging.AddCountDuplicateRequest(); 
+                    }
+                    finally
+                    {
+                        _logging.CloseRequest();
+                        _semaphore.Release();
+                    }
+
                 }
-                catch { _logging.AddCountDuplicateRequest(); }
-                _logging.CloseRequest();
-
-            }
+            });
         }
 
 

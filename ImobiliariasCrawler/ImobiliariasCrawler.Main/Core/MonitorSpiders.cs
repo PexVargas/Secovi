@@ -47,8 +47,8 @@ namespace ImobiliariasCrawler.Main
             var requestsPorMinuto = Math.Round(CountTotalRequests / timeInterval.TotalMinutes);
             var itemsPorMinuto = Math.Round(CountItems / timeInterval.TotalMinutes);
 
-            var message = String.Format("[{0}] - SPIDER [{1}] - REQUESTS {2,-5} - REQUEST/MINUTOS {3,-5} - ITEMS {4,-5} - ITEMS/MINUTOS {5,-5} - REQUESTS/DUPLICADOS {6,-5}",
-                                        timeInterval, Spider, CountTotalRequests, requestsPorMinuto, CountItems, itemsPorMinuto, CountDuplicateRequests);
+            var message = String.Format("[{0}] - SPIDER [{1}] - REQUESTS {2,-5} - REQUEST/MINUTOS {3,-5} - ITEMS {4,-5} - ITEMS/MINUTOS {5,-5} - REQUESTS/DUPLICADOS {6,-5} - REQUESTS/ERROR {7,-5}",
+                                        timeInterval, Spider, CountTotalRequests, requestsPorMinuto, CountItems, itemsPorMinuto, CountDuplicateRequests, CountRequestsError);
             Console.WriteLine(message);
         }
 

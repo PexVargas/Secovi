@@ -35,7 +35,7 @@ namespace ImobiliariasCrawler.Main
 
         public static T Deserialize<T>(this HtmlNode htmlNode)
         {
-            return JsonSerializer.Deserialize<T>(htmlNode.InnerText, MenageRequest.JsonOptions);
+            return JsonSerializer.Deserialize<T>(htmlNode.InnerText, ManageRequests.JsonOptions);
         }
     }
 }
