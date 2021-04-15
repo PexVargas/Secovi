@@ -1,17 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ImobiliariasCrawler.Main.DataObjectTransfer
+namespace ImobiliariasCrawler.Main
 {
-    public class LoggingPerMinuteDto
+    public class MonitorSpiders
     {
-        public LoggingPerMinuteDto(string spiderName, Action callbackFinish) { Spider = spiderName; _callbackFinish = callbackFinish; }
+        public MonitorSpiders(string spiderName, Action callbackFinish) { Spider = spiderName; _callbackFinish = callbackFinish; }
         public string Spider { get; private set; }
         public int CountItems { get; private set; }
         public int CountTotalRequests { get; private set; }
         public int CountOpenRequests { get; private set; }
         public int CountDuplicateRequests { get; private set; }
+        public int CountRequestsError { get; private set; }
         public DateTime StartProcess { get; private set; } = DateTime.Now;
 
         private DateTime lastUpdateSpider;
@@ -20,6 +20,7 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
         public bool Finish { get; private set; } = false;
 
         public void AddCountDuplicateRequest() => CountDuplicateRequests++;
+        public void AddCountRequestError() => CountRequestsError++;
         public void AddCountItem() {
             lastUpdateSpider = DateTime.Now;
             CountItems++;
