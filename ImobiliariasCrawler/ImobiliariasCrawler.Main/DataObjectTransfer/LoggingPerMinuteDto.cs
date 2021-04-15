@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,7 +14,7 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
         public DateTime StartProcess { get; private set; } = DateTime.Now;
 
         private DateTime lastUpdateSpider;
-        private Action _callbackFinish;
+        private readonly Action _callbackFinish;
 
         public bool Finish { get; private set; } = false;
 
@@ -35,7 +35,7 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
         {
             lastUpdateSpider = DateTime.Now;
             StatisticsCollect();
-            MonitoringOpenRequests();
+            MonitoringFinishSpider();
         }
 
         private void StatisticsCollect()
@@ -43,7 +43,6 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
             Task.Run(async () =>
             {
                 Console.Clear();
-                var messageList = new List<string>(10);
                 while (true && !Finish)
                 {
                     var timeInterval = DateTime.Now - StartProcess;
@@ -52,29 +51,21 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
 
                     var message = String.Format("[{0}] - SPIDER [{1}] - REQUESTS {2,-5} - REQUEST/MINUTOS {3,-5} - ITEMS {4,-5} - ITEMS/MINUTOS {5,-5}",
                                                 timeInterval, Spider, CountTotalRequests, requestsPorMinuto, CountItems, itemsPorMinuto);
-
-                    if (messageList.Count >= 10) messageList.RemoveAt(0);
-                    messageList.Add(message);
-                    Console.Clear();
-                    Console.WriteLine(string.Join("\n", messageList));
-
+                    Console.WriteLine(message);
                     await Task.Delay(60 * 1000);
                 }
             });
         }
 
 
-        private void MonitoringOpenRequests()
+        private void MonitoringFinishSpider()
         {
             Task.Run(async () =>
             {
                 while (true && !Finish)
                 {
-                    Console.SetCursorPosition(0, 12);
-                    Console.WriteLine($"OPEN REQUESTS: [{CountOpenRequests}] - CLOSE REQUESTS: [{CountTotalRequests - CountOpenRequests}]");
-                    await Task.Delay(1000);
-
-                    if ((DateTime.Now - lastUpdateSpider).Seconds > 10 && !Finish)
+                    await Task.Delay(10 * 1000);
+                    if ((DateTime.Now - lastUpdateSpider).TotalSeconds > 30 && !Finish)
                     {
                         Finish = true;
                         _callbackFinish.Invoke();
