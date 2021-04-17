@@ -1,4 +1,5 @@
-﻿using ImobiliariasCrawler.Main.Model;
+﻿using ImobiliariasCrawler.Main.Core;
+using ImobiliariasCrawler.Main.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,7 +12,7 @@ namespace ImobiliariasCrawler.Main.Spiders
         private readonly PexinContext _context;
         private int _bufferInsertItems = 0;
 
-        public SpiderBase() : base()
+        public SpiderBase(ConfigurationSpider config = null) : base(config ?? new ConfigurationSpider(new TimeSpan(0, 0, 0, 0, 1000), 10))
         {
             _context = new PexinContext();
         }

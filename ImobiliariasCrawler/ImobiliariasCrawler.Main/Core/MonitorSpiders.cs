@@ -56,7 +56,6 @@ namespace ImobiliariasCrawler.Main
         {
             Task.Run(async () =>
             {
-                Console.Clear();
                 while (true && !Finish)
                 {
                     Print();
