@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ImobiliariasCrawler.Main.Core;
 using ImobiliariasCrawler.Main.Extensions;
@@ -20,6 +21,8 @@ namespace ImobiliariasCrawler.Main.Spiders
         {
             var dictVenda = new Dictionary<string, object> { { "TipoImovel", "1" } };
             Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=venda&finalidade=venda&cidade=", callback: Parse, dictArgs: dictVenda);
+            return;
+
             Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=lancamentos&finalidade=venda&lancamentos=true&cidade=", callback: Parse, dictArgs: dictVenda);
 
             var dictAluguel = new Dictionary<string, object> { { "TipoImovel", "2" } };
@@ -32,25 +35,27 @@ namespace ImobiliariasCrawler.Main.Spiders
         {
             var partialNextUrl = response.Selector.SelectSingleNode("//i[@class='fa fa-chevron-right']/..").GetAttributeValue("href", null);
             
-            if (!string.IsNullOrWhiteSpace(partialNextUrl))
-            {
-                var nextUrl = "http://www.garciaimoveisrs.com.br/imoveis.php" + partialNextUrl;
-                Request.Get(nextUrl, callback: Parse, dictArgs: response.DictArgs);
-            }
+            //if (!string.IsNullOrWhiteSpace(partialNextUrl))
+            //{
+            //    var nextUrl = "http://www.garciaimoveisrs.com.br/imoveis.php" + partialNextUrl;
+            //    Request.Get(nextUrl, callback: Parse, dictArgs: response.DictArgs);
+            //}
 
             foreach (var div in response.Selector.SelectNodes("//div[@class='imoveis clearfix']//div[@class='row']/div"))
             {
                 var partialUrl = div.SelectSingleNode(".//a").GetAttributeValue("href", null);
                 var url = "http://www.garciaimoveisrs.com.br/" + partialUrl;
 
-                Request.Get(url, callback: ParseResult, dictArgs: response.DictArgs);
+
+                Request.Get("http://www.garciaimoveisrs.com.br/deposito-neopolis-gravatai,200007199", callback: ParseResult, dictArgs: response.DictArgs);
+                return;
             }
         }
 
         public void ParseResult(Response response)
         {
             var tipoImovel = response.DictArgs["TipoImovel"].ToString() == "1" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
-            var cidade = response.Selector.SelectSingleNode("//head/title").ReFirst("Imobil.*?- (.*) [A-Z]{2}");
+            var cidade = response.Selector.SelectSingleNode("//meta[@name='description']").GetAttributeValue("content", null).Split("(").First().Split(",").Last();
             var bairro = response.Selector.SelectSingleNode("//div[@class='sobre']/h3").TextOrNull();
             if (bairro != null) bairro = bairro.Replace(cidade, "");
             var imovel = new ImoveiscapturadosDto(SpiderEnum.Garcia, tipoImovel)
