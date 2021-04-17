@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ImobiliariasCrawler.Main.Core;
 using ImobiliariasCrawler.Main.Extensions;
 using ImobiliariasCrawler.Main.Model;
 
@@ -8,7 +9,13 @@ namespace ImobiliariasCrawler.Main.Spiders
 {
     public class Garcia : SpiderBase
     {
-       
+        public Garcia() : base(
+            new ConfigurationSpider(
+                downloadDelay: new TimeSpan(0, 0, 0, 0, 3000),
+                concurretnRequests: 10
+            ))
+        {}
+
         public override void StartRequest()
         {
             var dictVenda = new Dictionary<string, object> { { "TipoImovel", "1" } };
@@ -24,7 +31,8 @@ namespace ImobiliariasCrawler.Main.Spiders
         public override void Parse(Response response)
         {
             var partialNextUrl = response.Selector.SelectSingleNode("//i[@class='fa fa-chevron-right']/..").GetAttributeValue("href", null);
-            if (partialNextUrl != null)
+            
+            if (!string.IsNullOrWhiteSpace(partialNextUrl))
             {
                 var nextUrl = "http://www.garciaimoveisrs.com.br/imoveis.php" + partialNextUrl;
                 Request.Get(nextUrl, callback: Parse, dictArgs: response.DictArgs);
