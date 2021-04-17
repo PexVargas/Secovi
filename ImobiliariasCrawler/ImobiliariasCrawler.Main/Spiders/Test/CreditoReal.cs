@@ -1,5 +1,5 @@
 using ImobiliariasCrawler.Main.Model;
-using ImobiliariasCrawler.Main.Services;
+using ImobiliariasCrawler.Main;
 using System;
 using System.Collections.Generic;
 using System.Text;

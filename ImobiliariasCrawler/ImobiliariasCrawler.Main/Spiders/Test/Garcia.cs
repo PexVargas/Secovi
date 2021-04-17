@@ -6,7 +6,7 @@ using ImobiliariasCrawler.Main.Model;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
-    class Garcia : SpiderBase
+    public class Garcia : SpiderBase
     {
        
         public override void StartRequest()

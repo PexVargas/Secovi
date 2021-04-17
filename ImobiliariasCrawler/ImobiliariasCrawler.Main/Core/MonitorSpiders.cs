@@ -1,17 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ImobiliariasCrawler.Main.DataObjectTransfer
+namespace ImobiliariasCrawler.Main
 {
-    public class LoggingPerMinuteDto
+    public class MonitorSpiders
     {
-        public LoggingPerMinuteDto(string spiderName, Action callbackFinish) { Spider = spiderName; _callbackFinish = callbackFinish; }
+        public MonitorSpiders(string spiderName, Action callbackFinish) { Spider = spiderName; _callbackFinish = callbackFinish; }
         public string Spider { get; private set; }
         public int CountItems { get; private set; }
         public int CountTotalRequests { get; private set; }
         public int CountOpenRequests { get; private set; }
         public int CountDuplicateRequests { get; private set; }
+        public int CountRequestsError { get; private set; }
         public DateTime StartProcess { get; private set; } = DateTime.Now;
 
         private DateTime lastUpdateSpider;
@@ -20,6 +20,7 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
         public bool Finish { get; private set; } = false;
 
         public void AddCountDuplicateRequest() => CountDuplicateRequests++;
+        public void AddCountRequestError() => CountRequestsError++;
         public void AddCountItem() {
             lastUpdateSpider = DateTime.Now;
             CountItems++;
@@ -46,8 +47,8 @@ namespace ImobiliariasCrawler.Main.DataObjectTransfer
             var requestsPorMinuto = Math.Round(CountTotalRequests / timeInterval.TotalMinutes);
             var itemsPorMinuto = Math.Round(CountItems / timeInterval.TotalMinutes);
 
-            var message = String.Format("[{0}] - SPIDER [{1}] - REQUESTS {2,-5} - REQUEST/MINUTOS {3,-5} - ITEMS {4,-5} - ITEMS/MINUTOS {5,-5} - REQUESTS/DUPLICADOS {6,-5}",
-                                        timeInterval, Spider, CountTotalRequests, requestsPorMinuto, CountItems, itemsPorMinuto, CountDuplicateRequests);
+            var message = String.Format("[{0}] - SPIDER [{1}] - REQUESTS {2,-5} - REQUEST/MINUTOS {3,-5} - ITEMS {4,-5} - ITEMS/MINUTOS {5,-5} - REQUESTS/DUPLICADOS {6,-5} - REQUESTS/ERROR {7,-5}",
+                                        timeInterval, Spider, CountTotalRequests, requestsPorMinuto, CountItems, itemsPorMinuto, CountDuplicateRequests, CountRequestsError);
             Console.WriteLine(message);
         }
 

@@ -1,6 +1,4 @@
 using HtmlAgilityPack;
-using ImobiliariasCrawler.Main.DataObjectTransfer;
-using ImobiliariasCrawler.Main.Exceptions;
 using ImobiliariasCrawler.Main.Extensions;
 using System;
 using System.Collections.Generic;
@@ -10,20 +8,20 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace ImobiliariasCrawler.Main.Services
+namespace ImobiliariasCrawler.Main
 {
     public delegate void Callback(Response response);
 
 
-    public class RequestService
+    public class ManageRequests
     {
-        private readonly Scheduling _scheduling;
         private readonly HashSet<string> _fingerPrintRequest;
-        private readonly List<string> tmp = new List<string>();
-
-        private readonly LoggingPerMinuteDto _logging;
+        private readonly SemaphoreSlim _semaphore;
+        private readonly TimeSpan _intervalRequest = new TimeSpan(0, 0, 0, 0, 1000);
+        private readonly MonitorSpiders _logging;
 
         public readonly static JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
         {
@@ -31,59 +29,42 @@ namespace ImobiliariasCrawler.Main.Services
             Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
         };
 
-
-        public RequestService(LoggingPerMinuteDto logging)
+        public ManageRequests(MonitorSpiders logging)
         {
+            _semaphore = new SemaphoreSlim(10);
             _logging = logging;
             _fingerPrintRequest = new HashSet<string>();
-            _scheduling = new Scheduling(10, new TimeSpan(0, 0, 0, 0, 1000), logging);
         }
 
         public void Get(string url, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
-        {
-            Request(url, callback, dictArgs: dictArgs);
+            => Request(url, callback, dictArgs: dictArgs, headers: headers);
 
-        }
         public void Post(string url, object body, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
             var payload = JsonSerializer.Serialize(body, JsonOptions);
             var jsonContent = new StringContent(payload, Encoding.UTF8, "application/json");
-
-            MakeHeaders(jsonContent.Headers, headers);
-            Request(url, callback, stringContent: jsonContent, dictArgs: dictArgs);
-
+            Request(url, callback, httpContent: jsonContent, dictArgs: dictArgs, headers: headers);
         }
+
         public void FormPost(string url, Callback callback, object objBody=null, Dictionary<string,string> dictBody=null, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
             var keyValue = objBody != null ? objBody.ToKeyValue() : dictBody.ToList();
             var formContent = new FormUrlEncodedContent(keyValue);
-
-            MakeHeaders(formContent.Headers, headers);
-            Request(url, callback, formContent, dictArgs: dictArgs);
+            Request(url, callback, httpContent: formContent, dictArgs: dictArgs, headers: headers);
         }
 
-        private void Request(string url, Callback callback, FormUrlEncodedContent formContent=null, StringContent stringContent = null, Dictionary<string, object> dictArgs=null)
+        private void Request(string url, Callback callback, HttpContent httpContent = null, Dictionary<string, object> dictArgs=null, Dictionary<string, string> headers=null)
         {
-            _scheduling.Add(async () =>
+            Task.Run(async () =>
             {
-                string payload = null;
-                HttpRequestMessage request = null;
+                await _semaphore.WaitAsync();
+                await Task.Delay(_intervalRequest);
 
-                if (formContent is null && stringContent is null)
-                {
-                    request = new HttpRequestMessage(HttpMethod.Get, url);
-                }
-                else if (formContent is null)
-                {
-                    request = new HttpRequestMessage(HttpMethod.Post, url) { Content = stringContent };
-                    payload = stringContent.ReadAsStringAsync().Result;
-                }
-                else
-                {
-                    request = new HttpRequestMessage(HttpMethod.Post, url) { Content = formContent };
-                    payload = formContent.ReadAsStringAsync().Result;
-                }
+                if (httpContent != null) MakeHeaders(httpContent.Headers, headers);
+
+                string payload = httpContent != null ? await httpContent.ReadAsStringAsync() : null;
                 var hashFingerPrint = HandleHash.StringSHA256($"{url}{payload}");
+
                 if (_fingerPrintRequest.Contains(hashFingerPrint))
                     _logging.AddCountDuplicateRequest();
                 else
@@ -93,15 +74,31 @@ namespace ImobiliariasCrawler.Main.Services
                     using var httpClient = new HttpClient();
 
                     _logging.AddCountRequest();
-                    var response = await httpClient.SendAsync(request);
-                    _logging.CloseRequest();
+                    var request = CreateRequest(url, httpContent);
 
-                    var selector = await ContentToHtmlDocument(response);
-                    callback.Invoke(CreateResponse(response, selector, dictArgs));
+                    try
+                    {
+                        var response = await httpClient.SendAsync(request);
+                        var selector = await ContentToHtmlDocument(response);
+                        callback.Invoke(CreateResponse(response, selector, dictArgs));
+                    }
+                    catch { 
+                        Console.WriteLine($"ERRO REQUEST {hashFingerPrint}");
+                        _logging.AddCountDuplicateRequest(); 
+                    }
+                    finally
+                    {
+                        _logging.CloseRequest();
+                        _semaphore.Release();
+                    }
+
                 }
             });
         }
 
+
+        private static HttpRequestMessage CreateRequest(string url, HttpContent httpContent) =>
+            httpContent is null ? new HttpRequestMessage(HttpMethod.Get, url) : new HttpRequestMessage(HttpMethod.Post, url) { Content = httpContent };
 
         private static Response CreateResponse(HttpResponseMessage httpResponse, HtmlDocument selector, Dictionary<string, object> dictArgs) 
             => new Response { 
