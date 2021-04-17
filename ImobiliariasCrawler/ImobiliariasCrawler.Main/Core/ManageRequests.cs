@@ -1,4 +1,5 @@
 using HtmlAgilityPack;
+using ImobiliariasCrawler.Main.Core;
 using ImobiliariasCrawler.Main.Extensions;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,9 @@ namespace ImobiliariasCrawler.Main
     {
         private readonly HashSet<string> _fingerPrintRequest;
         private readonly SemaphoreSlim _semaphore;
-        private readonly TimeSpan _intervalRequest = new TimeSpan(0, 0, 0, 0, 1000);
         private readonly MonitorSpiders _logging;
+        private readonly ConfigurationSpider _configuration;
+
 
         public readonly static JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
         {
@@ -29,11 +31,14 @@ namespace ImobiliariasCrawler.Main
             Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
         };
 
-        public ManageRequests(MonitorSpiders logging)
+        public ManageRequests(MonitorSpiders logging, ConfigurationSpider configuration)
         {
-            _semaphore = new SemaphoreSlim(10);
+            _configuration = configuration;
+            _semaphore = new SemaphoreSlim(_configuration.ConcurrentRequests);
             _logging = logging;
             _fingerPrintRequest = new HashSet<string>();
+
+            Console.WriteLine($"DOWNLOAD_DELAY: [{_configuration.DownloadDelay}] - CONCURRENT_REQUESTS: [{_configuration.ConcurrentRequests}]");
         }
 
         public void Get(string url, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
@@ -58,7 +63,7 @@ namespace ImobiliariasCrawler.Main
             Task.Run(async () =>
             {
                 await _semaphore.WaitAsync();
-                await Task.Delay(_intervalRequest);
+                await Task.Delay(_configuration.DownloadDelay);
 
                 if (httpContent != null) MakeHeaders(httpContent.Headers, headers);
 
