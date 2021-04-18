@@ -59,7 +59,6 @@ namespace ImobiliariasCrawler.Main.Spiders
                 var urlNextPage = nextPage.GetAttributeValue("href", null);
                 if (urlNextPage != null && !urlNextPage.Contains("javascript:void(0);"))
                 {
-                filter.NextPage();
                     Request.Get(url: urlNextPage, callback: ParseResultList, dictArgs: response.DictArgs);
                 }
             }
