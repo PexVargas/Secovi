@@ -69,6 +69,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Url = response.Url,
                 Descricao = response.Selector.SelectSingleNode("//div[@id='detalhes']//p[2]").TextOrNull(),
                 Quartos = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Dormitório(s)' )]/strong").TextOrNull(),
+                Suites = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Suíte(s)' )]/strong").TextOrNull(),
                 Garagens = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Vaga(s)' )]/strong").TextOrNull(),
                 AreaTotal = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Total' )]/strong").ReFirst("(.*?m)"),
                 AreaPrivativa = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Útil' )]/strong").ReFirst("(.*?m)"),
