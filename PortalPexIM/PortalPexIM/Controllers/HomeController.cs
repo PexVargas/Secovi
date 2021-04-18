@@ -25,9 +25,9 @@ namespace PortalPexIM.Controllers
         public IActionResult Index()
         {
             FiltroPesquisa filtro = new FiltroPesquisa();
-            filtro.Cidades = db.Imoveisclassificados.Select(x => x.Cidade).Distinct().ToList();
-            filtro.Bairros = db.Imoveisclassificados.Select(x => x.Bairro).Distinct().ToList();
-            filtro.Tipos = db.Imoveisclassificados.Select(x => x.Tipo).Distinct().ToList();
+            filtro.Cidades = db.Imoveisclassificados.Select(x => x.Cidade).Distinct().ToArray();
+            filtro.Bairros = db.Imoveisclassificados.Select(x => x.Bairro).Distinct().ToArray();
+            filtro.Tipos = db.Imoveisclassificados.Select(x => x.Tipo).Distinct().ToArray();
 
             return View(filtro);
         }
@@ -49,8 +49,11 @@ namespace PortalPexIM.Controllers
             peximContext dbe = new peximContext();
 
             var imoveis = (from i in dbe.Imoveisclassificados
-                           where i.Tipo!=null //&& filtro.Cidades.Contains(i.Cidade) && filtro.Bairros.Contains(i.Bairro) && filtro.Tipos.Contains(i.Tipo)
-
+                           where i.Tipo!=null 
+                           && ((filtro.Cidades == null || filtro.Cidades.Length == 0)|| filtro.Cidades.Contains(i.Cidade)) 
+                           && ((filtro.Bairros == null || filtro.Bairros.Length == 0)|| filtro.Bairros.Contains(i.Bairro))
+                           && ((filtro.Tipos == null || filtro.Tipos.Length == 0) ||filtro.Tipos.Contains(i.Tipo))
+                           && i.TipoImovel == filtro.TipoImovel
                            group i by new { i.DataClassificacao.Value.Year, i.DataClassificacao.Value.Month } into g
                            
                            select new
@@ -68,7 +71,11 @@ namespace PortalPexIM.Controllers
             peximContext dbt = new peximContext();
 
             var imoveis = (from i in dbt.Imoveisclassificados
-                           where i.Tipo != null //&& filtro.Cidades.Contains(i.Cidade) && filtro.Bairros.Contains(i.Bairro) && filtro.Tipos.Contains(i.Tipo)
+                           where i.Tipo != null
+                            && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                            && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                            && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                            && i.TipoImovel == filtro.TipoImovel
                            group i by new { i.Tipo } into g
 
                            select new
@@ -86,7 +93,11 @@ namespace PortalPexIM.Controllers
         {
             peximContext dbc = new peximContext();
             var imoveis = (from i in dbc.Imoveisclassificados
-                           where i.Cidade != null //&& filtro.Cidades.Contains(i.Cidade) && filtro.Bairros.Contains(i.Bairro) && filtro.Tipos.Contains(i.Tipo)
+                           where i.Tipo != null
+                            && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                            && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                            && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                            && i.TipoImovel == filtro.TipoImovel
                            group i by new { i.Cidade } into g
 
                            select new
@@ -103,7 +114,11 @@ namespace PortalPexIM.Controllers
         {
             peximContext dbc = new peximContext();
             var imoveis = (from i in dbc.Imoveisclassificados
-                           where i.Bairro != null //&& filtro.Cidades.Contains(i.Cidade) && filtro.Bairros.Contains(i.Bairro) && filtro.Tipos.Contains(i.Tipo)
+                           where i.Tipo != null
+                            && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                            && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                            && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                            && i.TipoImovel == filtro.TipoImovel
                            group i by new { i.Bairro } into g
 
                            select new
@@ -120,7 +135,11 @@ namespace PortalPexIM.Controllers
         {
             peximContext dbc = new peximContext();
             var imoveis = (from i in dbc.Imoveisclassificados
-                           //where filtro.Cidades.Contains(i.Cidade) && filtro.Bairros.Contains(i.Bairro) && filtro.Tipos.Contains(i.Tipo)
+                           where i.Tipo != null
+                            && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                            && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                            && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                            && i.TipoImovel == filtro.TipoImovel
                            group i by new { i.Garagens } into g
                            select new
                            {
@@ -220,7 +239,7 @@ namespace PortalPexIM.Controllers
         }
 
         [HttpPost]
-        public JsonResult Bairros(FiltroPesquisa filtro)
+        public JsonResult Bairros([FromBody]  FiltroPesquisa filtro)
         {
  
             var imoveis = (from i in db.Imoveisclassificados

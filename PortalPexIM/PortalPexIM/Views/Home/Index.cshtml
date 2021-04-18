@@ -87,7 +87,7 @@
 <div class="funcFiltroLista">
     <div class="col-md-12">
         <div class="form-group col-md-12">
-            <select multiple id="cmbCidade" class="form-control selectpicker" data-style="btn btn-link" title="Selecione a Cidade">
+            <select multiple id="cmbCidade"  class="form-control selectpicker" data-style="btn btn-link" title="Selecione a Cidade">
                 @foreach(var itens in Model.Cidades) 
                 { 
                     <option value="@itens">@itens</option>
@@ -294,6 +294,14 @@
     
 
     function Pesquisar() {
+        if($("#cmbAbsoluto").is(':checked'))
+            tipoimovel = 2;
+        else
+            tipoimovel = 1;
+
+        cidades = $('#cmbCidade').val();
+        bairros = $('#cmbBairro').val();
+        tipos = $('#cmbTipo').val();
 
         CarregarGraficoMeses();
         CarregarGraficoTipos();
@@ -304,14 +312,14 @@
 
 
     function CarregarGraficoMeses() {
-        var processed_json = new Array();
+     
 
         var processed_json = new Array();
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
             url: "/Home/GetEvolutivo",
-            data: JSON.stringify({ cidades, bairros, tipos, tipoimovel }),
+            data: JSON.stringify({ cidades: cidades, Bairros: bairros, Tipos: tipos, TipoImovel: tipoimovel }),
 
             dataType: "json",
             success: function (result) {
