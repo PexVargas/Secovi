@@ -1,6 +1,8 @@
 ﻿using ImobiliariasCrawler.Main.DataObjectTransfer;
 using ImobiliariasCrawler.Main.Extensions;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -34,7 +36,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                     var cidade = option.GetAttributeValue("value", null);
                     var cidadeFormatada = cidade.RemoveAccents().ToLower();
 
-                    foreach (var input in response.Selector.SelectNodes($"//div[@class='citys'][contains(@id,'{cidadeFormatada}')]//input"))
+                    foreach (var input in response.Xpath($"//div[@class='citys'][contains(@id,'{cidadeFormatada}')]//input"))
                     {
                         var bairro = input.GetAttributeValue("value", null);
                         var filter = new FilterSperinde
@@ -76,9 +78,17 @@ namespace ImobiliariasCrawler.Main.Spiders
             var tipoImovel = filter.TipoImovel == "aluguel" ? TipoImovelEnum.Alugar : TipoImovelEnum.Comprar;
 
             var jsonText = response.Selector.SelectSingleNode("//script[contains(text(),'SOH.Exec')]").TextOrNull().Replace("SOH.Exec(", "").Replace(");", "");
-            var fixQuotes = jsonText.Replace("'", "\"").Replace("href=\"", "href='").Replace("void(0\"", "void(0'");
-            var fixComma = new Regex(",", RegexOptions.RightToLeft).Replace(fixQuotes, "", 1);
-            var imovelSperinde = JsonSerializer.Deserialize<ImovelSperinde>(fixComma, ManageRequests.JsonOptions);
+            var fixComma = new Regex(",\n.*?}", RegexOptions.RightToLeft).Replace(jsonText, "}", 1);
+            var removeChares = fixComma.Replace("\"", "").Replace("{", "").Replace("}", "");
+
+            var dictKeyValue = new Dictionary<string,string>();
+            foreach (var linha in removeChares.Split(","))
+            {
+                var keyValue = linha.Split(":");
+                try { dictKeyValue.Add(keyValue[0].Trim(), keyValue[1].Trim()); }
+                catch { dictKeyValue.Add(keyValue[0].Trim(), ""); }
+            }
+
 
             var imovel = new ImoveiscapturadosDto(SpiderEnum.Sperinde, tipoImovel)
             {
@@ -86,21 +96,21 @@ namespace ImobiliariasCrawler.Main.Spiders
                 SiglaEstado = "RS",
                 Cidade = filter.Cidade,
                 Bairro = filter.Bairro,
-                Rua = response.Selector.SelectSingleNode("//h6[@class='fw-600 t-up']").TextOrNull() ?? imovelSperinde.ImovelEndereco,
-                Cep = imovelSperinde.ImovelCep,
+                Rua = response.Selector.SelectSingleNode("//h6[@class='fw-600 t-up']").TextOrNull() ?? dictKeyValue["imovelEndereco"],
+                Cep = dictKeyValue["imovelCep"],
 
                 AreaPrivativa = response.Selector.SelectSingleNode("//h4[@class='fleft100 cl-red fw-600']").TextOrNull(),
                 AreaTotal = response.Selector.SelectSingleNode("//h4[@class='fleft100 cl-red fw-600']").TextOrNull(),
 
                 Tipo = response.Selector.SelectSingleNode("//h4[@class='fleft100 cl-red fw-600 t-up']").TextOrNull(),
-                Descricao = response.Selector.SelectSingleNode("//p[@class='//p[@class='ft-size17 fleft100']']").TextOrNull(),
+                Descricao = response.Selector.SelectSingleNode("//p[@class='ft-size17 fleft100']").TextOrNull(),
 
-                Imagens = response.Selector.SelectSingleNode("//figure[contains(@class,'lazy-img')]//img").GetAttributeValue("data-url", null) ?? imovelSperinde.ImovelUrl,
-                Quartos = imovelSperinde.ImovelDormitorios,
-                Garagens = imovelSperinde.ImovelVagas,
-                Valor = imovelSperinde.ImovelAluguel,
-                Condominio = imovelSperinde.ImovelCondominio,
-                Iptu = imovelSperinde.ImovelIptu,
+                Imagens = response.Selector.SelectSingleNode("//figure[contains(@class,'lazy-img')]//img").GetAttributeValue("data-url", null) ?? dictKeyValue["imovelUrl"],
+                Quartos = dictKeyValue["imovelDormitorios"],
+                Garagens = dictKeyValue["imovelVagas"],
+                Valor = dictKeyValue["imovelAluguel"],
+                Condominio = dictKeyValue["imovelCondominio"],
+                Iptu = dictKeyValue["imovelIptu"],
             };
             Save(imovel);
         }
