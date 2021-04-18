@@ -21,8 +21,6 @@ namespace ImobiliariasCrawler.Main.Spiders
         {
             var dictVenda = new Dictionary<string, object> { { "TipoImovel", "1" } };
             Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=venda&finalidade=venda&cidade=", callback: Parse, dictArgs: dictVenda);
-            return;
-
             Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=lancamentos&finalidade=venda&lancamentos=true&cidade=", callback: Parse, dictArgs: dictVenda);
 
             var dictAluguel = new Dictionary<string, object> { { "TipoImovel", "2" } };
@@ -34,21 +32,18 @@ namespace ImobiliariasCrawler.Main.Spiders
         public override void Parse(Response response)
         {
             var partialNextUrl = response.Selector.SelectSingleNode("//i[@class='fa fa-chevron-right']/..").GetAttributeValue("href", null);
-            
-            //if (!string.IsNullOrWhiteSpace(partialNextUrl))
-            //{
-            //    var nextUrl = "http://www.garciaimoveisrs.com.br/imoveis.php" + partialNextUrl;
-            //    Request.Get(nextUrl, callback: Parse, dictArgs: response.DictArgs);
-            //}
+
+            if (!string.IsNullOrWhiteSpace(partialNextUrl))
+            {
+                var nextUrl = "http://www.garciaimoveisrs.com.br/imoveis.php" + partialNextUrl;
+                Request.Get(nextUrl, callback: Parse, dictArgs: response.DictArgs);
+            }
 
             foreach (var div in response.Selector.SelectNodes("//div[@class='imoveis clearfix']//div[@class='row']/div"))
             {
                 var partialUrl = div.SelectSingleNode(".//a").GetAttributeValue("href", null);
                 var url = "http://www.garciaimoveisrs.com.br/" + partialUrl;
-
-
                 Request.Get("http://www.garciaimoveisrs.com.br/deposito-neopolis-gravatai,200007199", callback: ParseResult, dictArgs: response.DictArgs);
-                return;
             }
         }
 
