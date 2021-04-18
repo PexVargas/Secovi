@@ -1,14 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using ImobiliariasCrawler.Main.Model;
+using ImobiliariasCrawler.Main.Core;
+using ImobiliariasCrawler.Main.Extensions;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
     public class Leindecker : SpiderBase
     {
+
+        public Leindecker() : base(new ConfigurationSpider(
+                downloadDelay: new TimeSpan(0, 0, 0, 0, 500),
+                concurretnRequests: 10
+            ))
+        {}
 
         public override void StartRequest()
         {
@@ -19,32 +27,41 @@ namespace ImobiliariasCrawler.Main.Spiders
         {
             foreach (var tipoImovel in new string[] { "locacao", "venda" })
             {
-                foreach (var option in response.Selector.SelectNodes("//div[@class='modal-content']//select[@id='cidade']/option"))
-                {
-                    var cidade = option.InnerHtml.Replace(" ", ";");
-                    var cidadePartialId = option.InnerHtml.Replace(" ", "-").ToLower();
-                    foreach (var input in response.Xpath($"//input[contains(@id,'{cidadePartialId}')]"))
-                    {
-                        var filter = new FilterLeindecker
-                        {
-                            Bairro = input.GetAttributeValue("value", null),
-                            Cidade = cidade,
-                            TipoImovel = tipoImovel
-                        };
-                        Request.Get(filter.Url, callback: ParseResultList, dictArgs: new Dictionary<string, object> { { "filter", filter } });
-                    }
-                }
+                var urlTipo = $"https://www.leindecker.com.br/busca/{tipoImovel}";
+                Request.Get(urlTipo, ParseCidades, dictArgs: new Dictionary<string, object> { { "tipoImovel", tipoImovel } });
+            }
+        }
+
+        private void ParseCidades(Response response)
+        {
+            var tipoImovel = response.DictArgs["tipoImovel"] as string;
+            foreach (var cidade in response.Xpath("//select[@class='cityselect']/option").Select(o => o.TextOrNull()))
+            {
+                var selectorBairros = response.Selector.SelectSingleNode("//div[@class='modal-dialog bairro']//div[@class='fleft100']");
+                
+                var cidadeLabel = cidade.RemoveAccents().Replace(" ", "-").ToLower();
+                var cidadeFormated = cidade.Replace(" ", ";");
+
+                var bairrosList = string.Join(";", selectorBairros.SelectNodes($"//label[contains(@for,'{cidadeLabel}')]").Select(n => n.TextOrNull()));
+                var url = $"https://www.leindecker.com.br/busca/{tipoImovel}/cidade/{cidadeFormated}/bairros/{bairrosList}/0/";
+
+                Request.Get(url: url, callback: ParseResultList, dictArgs: new Dictionary<string, object> { { "tipoImovel", tipoImovel }, { "cidade", cidade } } );
             }
         }
 
         public void ParseResultList(Response response)
         {
-            var filter = response.DictArgs["filter"] as FilterLeindecker;
-            var listImoveis = response.Xpath("//div[contains(@class,'imovel ')]");
-            if (listImoveis.Count > 0)
+            var listImoveis = response.Xpath("//div[contains(@class,'imovel im-busca')]");
+
+            var nextPage = response.Xpath("//ul[@class='pg']/li[@class='next']/a").FirstOrDefault();
+            if (nextPage != null)
             {
+                var urlNextPage = nextPage.GetAttributeValue("href", null);
+                if (urlNextPage != null && !urlNextPage.Contains("javascript:void(0);"))
+                {
                 filter.NextPage();
-                Request.Get(url: filter.Url, callback: ParseResultList, dictArgs: response.DictArgs);
+                    Request.Get(url: urlNextPage, callback: ParseResultList, dictArgs: response.DictArgs);
+                }
             }
 
             foreach (var div in listImoveis)
@@ -56,15 +73,16 @@ namespace ImobiliariasCrawler.Main.Spiders
 
         public void ParseImovel(Response response)
         {
-            var filter = (response.DictArgs["filter"] as FilterLeindecker);
-            var tipoImovel = filter.TipoImovel == "venda" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
+            var tipoImovel = response.DictArgs["tipoImovel"] as string;
+            var cidade = response.DictArgs["cidade"] as string;
+            var tipoImovelEnum = tipoImovel == "venda" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
 
             var banheiro = response.Selector.SelectSingleNode("//ul[@class='licarac']/li").ReHas("BANHEIRO") ? "1" : "0";
-            var imovel = new ImoveiscapturadosDto(SpiderEnum.Leindecker, tipoImovel)
+            var imovel = new ImoveiscapturadosDto(SpiderEnum.Leindecker, tipoImovelEnum)
             {
                 Url = response.Url,
-                Bairro = filter.Bairro,
-                Cidade = filter.Cidade,
+                Bairro = response.Selector.SelectSingleNode("//h4[contains(text(),'Localização')]/../span").InnerHtml.Split("<br>").FirstOrDefault(),
+                Cidade = cidade,
                 SiglaEstado = "RS",
 
                 Imagens = response.Selector.SelectSingleNode("//div[@class='item']//img").GetAttributeValue("data-src", null),
@@ -88,9 +106,6 @@ namespace ImobiliariasCrawler.Main.Spiders
         public string Cidade { get; set; }
         public string Bairro { get; set; }
         public string TipoImovel { get; set; }
-        public int Pagina { get; private set; } = 0;
-
-        public void NextPage() => Pagina += 12;
-        public string Url => string.Format("https://www.leindecker.com.br/busca/{0}/cidade/{1}/bairros/{2}/{3}/", TipoImovel, Cidade, Bairro, Pagina);
+        public string Url => string.Format("https://www.leindecker.com.br/busca/{0}/cidade/{1}/bairros/{2}/0/", TipoImovel, Cidade, Bairro);
     }
 }
