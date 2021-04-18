@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
-    public class Guarita : SpiderBase
+    public class Guarida : SpiderBase
     {
         public override void StartRequest()
         {
@@ -39,7 +39,8 @@ namespace ImobiliariasCrawler.Main.Spiders
             var currentPage = int.Parse(desserialize.Paginacao.Current);
             if (currentPage < desserialize.Paginacao.Pages)
             {
-                dictForm["page"] = currentPage.ToString();
+                dictForm["page"] = (currentPage+1).ToString();
+                Console.WriteLine($"Pagina {currentPage + 1}");
                 var newDictForm = new Dictionary<string, object>() { { "form", dictForm } };
                 Request.FormPost(url: "https://www.guarida.com.br/alugueis/index/filtro", dictBody: dictForm, callback: Parse, dictArgs: newDictForm);
             }
@@ -47,7 +48,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             foreach (var item in desserialize.Imoveis)
             {
                 var tipoImovel = dictForm["opcao-filtro"] == "vender" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
-                var imovel = new ImoveiscapturadosDto(SpiderEnum.Guarita, tipoImovel)
+                var imovel = new ImoveiscapturadosDto(SpiderEnum.Guarida, tipoImovel)
                 {
                     AreaPrivativa = item.Area_util,
                     AreaTotal = item.Area_total,

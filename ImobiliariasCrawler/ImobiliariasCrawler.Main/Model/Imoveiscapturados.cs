@@ -12,7 +12,7 @@ namespace ImobiliariasCrawler.Main
         DLegend = 5,
         CreditoReal = 6,
         Garcia = 7,
-        Guarita = 8,
+        Guarida = 8,
         Leindecker = 9,
         Sperinde = 10,
         ChaveFacil = 11,
