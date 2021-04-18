@@ -1,5 +1,6 @@
 ﻿using ImobiliariasCrawler.Main.DataObjectTransfer;
 using ImobiliariasCrawler.Main.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,72 +11,57 @@ namespace ImobiliariasCrawler.Main.Spiders
 {
     public class Sperinde : SpiderBase
     {
-
-        public class FilterSperinde : Filter
+        public override void StartRequest()
         {
-            public string Site { get; set; }
-            public string MountUrl() => $"https://www.sperinde.com/busca/site/{Site}/modo/{TipoImovel}/cidade/{Cidade.Replace(" ", ";")}/bairros/{Bairro}/hv/S/{Page}/";
+            Request.Get("https://www.sperinde.com", callback: Parse);
         }
-
-        public override void StartRequest() => Request.Get("https://www.sperinde.com/", callback: Parse);
 
         public override void Parse(Response response)
         {
+
             foreach (var tipoImovel in new []{"aluguel", "venda" })
             {
-                var site = "poa";
-                foreach (var option in response.Xpath("//select[@id='cidade']/option"))
+                foreach (var cidade in response.Xpath("//select[contains(@class,'cityselect')]/option[not(@disabled='disabled')]").Select(o => o.TextOrNull()))
                 {
-                    var isDisable = option.GetAttributeValue("disabled", null);
-                    if (isDisable == "disabled")
-                    {
-                        if (option.ReHas("Caxias e Região"))
-                            site = "caxias";
-                        continue;
-                    }
-                    var cidade = option.GetAttributeValue("value", null);
-                    var cidadeFormatada = cidade.RemoveAccents().ToLower();
+                    var selectorBairros = response.Selector.SelectSingleNode("//div[@class='modal-dialog bairro']//div[@class='modal-body']");
 
-                    foreach (var input in response.Xpath($"//div[@class='citys'][contains(@id,'{cidadeFormatada}')]//input"))
-                    {
-                        var bairro = input.GetAttributeValue("value", null);
-                        var filter = new FilterSperinde
-                        {
-                            Cidade = cidade,
-                            Bairro = bairro,
-                            Estado = "RS",
-                            TipoImovel = tipoImovel,
-                            Site = site,
-                        };
-                        var url = filter.MountUrl();
-                        Request.Get(url, callback: ParseResultList, dictArgs: new Dictionary<string, object> { { "filter", filter } });
-                    }
+                    var cidadeLabel = cidade.RemoveAccents().Replace(" ", "-").ToLower();
+                    var cidadeFormated = cidade.Replace(" ", ";");
+
+                    var bairrosList = string.Join(";", selectorBairros.SelectNodes($"//label[contains(@for,'{cidadeLabel}')]").Select(n => n.TextOrNull()));
+                    var url = $"https://www.sperinde.com/busca/site/caxias/modo/{tipoImovel}/cidade/{cidadeFormated}/bairros/{bairrosList}/hv/S/0/";
+
+                    Request.Get(url: url, callback: ParseResultList, dictArgs: new Dictionary<string, object> { { "tipoImovel", tipoImovel }, { "cidade", cidade } });
                 }
             }
         }
 
         public void ParseResultList(Response response)
         {
-            var urlList = response.Xpath("//div[@class='container']/div[contains(@class,'fleft100')]/a");
-            if (urlList.Count > 0)
+            var nextPage = response.Xpath("//ul[@class='pg']/li[last()]/a").FirstOrDefault();
+            if (nextPage != null)
             {
-                var filter = response.DictArgs["filter"] as FilterSperinde;
-                filter.NextPage(12);
-                var nextUrl = filter.MountUrl();
-                Request.Get(nextUrl, callback: ParseResultList, dictArgs: response.DictArgs);
-
-                foreach (var a in urlList)
+                var urlNextPage = nextPage.GetAttributeValue("href", null);
+                if (urlNextPage != null && !urlNextPage.Contains("javascript:void(0);"))
                 {
-                    var url = a.GetAttributeValue("href", null);
-                    Request.Get(url, callback: ParseImovel, dictArgs: response.DictArgs);
+                    Request.Get(url: urlNextPage, callback: ParseResultList, dictArgs: response.DictArgs);
                 }
+            }
+
+            var urlList = response.Xpath("//div[@class='container']/div[contains(@class,'fleft100')]/a");
+            foreach (var a in urlList)
+            {
+                var url = a.GetAttributeValue("href", null);
+                Request.Get(url, callback: ParseImovel, dictArgs: response.DictArgs);
             }
         }
 
         public void ParseImovel(Response response)
         {
-            var filter = response.DictArgs["filter"] as FilterSperinde;
-            var tipoImovel = filter.TipoImovel == "aluguel" ? TipoImovelEnum.Alugar : TipoImovelEnum.Comprar;
+            var tipoImovel = response.DictArgs["tipoImovel"] as string;
+            var cidade = response.DictArgs["cidade"] as string;
+
+            var tipoImovelEnum = tipoImovel == "aluguel" ? TipoImovelEnum.Alugar : TipoImovelEnum.Comprar;
 
             var jsonText = response.Selector.SelectSingleNode("//script[contains(text(),'SOH.Exec')]").TextOrNull().Replace("SOH.Exec(", "").Replace(");", "");
             var fixComma = new Regex(",\n.*?}", RegexOptions.RightToLeft).Replace(jsonText, "}", 1);
@@ -90,12 +76,12 @@ namespace ImobiliariasCrawler.Main.Spiders
             }
 
 
-            var imovel = new ImoveiscapturadosDto(SpiderEnum.Sperinde, tipoImovel)
+            var imovel = new ImoveiscapturadosDto(SpiderEnum.Sperinde, tipoImovelEnum)
             {
                 Url = response.Url,
                 SiglaEstado = "RS",
-                Cidade = filter.Cidade,
-                Bairro = filter.Bairro,
+                Cidade = cidade,
+                Bairro = response.Selector.SelectSingleNode("//h3[contains(text(),'LOCALIZAÇÃO')]/../span").TextOrNull(),
                 Rua = response.Selector.SelectSingleNode("//h6[@class='fw-600 t-up']").TextOrNull() ?? dictKeyValue["imovelEndereco"],
                 Cep = dictKeyValue["imovelCep"],
 
