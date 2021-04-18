@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using PortalPexIM.Models;
 
-namespace InterCementWeb.Controllers
+namespace PortalPexIM.Controllers
 {
    
     public class UsuarioController : Controller
@@ -20,7 +20,7 @@ namespace InterCementWeb.Controllers
         }
 
 
-        private async void Login(Models.Usuario usuario)
+        private async void Login(Usuario usuario)
         {
             var claims = new List<Claim>
             {
@@ -54,7 +54,7 @@ namespace InterCementWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult LoginPage(Models.Usuario usuario)
+        public IActionResult LoginPage(Usuario usuario)
         {
             try
             {

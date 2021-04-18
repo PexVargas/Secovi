@@ -27,7 +27,7 @@ namespace PortalPexIM.Model
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySQL("Data Source=72.167.226.226,3306;Initial Catalog=pexim;User ID=pexboot;Password=pex2021#");
+                optionsBuilder.UseMySQL("Data Source=72.167.226.226;Initial Catalog=pexim;User ID=pexboot;Password=pex2021#");
             }
         }
 

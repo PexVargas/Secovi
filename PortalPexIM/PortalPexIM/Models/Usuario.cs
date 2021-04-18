@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace InterCementWeb.Models
+namespace PortalPexIM.Models
 {
     public class Usuario
     {
