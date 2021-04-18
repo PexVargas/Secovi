@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using ImobiliariasCrawler.Main.Core;
 using ImobiliariasCrawler.Main.Extensions;
 using ImobiliariasCrawler.Main.Model;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
-    class Garcia : SpiderBase
+    public class Garcia : SpiderBase
     {
-       
+        public Garcia() : base(
+            new ConfigurationSpider(
+                downloadDelay: new TimeSpan(0, 0, 0, 0, 3000),
+                concurretnRequests: 10
+            ))
+        {}
+
         public override void StartRequest()
         {
             var dictVenda = new Dictionary<string, object> { { "TipoImovel", "1" } };
@@ -17,12 +25,15 @@ namespace ImobiliariasCrawler.Main.Spiders
 
             var dictAluguel = new Dictionary<string, object> { { "TipoImovel", "2" } };
             Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=aluguel&finalidade=aluguel&cidade=", callback: Parse, dictArgs: dictAluguel);
+        
+        
         }
 
         public override void Parse(Response response)
         {
             var partialNextUrl = response.Selector.SelectSingleNode("//i[@class='fa fa-chevron-right']/..").GetAttributeValue("href", null);
-            if (partialNextUrl != null)
+
+            if (!string.IsNullOrWhiteSpace(partialNextUrl))
             {
                 var nextUrl = "http://www.garciaimoveisrs.com.br/imoveis.php" + partialNextUrl;
                 Request.Get(nextUrl, callback: Parse, dictArgs: response.DictArgs);
@@ -32,15 +43,14 @@ namespace ImobiliariasCrawler.Main.Spiders
             {
                 var partialUrl = div.SelectSingleNode(".//a").GetAttributeValue("href", null);
                 var url = "http://www.garciaimoveisrs.com.br/" + partialUrl;
-
-                Request.Get(url, callback: ParseResult, dictArgs: response.DictArgs);
+                Request.Get("http://www.garciaimoveisrs.com.br/deposito-neopolis-gravatai,200007199", callback: ParseResult, dictArgs: response.DictArgs);
             }
         }
 
         public void ParseResult(Response response)
         {
             var tipoImovel = response.DictArgs["TipoImovel"].ToString() == "1" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
-            var cidade = response.Selector.SelectSingleNode("//head/title").ReFirst("Imobil.*?- (.*) [A-Z]{2}");
+            var cidade = response.Selector.SelectSingleNode("//meta[@name='description']").GetAttributeValue("content", null).Split("(").First().Split(",").Last();
             var bairro = response.Selector.SelectSingleNode("//div[@class='sobre']/h3").TextOrNull();
             if (bairro != null) bairro = bairro.Replace(cidade, "");
             var imovel = new ImoveiscapturadosDto(SpiderEnum.Garcia, tipoImovel)
@@ -54,6 +64,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Url = response.Url,
                 Descricao = response.Selector.SelectSingleNode("//div[@id='detalhes']//p[2]").TextOrNull(),
                 Quartos = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Dormitório(s)' )]/strong").TextOrNull(),
+                Suites = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Suíte(s)' )]/strong").TextOrNull(),
                 Garagens = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Vaga(s)' )]/strong").TextOrNull(),
                 AreaTotal = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Total' )]/strong").ReFirst("(.*?m)"),
                 AreaPrivativa = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Útil' )]/strong").ReFirst("(.*?m)"),

@@ -1,5 +1,5 @@
 using ImobiliariasCrawler.Main.Model;
-using ImobiliariasCrawler.Main.Services;
+using ImobiliariasCrawler.Main;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -70,6 +70,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Iptu = item.FormattedIPTUValue,
                     Suites = item.Suites.ToString(),
                     Valor = item.FormattedFullPrice,
+                    Condominio = item.FormattedCondominiumValue
                 };
                 Save(imovel);
             }
