@@ -23,11 +23,12 @@ namespace ImobiliariasCrawler.Main.Spiders
             {
                 var searchMapLocacao = new SearchMapsFilter(goal: "locacao", neighborhood: bairro);
                 var dictLocacao = new Dictionary<string, object> { { "bairro", bairro }, { "TipoImovel", "2" } };
-                Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapLocacao, headers, dictArgs: dictLocacao);
+                //Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapLocacao, headers, dictArgs: dictLocacao);
 
                 var searchMapVenda = new SearchMapsFilter(goal: "venda", neighborhood: bairro);
                 var dictVenda = new Dictionary<string, object> { { "bairro", bairro }, { "TipoImovel", "1" } };
                 Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapVenda, headers, dictArgs: dictVenda);
+                return;
             }
         }
 
@@ -43,7 +44,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             }
             catch (Exception)
             {
-                Console.WriteLine($"Erro na url com os seguintes parâmetros: {response.HttpResponse.RequestMessage.Content.ReadAsStringAsync().Result}");
+                Console.WriteLine(response.Selector.InnerHtml);
             }
         }
 
@@ -56,6 +57,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 var headers = new Dictionary<string, string> { { "x-requested-with", "XMLHttpRequest" } };
                 var searchListCard = response.DictArgs["form"] as SearchListCard;
                 searchListCard.NextPage();
+                Console.WriteLine($"Tipo {searchListCard.Goal} Pagina {searchListCard.Per_page}");
                 Request.FormPost("https://www.dlegend.com.br/search/searchListCard", ParseResult, searchListCard, headers, dictArgs: response.DictArgs);
 
                 foreach (var div in response.Selector.SelectNodes("//div[@class='property-card']"))
