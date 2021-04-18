@@ -10,7 +10,7 @@ namespace ImobiliariasCrawler.Main.Spiders
 {
     public class Guarida : SpiderBase
     {
-        public override void StartRequest()
+        public override void BeginRequests()
         {
             var codCidadeList = new string[] {"4237", "4402", "3973", "3991", "4399", "4096", "4405", "4397"};
             foreach (var codCidade in codCidadeList)

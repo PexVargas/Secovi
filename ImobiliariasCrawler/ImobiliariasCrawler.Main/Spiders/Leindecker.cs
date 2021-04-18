@@ -18,7 +18,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             ))
         {}
 
-        public override void StartRequest()
+        public override void BeginRequests()
         {
             Request.Get("https://www.leindecker.com.br/", callback: Parse);
         }

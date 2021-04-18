@@ -11,7 +11,7 @@ namespace ImobiliariasCrawler.Main.Spiders
     public class ChaveFacil : SpiderBase
     {
 
-        public override void StartRequest()
+        public override void BeginRequests()
         {
             foreach (var estado in new[] { "PE", "MG" })
             {

@@ -19,12 +19,12 @@ namespace ImobiliariasCrawler.Main
             var thread = new Thread(() =>
             {
                 _logging.Init();
-                StartRequest();
+                BeginRequests();
             });
             thread.Start();
         }
 
-        public abstract void StartRequest();
+        public abstract void BeginRequests();
         public abstract void Parse(Response response);
         public virtual void Close() { }
     }

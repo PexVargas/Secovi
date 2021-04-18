@@ -12,7 +12,7 @@ namespace ImobiliariasCrawler.Main.Spiders
 {
     public class DLegend : SpiderBase
     {
-        public override void StartRequest() => Request.Get("https://www.dlegend.com.br", Parse);
+        public override void BeginRequests() => Request.Get("https://www.dlegend.com.br", Parse);
 
         public override void Parse(Response response)
         {

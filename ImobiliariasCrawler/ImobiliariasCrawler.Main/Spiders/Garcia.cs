@@ -17,7 +17,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             ))
         {}
 
-        public override void StartRequest()
+        public override void BeginRequests()
         {
             var dictVenda = new Dictionary<string, object> { { "TipoImovel", "1" } };
             Request.Get("http://www.garciaimoveisrs.com.br/imoveis.php?busca=venda&finalidade=venda&cidade=", callback: Parse, dictArgs: dictVenda);

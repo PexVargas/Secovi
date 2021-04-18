@@ -12,7 +12,7 @@ namespace ImobiliariasCrawler.Main.Spiders
     {
         public string UrlBaseVenda { get; } = "https://www.creditoreal.com.br/Services/RealEstate/JSONP/List.aspx?mode=realties&currentPage={0}&pageSize=28&numberOfImages=1&lancamento=0&tem_foto=1&tipo_negociacao=-2&nt=-2&ordem=0&valor_completo=0&estado={1}&cidade={2}&_1617542582010=";
         public string UrlBaseAluguel { get; } = "https://www.creditoreal.com.br/Services/RealEstate/JSONP/List.aspx?mode=realties&currentPage={0}&pageSize=28&numberOfImages=1&tipo_negociacao=-4&nt=-4&ordem=0&valor_completo=0&estado={1}&cidade={2}&_1617543989530=";
-        public override void StartRequest() => Request.Get("https://www.creditoreal.com.br/", callback: Parse);
+        public override void BeginRequests() => Request.Get("https://www.creditoreal.com.br/", callback: Parse);
 
         public override void Parse(Response response)
         {

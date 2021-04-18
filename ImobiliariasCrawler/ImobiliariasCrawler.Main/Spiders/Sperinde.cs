@@ -11,7 +11,7 @@ namespace ImobiliariasCrawler.Main.Spiders
 {
     public class Sperinde : SpiderBase
     {
-        public override void StartRequest()
+        public override void BeginRequests()
         {
             Request.Get("https://www.sperinde.com", callback: Parse);
         }
