@@ -20,6 +20,8 @@ namespace ImobiliariasCrawler.Main.Model
         }
 
         public virtual DbSet<Imoveiscapturados> Imoveiscapturados { get; set; }
+        public virtual DbSet<UrlsProcessadas> UrlsProcessadas { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,6 +33,14 @@ namespace ImobiliariasCrawler.Main.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<UrlsProcessadas>(entity =>
+            {
+                entity.ToTable("UrlsProcessadas");
+
+                entity.Property(e => e.Url);
+                entity.HasIndex(e => e.Url).IsUnique();
+            });
+
             modelBuilder.Entity<Imoveiscapturados>(entity =>
             {
                 entity.HasKey(e => e.CodImovelcapturado)
@@ -51,7 +61,7 @@ namespace ImobiliariasCrawler.Main.Model
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.AreaTotal)
-                    .HasColumnType("varchar(20)")
+                    .HasColumnType("varchar(45)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
