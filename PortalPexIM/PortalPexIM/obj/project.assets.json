@@ -1847,19 +1847,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\WINDOWS\\.nuget\\packages\\": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
       "projectName": "PortalPexIM",
-      "projectPath": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
-      "packagesPath": "C:\\Users\\WINDOWS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\obj\\",
+      "projectPath": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Admin\\Desktop\\ASPNETCoreWithReact\\Secovi\\PortalPexIM\\PortalPexIM\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\WINDOWS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
