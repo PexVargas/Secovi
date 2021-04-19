@@ -1,10 +1,6 @@
-﻿using ImobiliariasCrawler.Main.DataObjectTransfer;
-using ImobiliariasCrawler.Main.Extensions;
-using System;
+﻿using ImobiliariasCrawler.Main.Extensions;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace ImobiliariasCrawler.Main.Spiders
