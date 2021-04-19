@@ -80,6 +80,9 @@ namespace ImobiliariasCrawler.Main
 
                     _logging.AddCountRequest();
                     var request = CreateRequest(url, httpContent);
+                    if (headers != null && headers.ContainsKey("User-Agent"))
+                        request.Headers.Add("User-Agent", headers["User-Agent"]);
+
 
                     try
                     {
@@ -96,7 +99,6 @@ namespace ImobiliariasCrawler.Main
                         _logging.CloseRequest();
                         _semaphore.Release();
                     }
-
                 }
             });
         }
@@ -120,6 +122,8 @@ namespace ImobiliariasCrawler.Main
                 foreach (var key in headers.Keys)
                     source.Add(key, headers[key]);
         }
+
+       
 
         private async Task<HtmlDocument> ContentToHtmlDocument(HttpResponseMessage response)
         {
