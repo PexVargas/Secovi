@@ -33,6 +33,12 @@ namespace ImobiliariasCrawler.Main
             return Regex.IsMatch(htmlNode.InnerHtml, expression, RegexOptions.Multiline & RegexOptions.IgnoreCase);
         }
 
+        public static string GetAttr(this HtmlNode htmlNode, string attr)
+        {
+            if (htmlNode is null) return null;
+            return htmlNode.GetAttributeValue(attr, null);
+        }
+
         public static T Deserialize<T>(this HtmlNode htmlNode)
         {
             return JsonSerializer.Deserialize<T>(htmlNode.InnerText, ManageRequests.JsonOptions);

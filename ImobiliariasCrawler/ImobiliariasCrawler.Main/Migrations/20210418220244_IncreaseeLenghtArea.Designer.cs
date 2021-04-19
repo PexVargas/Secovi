@@ -3,14 +3,16 @@ using System;
 using ImobiliariasCrawler.Main.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ImobiliariasCrawler.Main.Migrations
 {
     [DbContext(typeof(PexinContext))]
-    partial class PexinContextModelSnapshot : ModelSnapshot
+    [Migration("20210418220244_IncreaseeLenghtArea")]
+    partial class IncreaseeLenghtArea
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,32 +159,6 @@ namespace ImobiliariasCrawler.Main.Migrations
                         .HasName("PRIMARY");
 
                     b.ToTable("ImoveisCapturados");
-                });
-
-            modelBuilder.Entity("ImobiliariasCrawler.Main.Model.UrlsProcessadas", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("ArgsJson")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime>("ProcessedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("Spider")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Url")
-                        .IsUnique();
-
-                    b.ToTable("UrlsProcessadas");
                 });
 #pragma warning restore 612, 618
         }
