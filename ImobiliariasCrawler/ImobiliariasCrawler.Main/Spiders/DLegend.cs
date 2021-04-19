@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
-using HtmlAgilityPack;
 using ImobiliariasCrawler.Main.Extensions;
 using System.Linq;
 using ImobiliariasCrawler.Main.Model;
+using ImobiliariasCrawler.Main.Core;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
     public class DLegend : SpiderBase
     {
+        public DLegend() : base(
+                new ConfigurationSpider(
+                        concurretnRequests: 5,
+                        downloadDelay: new TimeSpan(0, 0, 0, 0, 3000)
+                    ))
+        {
+
+        }
         public override void BeginRequests() => Request.Get("https://www.dlegend.com.br", Parse);
 
         public override void Parse(Response response)
@@ -96,7 +101,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Banheiros = ul.SelectSingleNode(".//use/@*[contains(.,'#svg-bathroom')]/../../..").TextOrNull(),
                 Garagens = ul.SelectSingleNode(".//use/@*[contains(.,'#svg-garage')]/../../..").TextOrNull(),
                 Churrasqueiras = descriptionSelector.ReHas("churrasqueira") ? "1" : "0",
-                Imagens = string.Join(", ", response.Xpath("//div[@class='b-lazy img-background']").Select(n => n.GetAttributeValue("data-src", null)).Take(5)),
+                Imagens = response.Selector.SelectSingleNode("//div[@class='b-lazy img-background']").GetAttr("data-src"),
                 Valor = response.Selector.SelectSingleNode("//p[@class='price-por']/span[@class='value']").TextOrNull(),
                 Rua = response.Selector.SelectSingleNode("//h1[@class='property-title']").TextOrNull(),
                 Descricao = descriptionSelector.TextOrNull(),
