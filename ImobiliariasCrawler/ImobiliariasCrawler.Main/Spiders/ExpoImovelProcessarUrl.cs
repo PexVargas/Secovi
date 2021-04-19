@@ -28,7 +28,7 @@ namespace ImobiliariasCrawler.Main.Spiders
 
             foreach (var tipo in tipoList)
                 foreach (var codPretensao in new string[] { "0", "1;4" })
-                    foreach (var codEstado in new string[] { "1", "10" })
+                    foreach (var codEstado in new string[] { "1" })
                     {
                         var estado = codEstado == "1" ? "PE" : "MG";
                         var tipoImovelEnum = codPretensao == "0" ? TipoImovelEnum.Alugar : TipoImovelEnum.Comprar;
