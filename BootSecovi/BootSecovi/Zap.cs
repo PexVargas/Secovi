@@ -100,6 +100,22 @@ namespace BootSecovi
                 SubTipo = ""
             };
 
+            FiltroZap f19 = new FiltroZap
+            {
+                Tipo = "APARTMENT",
+                TipoV3 = "PENTHOUSE",
+                Perfil = "RESIDENTIAL",
+                SubTipo = "PENTHOUSE"
+            };
+
+            FiltroZap f20 = new FiltroZap
+            {
+                Tipo = "APARTMENT",
+                TipoV3 = "APARTMENT",
+                Perfil = "RESIDENTIAL",
+                SubTipo = ""
+            };
+
 
 
             // COMERCIAL
@@ -181,41 +197,27 @@ namespace BootSecovi
                 SubTipo = ""
             };
 
-            FiltroZap f19 = new FiltroZap
-            {
-                Tipo = "APARTMENT",
-                TipoV3 = "PENTHOUSE",
-                Perfil = "RESIDENTIAL",
-                SubTipo = "PENTHOUSE"
-            };
+         
 
-            FiltroZap f20 = new FiltroZap
-            {
-                Tipo = "APARTMENT",
-                TipoV3 = "APARTMENT",
-                Perfil = "RESIDENTIAL",
-                SubTipo = ""
-            };
-
-            lstTiposSubTipos.Add(f1);
-            lstTiposSubTipos.Add(f2);
-            lstTiposSubTipos.Add(f3);
-            lstTiposSubTipos.Add(f4);
-            lstTiposSubTipos.Add(f5);
-            lstTiposSubTipos.Add(f6);
-            lstTiposSubTipos.Add(f7);
-            lstTiposSubTipos.Add(f8);
-            lstTiposSubTipos.Add(f9);
-            lstTiposSubTipos.Add(f10);
-            lstTiposSubTipos.Add(f11);
-            lstTiposSubTipos.Add(f12);
-            lstTiposSubTipos.Add(f13);
-            lstTiposSubTipos.Add(f14);
-            lstTiposSubTipos.Add(f15);
-            lstTiposSubTipos.Add(f16);
-            lstTiposSubTipos.Add(f17);
-            lstTiposSubTipos.Add(f18);
-            lstTiposSubTipos.Add(f19);
+            //lstTiposSubTipos.Add(f1);
+            //lstTiposSubTipos.Add(f2);
+            //lstTiposSubTipos.Add(f3); //CASA
+            //lstTiposSubTipos.Add(f4);
+            //lstTiposSubTipos.Add(f5);
+            //lstTiposSubTipos.Add(f6);
+            //lstTiposSubTipos.Add(f7);
+            //lstTiposSubTipos.Add(f8);
+            //lstTiposSubTipos.Add(f9);
+            //lstTiposSubTipos.Add(f10);
+            //lstTiposSubTipos.Add(f11);
+            //lstTiposSubTipos.Add(f12);
+            //lstTiposSubTipos.Add(f13);
+            //lstTiposSubTipos.Add(f14);
+            //lstTiposSubTipos.Add(f15);
+            //lstTiposSubTipos.Add(f16);
+            //lstTiposSubTipos.Add(f17);
+            //lstTiposSubTipos.Add(f18);
+            //lstTiposSubTipos.Add(f19);
             lstTiposSubTipos.Add(f20);
 
             foreach (var tipo in lstTiposSubTipos)
@@ -259,7 +261,7 @@ namespace BootSecovi
 
                     int from = 0;
 
-                    var options = new ParallelOptions { MaxDegreeOfParallelism = 5 };
+                    var options = new ParallelOptions { MaxDegreeOfParallelism = 3 };
 
 
                 

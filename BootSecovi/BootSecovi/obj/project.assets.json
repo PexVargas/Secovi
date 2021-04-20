@@ -2152,19 +2152,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\WINDOWS\\.nuget\\packages\\": {}
+    "C:\\Users\\pexim\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\WINDOWS\\source\\repos\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+      "projectUniqueName": "C:\\Users\\pexim\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
       "projectName": "BootSecovi",
-      "projectPath": "C:\\Users\\WINDOWS\\source\\repos\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
-      "packagesPath": "C:\\Users\\WINDOWS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\WINDOWS\\source\\repos\\BootSecovi\\BootSecovi\\obj\\",
+      "projectPath": "C:\\Users\\pexim\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+      "packagesPath": "C:\\Users\\pexim\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\pexim\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\WINDOWS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\pexim\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2176,6 +2176,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -2187,6 +2188,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Design": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -2232,7 +2234,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

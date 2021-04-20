@@ -18,9 +18,11 @@ namespace GeradorCSV
 
             string connStr = "server=72.167.226.226;user=pexboot;database=pexim_homolog;password=pex2021#";
 
-            GerarArquivoGarcia(connStr);
+            GerarArquivoGuarida(connStr);
 
-           //GerarArquivoCreditoReal(connStr);
+            //GerarArquivoGarcia(connStr);
+
+            //GerarArquivoCreditoReal(connStr);
 
             //GerarArquivoZap(connStr);
 
@@ -151,9 +153,70 @@ namespace GeradorCSV
 
             conn.Close();
         }
+        public static void GerarArquivoGuarida(string connStr)
+        {
+            MySqlConnection conn = new MySqlConnection(connStr);
+            try
+            {
+                Console.WriteLine("Connecting to MySQL...");
+                conn.Open();
+
+                //SQL Query to execute
+
+                string sql = @"SELECT 
+                             CASE
+                                   WHEN TipoImovel='1' THEN 'Venda'
+                                   ELSE 'Aluguel'
+                                   END AS Tipo_Busca,
+                                Finalidade,
+	                            Tipo,
+                                Cidade,
+                                Bairro as Localidade,
+                                Bairro,
+                                Valor,
+                                quartos,
+                                AreaTotal as Metragem_Util,
+                                Iptu,
+                                Condominio,
+                                Garagens as Vagas,
+                                Rua,
+                                Suites,
+                                url as Link_do_anuncio,
+                                Anunciante,
+                                AreaPrivativa,
+                                'Guarida' as Imobiliaria,
+                                Cep,
+                                Descricao
+	                            FROM ImoveisCapturados where  codImobiliaria = 8 and siglaEstado = 'RS';";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.CommandTimeout = 9000;
+
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                StringBuilder sb = new StringBuilder();
+
+                sb.AppendLine("Tipo_Busca;Finalidade;Tipo;Cidade;Localidade;Bairro;Valor;Quartos;Metragem_Util;Iptu;Condominio;Vagas;Rua;Suites;Link_do_anuncio;Anunciante;AreaPrivativa;Imobiliaria;Cep;Descricao");
+
+                //read the data
+                while (rdr.Read())
+                {
+                    sb.AppendLine(rdr[0].ToString().Trim() + ";" + rdr[1].ToString().Trim() + ";" + rdr[2].ToString().Trim() + ";" + rdr[3].ToString().Trim() + ";" + rdr[4].ToString().Trim() + ";" + rdr[5].ToString().Trim() + ";" + rdr[6].ToString().Trim() + ";" + rdr[7].ToString().Trim() + ";" + rdr[8].ToString().Trim() + ";" + rdr[9].ToString().Trim() + ";" + rdr[10].ToString().Trim() + ";" + rdr[11].ToString().Trim() + ";" + rdr[12].ToString().Trim() + ";" + rdr[13].ToString().Trim() + ";" + rdr[14].ToString().Trim() + ";" + rdr[15].ToString().Trim() + ";" + rdr[16].ToString().Trim() + ";" + rdr[17].ToString().Trim() + ";" + rdr[18].ToString().Trim().Replace("\"", "") + ";" + rdr[19].ToString().Trim().Replace("\"", "").Replace(";", "").Replace("\r\n", "").Replace("\r", ""));
+                }
+
+                rdr.Close();
+
+                File.WriteAllText(@"c:\csv\Guarida_RS.csv", sb.ToString());
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.ToString());
+            }
+
+            conn.Close();
+        }
 
 
-            public static void GerarArquivoZap(string connStr)
+        public static void GerarArquivoZap(string connStr)
         {
             MySqlConnection conn = new MySqlConnection(connStr);
             try

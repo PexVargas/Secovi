@@ -27,7 +27,7 @@ namespace ImobiliariasCrawler.Main.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql(Configuration.ConnectionString, x => x.ServerVersion("5.7.33-mysql"));
+                optionsBuilder.UseMySql(Configuration.ConnectionStringProd, x => x.ServerVersion("5.7.33-mysql"));
             }
         }
 
