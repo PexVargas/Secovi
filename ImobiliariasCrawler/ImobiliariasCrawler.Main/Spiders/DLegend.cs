@@ -28,12 +28,11 @@ namespace ImobiliariasCrawler.Main.Spiders
             {
                 var searchMapLocacao = new SearchMapsFilter(goal: "locacao", neighborhood: bairro);
                 var dictLocacao = new Dictionary<string, object> { { "bairro", bairro }, { "TipoImovel", "2" } };
-                //Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapLocacao, headers, dictArgs: dictLocacao);
+                Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapLocacao, headers, dictArgs: dictLocacao);
 
                 var searchMapVenda = new SearchMapsFilter(goal: "venda", neighborhood: bairro);
                 var dictVenda = new Dictionary<string, object> { { "bairro", bairro }, { "TipoImovel", "1" } };
                 Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapVenda, headers, dictArgs: dictVenda);
-                return;
             }
         }
 
