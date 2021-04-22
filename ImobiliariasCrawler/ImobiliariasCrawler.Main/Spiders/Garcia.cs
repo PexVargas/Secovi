@@ -43,14 +43,15 @@ namespace ImobiliariasCrawler.Main.Spiders
             {
                 var partialUrl = div.SelectSingleNode(".//a").GetAttributeValue("href", null);
                 var url = "http://www.garciaimoveisrs.com.br/" + partialUrl;
-                Request.Get("http://www.garciaimoveisrs.com.br/deposito-neopolis-gravatai,200007199", callback: ParseResult, dictArgs: response.DictArgs);
+                Request.Get(url, callback: ParseResult, dictArgs: response.DictArgs);
             }
         }
 
         public void ParseResult(Response response)
         {
             var tipoImovel = response.DictArgs["TipoImovel"].ToString() == "1" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
-            var cidade = response.Selector.SelectSingleNode("//meta[@name='description']").GetAttributeValue("content", null).Split("(").First().Split(",").Last();
+            var cidade = response.Selector.SelectSingleNode("//meta[@name='description']").GetAttributeValue("content", null).Split(",").Last().Split("(").First();
+           
             var bairro = response.Selector.SelectSingleNode("//div[@class='sobre']/h3").TextOrNull();
             if (bairro != null) bairro = bairro.Replace(cidade, "");
             var imovel = new ImoveiscapturadosDto(SpiderEnum.Garcia, tipoImovel)
