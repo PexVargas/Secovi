@@ -70,7 +70,9 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Iptu = item.FormattedIPTUValue,
                     Suites = item.Suites.ToString(),
                     Valor = item.FormattedFullPrice,
-                    Condominio = item.FormattedCondominiumValue
+                    Garagens = item.ParkingSpots.ToString(),
+                    Condominio = item.FormattedCondominiumValue,
+                    
                 };
                 Save(imovel);
             }
@@ -99,6 +101,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             public string FormattedIPTUValue { get; set; }
             public string FormattedLotArea { get; set; }
             public string Image { get; set; }
+            public int ParkingSpots { get; set; }
             public int Suites { get; set; }
 
             public CurrentSpotCreditoReal CurrentSpot { get; set; }
