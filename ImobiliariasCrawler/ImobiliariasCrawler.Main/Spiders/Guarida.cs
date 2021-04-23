@@ -12,37 +12,48 @@ namespace ImobiliariasCrawler.Main.Spiders
     {
         public override void BeginRequests()
         {
-            var codCidadeList = new string[] {"4237", "4402", "3973", "3991", "4399", "4096", "4405", "4397"};
-            foreach (var codCidade in codCidadeList)
-            {
-                foreach (var tipo in new string[] { "alugar" , "vender" })
-                {
-                    var dictForm = new Dictionary<string, string>()
-                    {
-                        { "opcao-filtro", tipo },
-                        { "page", "1" },
-                        { "cidade", codCidade },
-                        { "valor", "0-10000" },
-                        { "area", "0-10000" },
-                        { "order", "codigo-desc" },
-                    };
-                    var newDictForm = new Dictionary<string, object>() { { "form", dictForm } };
-                    Request.FormPost(url: "https://www.guarida.com.br/alugueis/index/filtro", dictBody: dictForm, callback: Parse, dictArgs: newDictForm);
-                }
-            }
+            Request.Get(url: "https://www.guarida.com.br/alugueis/0/selecione-uma-cidade?endereco=&items=15&order=codigo-desc&page=1", callback: Parse);
+            Request.Get(url: "https://www.guarida.com.br/vendas/0/selecione-uma-cidade?endereco=&items=15&order=codigo-desc&page=1", callback: Parse);
         }
 
         public override void Parse(Response response)
         {
+            Console.WriteLine("Parse");
+            var codCidadeList = response.Xpath("//option[contains(@class,'sources-filtro-cidade')]").Select(e => e.GetAttr("value")).ToList();
+            foreach (var codCidade in codCidadeList)
+            {
+                var tipo = response.Url.Contains("alugueis") ? "alugar" : "vender";
+                var url = response.Url.Contains("alugueis") ? "https://www.guarida.com.br/alugueis/index/filtro" : "https://www.guarida.com.br/vendas/index/buscaImovel";
+                var dictForm = new Dictionary<string, string>()
+                {
+                    { "opcao-filtro", tipo },
+                    { "page", "1" },
+                    { "cidade", codCidade },
+                    { "valor", "0-24000000" },
+                    { "area", "0-10000" },
+                    { "order", "codigo-desc" },
+                    { "url", url }
+                };
+                var newDictForm = new Dictionary<string, object>() { { "form", dictForm } };
+                Request.FormPost(url: url, dictBody: dictForm, callback: ParseAluguelVenda, dictArgs: newDictForm);
+            }
+        }
+
+        public void ParseAluguelVenda(Response response)
+        {
+
             var dictForm = response.DictArgs["form"] as Dictionary<string, string>;
+            var url = dictForm["url"];
             var desserialize = response.Selector.Deserialize<JsonImovelGuarita>();
             var currentPage = int.Parse(desserialize.Paginacao.Current);
+
             if (currentPage < desserialize.Paginacao.Pages)
             {
+                Console.WriteLine($"ParseAluguelVenda {currentPage} {desserialize.Paginacao.Pages}");
+
                 dictForm["page"] = (currentPage+1).ToString();
-                Console.WriteLine($"Pagina {currentPage + 1}");
                 var newDictForm = new Dictionary<string, object>() { { "form", dictForm } };
-                Request.FormPost(url: "https://www.guarida.com.br/alugueis/index/filtro", dictBody: dictForm, callback: Parse, dictArgs: newDictForm);
+                Request.FormPost(url: url.ToString(), dictBody: dictForm, callback: ParseAluguelVenda, dictArgs: newDictForm);
             }
 
             foreach (var item in desserialize.Imoveis)
