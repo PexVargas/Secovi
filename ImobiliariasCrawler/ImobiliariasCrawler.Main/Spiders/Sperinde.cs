@@ -88,12 +88,14 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Descricao = response.Selector.SelectSingleNode("//p[@class='ft-size17 fleft100']").TextOrNull(),
 
                 Imagens = response.Selector.SelectSingleNode("//figure[contains(@class,'lazy-img')]//img").GetAttributeValue("data-url", null) ?? dictKeyValue["imovelUrl"],
+                Suites = response.Selector.SelectSingleNode("//ul[@class='iconsdesc']/li[not(@class='naotem')]/span[contains(text(),'Suíte')]").TextOrNull(),
                 Quartos = dictKeyValue["imovelDormitorios"],
                 Garagens = dictKeyValue["imovelVagas"],
                 Valor = dictKeyValue["imovelAluguel"],
                 Condominio = dictKeyValue["imovelCondominio"],
                 Iptu = dictKeyValue["imovelIptu"],
             };
+            if (imovel.Suites == "Suíte") imovel.Suites = "1";
             Save(imovel);
         }
     }
