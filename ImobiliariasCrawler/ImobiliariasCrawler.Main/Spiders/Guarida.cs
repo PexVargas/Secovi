@@ -53,23 +53,23 @@ namespace ImobiliariasCrawler.Main.Spiders
                 {
                     dictForm["page"] = (++currentPage).ToString();
                     var newDictForm = new Dictionary<string, object>() { { "form", dictForm } };
-                    Request.FormPost(url: url.ToString(), dictBody: dictForm, callback: ParseAluguelVenda, dictArgs: newDictForm);
+                    Request.FormPost(url: url.ToString(), dictBody: dictForm, callback: ParseImovelList, dictArgs: newDictForm);
                 }
             }
-            ParseImovel(response);
+            ParseImovelList(response);
         }
 
-        public void ParseImovel(Response response)
+        public void ParseImovelList(Response response)
         {
             var dictForm = response.DictArgs["form"] as Dictionary<string, string>;
             var desserialize = response.Selector.Deserialize<JsonImovelGuarita>();
             var currentPage = int.Parse(desserialize.Paginacao.Current);
 
             Console.WriteLine($"ParseAluguelVenda {currentPage} {desserialize.Paginacao.Pages}");
+            var tipoImovel = dictForm["opcao-filtro"] == "vender" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
 
             foreach (var item in desserialize.Imoveis)
             {
-                var tipoImovel = dictForm["opcao-filtro"] == "vender" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
                 var imovel = new ImoveiscapturadosDto(SpiderEnum.Guarida, tipoImovel)
                 {
                     AreaPrivativa = item.Area_util,
@@ -86,8 +86,26 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Rua = item.Endereco,
                     SiglaEstado = item.Estado,
                     Tipo = item.Tipo,
+                    
                 };
-                Save(imovel);
+                if (tipoImovel == TipoImovelEnum.Alugar)
+                    Request.Get(url: imovel.Url, callback: ParseImovel, dictArgs: new Dictionary<string, object> { { "imovel", imovel } });
+                else
+                    Save(imovel);
+            }
+        }
+
+        private void ParseImovel(Response response)
+        {
+            var imovel = response.DictArgs["imovel"] as ImoveiscapturadosDto;
+            imovel.Condominio = response.Selector.SelectSingleNode("//h6[contains(text(),'Condomínio')]/../h5").TextOrNull();
+            imovel.Iptu = response.Selector.SelectSingleNode("//h6[contains(text(),'IPTU')]/../h5").TextOrNull();
+            if (string.IsNullOrWhiteSpace(imovel.Descricao)){
+                try
+                {
+                    imovel.Descricao = response.Selector.SelectSingleNode("//h5[text()='Sobre este imóvel']/..").InnerText.Split("Sobre este imóvel")[1].Split("O que eu preciso para alugar este imóvel?")[0];
+                }
+                catch { }
             }
         }
     }
