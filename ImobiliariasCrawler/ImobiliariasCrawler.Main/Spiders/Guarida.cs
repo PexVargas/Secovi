@@ -47,14 +47,25 @@ namespace ImobiliariasCrawler.Main.Spiders
             var desserialize = response.Selector.Deserialize<JsonImovelGuarita>();
             var currentPage = int.Parse(desserialize.Paginacao.Current);
 
-            if (currentPage < desserialize.Paginacao.Pages)
+            if (desserialize.Paginacao.Pages > 1)
             {
-                Console.WriteLine($"ParseAluguelVenda {currentPage} {desserialize.Paginacao.Pages}");
-
-                dictForm["page"] = (currentPage+1).ToString();
-                var newDictForm = new Dictionary<string, object>() { { "form", dictForm } };
-                Request.FormPost(url: url.ToString(), dictBody: dictForm, callback: ParseAluguelVenda, dictArgs: newDictForm);
+                foreach (var pag in Enumerable.Range(0, desserialize.Paginacao.Pages-1))
+                {
+                    dictForm["page"] = (++currentPage).ToString();
+                    var newDictForm = new Dictionary<string, object>() { { "form", dictForm } };
+                    Request.FormPost(url: url.ToString(), dictBody: dictForm, callback: ParseAluguelVenda, dictArgs: newDictForm);
+                }
             }
+            ParseImovel(response);
+        }
+
+        public void ParseImovel(Response response)
+        {
+            var dictForm = response.DictArgs["form"] as Dictionary<string, string>;
+            var desserialize = response.Selector.Deserialize<JsonImovelGuarita>();
+            var currentPage = int.Parse(desserialize.Paginacao.Current);
+
+            Console.WriteLine($"ParseAluguelVenda {currentPage} {desserialize.Paginacao.Pages}");
 
             foreach (var item in desserialize.Imoveis)
             {
