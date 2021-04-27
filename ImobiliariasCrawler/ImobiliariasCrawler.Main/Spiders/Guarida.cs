@@ -18,7 +18,6 @@ namespace ImobiliariasCrawler.Main.Spiders
 
         public override void Parse(Response response)
         {
-            Console.WriteLine("Parse");
             var codCidadeList = response.Xpath("//option[contains(@class,'sources-filtro-cidade')]").Select(e => e.GetAttr("value")).ToList();
             foreach (var codCidade in codCidadeList)
             {
@@ -65,7 +64,6 @@ namespace ImobiliariasCrawler.Main.Spiders
             var desserialize = response.Selector.Deserialize<JsonImovelGuarita>();
             var currentPage = int.Parse(desserialize.Paginacao.Current);
 
-            Console.WriteLine($"ParseAluguelVenda {currentPage} {desserialize.Paginacao.Pages}");
             var tipoImovel = dictForm["opcao-filtro"] == "vender" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
 
             foreach (var item in desserialize.Imoveis)
