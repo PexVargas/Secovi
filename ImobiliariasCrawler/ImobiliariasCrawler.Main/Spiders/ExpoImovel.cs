@@ -15,10 +15,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                         concurretnRequests: 5,
                         downloadDelay: new TimeSpan(0,0,0,0,1000)
                     ))
-        {
-        }
-
-
+        {}
         public override void BeginRequests()
         {
             var header = new Dictionary<string, string> { { "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0" } };
@@ -48,7 +45,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             {
                 Url = response.Url,
                 SiglaEstado = estado,
-                Rua = response.Selector.SelectSingleNode("//div[@class='lista-detalhe']/h3").TextOrNull(),
+                Rua = response.Selector.SelectSingleNode("//div[@class='info-localizacao']//h3").TextOrNull(),
 
                 Tipo = tipo,
                 Valor = response.Selector.SelectSingleNode("//div[@class='precAptDetExp']").TextOrNull(),
@@ -60,7 +57,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Garagens = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'Vagas')]/../div[3]").TextOrNull(),
                 Descricao = response.Selector.SelectSingleNode("//div[@class='textDetExpo']").TextOrNull(),
                 Imagens = response.Selector.SelectSingleNode("//div[@id='geralGaleria']//img").GetAttr("data-src"),
-                Condominio = response.Selector.SelectSingleNode("//div[@class='noxSubNomCond']").TextOrNull()
+                Condominio = response.Selector.SelectSingleNode("//div[@id='noxSubNomCond']").TextOrNull()
             };
             var cidadeBairro = response.Selector.SelectSingleNode("//div[@id='verMapa']/p").TextOrNull();
             if (cidadeBairro != null)
