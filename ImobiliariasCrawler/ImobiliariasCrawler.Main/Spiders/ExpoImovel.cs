@@ -52,7 +52,8 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Quartos = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'Quartos')]/../div[3]").TextOrNull(),
                 Suites = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'suítes')]/../div[3]").TextOrNull(),
                 Banheiros = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'banheiros sociais')]/../div[3]").TextOrNull(),
-                AreaTotal = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'Área')]/../div[3]").TextOrNull(),
+                AreaTotal = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'Área')]/../div[3]").TextOrNull()
+                            ?? response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'área total')]/../div[3]").TextOrNull(),
                 AreaPrivativa = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'área privativa')]/../div[3]").TextOrNull(),
                 Garagens = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'Vagas')]/../div[3]").TextOrNull(),
                 Descricao = response.Selector.SelectSingleNode("//div[@class='textDetExpo']").TextOrNull(),
