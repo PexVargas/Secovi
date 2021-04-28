@@ -4,153 +4,125 @@ using ImobiliariasCrawler.Main.Extensions;
 using System.Linq;
 using ImobiliariasCrawler.Main.Model;
 using ImobiliariasCrawler.Main.Core;
+using System.Text.RegularExpressions;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
     public class DLegend : SpiderBase
     {
-        public DLegend() : base(
-                new ConfigurationSpider(
-                        concurretnRequests: 5,
-                        downloadDelay: new TimeSpan(0, 0, 0, 0, 3000)
-                    ))
+
+        public DLegend() : base(config: new ConfigurationSpider(
+                downloadDelay: TimeSpan.FromSeconds(0),
+                concurretnRequests: 1
+            ))
+        {
+        }
+
+        public override void BeginRequests()
         {
 
+            var urlComprar = "https://www.dlegend.com.br/api/search?page=0&perPage=1000000&maps=&order=&goal=&free=&status=comprar&values[]=&values[]=&footage[]=&footage[]=&boundless=false";
+            Request.Get(urlComprar, Parse, dictArgs: new Dictionary<string, object> { { "tipoImovel", TipoImovelEnum.Comprar } });
+
+            var urlAlugar = "https://www.dlegend.com.br/api/search?page=0&perPage=1000000&maps=&order=&goal=&free=&status=alugar&values[]=&values[]=&footage[]=&footage[]=&boundless=false";
+            Request.Get(urlAlugar, Parse, dictArgs: new Dictionary<string, object> { { "tipoImovel", TipoImovelEnum.Alugar } });
         }
-        public override void BeginRequests() => Request.Get("https://www.dlegend.com.br", Parse);
 
         public override void Parse(Response response)
         {
-            var bairrosList = new List<string> { "Auxiliadora", "Bela Vista", "Boa Vista", "Chacara das Pedras", "Higienópolis", "Jardim Europa", "Moinhos de Vento", "Mont Serrat", "Petrópolis", "Rio Branco", "Santa Cecília", "Três Figueiras", "Azenha", "Bom Fim", "Centro", "Centro Histórico", "Cidade Baixa", "Independência", "Menino Deus", "Praia de Belas", "Santana", "Anchieta", "Cristo Redentor", "Farrapos", "Floresta", "Jardim Lindóia", "Jardim Planalto", "Humaitá", "Navegantes", "Passo da Areia", "Passo das Pedras", "Rubem Berta", "Santa Maria Goretti", "Sarandi", "São Geraldo", "São João", "São José", "São Sebastião", "Vila Ipiranga", "Vila Jardim", "Cavalhada", "Cristal", "Teresópolis", "Central Parque", "Agronomia", "Bom Jesus", "Jardim Botânico", "Jardim Carvalho", "Jardim Sabará", "Jardim do Salso", "Lomba do Pinheiro", "Medianeira", "Partenon", "Canoas", "Distrito Industrial", "Esteio", "Gravataí", "Auxiliadora", "Bela Vista", "Boa Vista", "Chacara das Pedras", "Higienópolis", "Jardim Europa", "Moinhos de Vento", "Mont Serrat", "Petrópolis", "Rio Branco", "Santa Cecília", "Três Figueiras", "Azenha", "Bom Fim", "Centro", "Centro Histórico", "Cidade Baixa", "Independência", "Menino Deus", "Praia de Belas", "Santana", "Anchieta", "Cristo Redentor", "Farrapos", "Floresta", "Jardim Lindóia", "Jardim Planalto", "Humaitá", "Navegantes", "Passo da Areia", "Passo das Pedras", "Rubem Berta", "Santa Maria Goretti", "Sarandi", "São Geraldo", "São João", "São José", "São Sebastião", "Vila Ipiranga", "Vila Jardim", "Cavalhada", "Cristal", "Teresópolis", "Central Parque", "Agronomia", "Bom Jesus", "Jardim Botânico", "Jardim Carvalho", "Jardim Sabará", "Jardim do Salso", "Lomba do Pinheiro", "Medianeira", "Partenon", "Canoas", "Distrito Industrial", "Esteio", "Gravataí" };
-            var headers = new Dictionary<string, string> { { "x-requested-with", "XMLHttpRequest" } };
+            var tipoImovel = (TipoImovelEnum)response.DictArgs["tipoImovel"];
 
-            foreach (var bairro in bairrosList)
+            var dlegendJsonList = response.Content.ReadAsStringAsync().Result.DeserializeSnakeCase<List<DlegendJson>>();
+            foreach (var item in dlegendJsonList)
             {
-                var searchMapLocacao = new SearchMapsFilter(goal: "locacao", neighborhood: bairro);
-                var dictLocacao = new Dictionary<string, object> { { "bairro", bairro }, { "TipoImovel", "2" } };
-                //Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapLocacao, headers, dictArgs: dictLocacao);
+                var bairro = item.AddressDistrict;
+                var rua = item.Address;
+                var url = $"https://www.dlegend.com.br/{tipoImovel}/{item.CategoryName}/{bairro}/{rua}/{item.Code}".RemoveAccents().Replace(" ", "-").ToLower();
 
-                var searchMapVenda = new SearchMapsFilter(goal: "venda", neighborhood: bairro);
-                var dictVenda = new Dictionary<string, object> { { "bairro", bairro }, { "TipoImovel", "1" } };
-                Request.FormPost("https://www.dlegend.com.br/search/search_maps", ParseGoals, searchMapVenda, headers, dictArgs: dictVenda);
-                return;
-            }
-        }
+                var imagens = string.Join(", ", item.Images.DeserializeCamelCase<List<DLegendImageJson>>().Take(5).Select(i =>
+                    $"https://www.dlegend.com.br/vista.imobi/fotos/{item.Code}/{i.File}"
+                ));
 
-        public void ParseGoals(Response response)
-        {
-            var headers = new Dictionary<string, string> { { "x-requested-with", "XMLHttpRequest" } };
-            try
-            {
-                var deserialize = response.Selector.Deserialize<SearchMapResult>();
-                var searchListCard = new SearchListCard(deserialize.Imoveis.Select(i => i.Id.ToString()).ToList(), goal: response.DictArgs["TipoImovel"].ToString());
-                response.DictArgs.Add("form", searchListCard);
-                Request.FormPost("https://www.dlegend.com.br/search/searchListCard", ParseResult, searchListCard, headers, dictArgs: response.DictArgs);
-            }
-            catch (Exception)
-            {
-                Console.WriteLine(response.Selector.InnerHtml);
-            }
-        }
 
-        public void ParseResult(Response response)
-        {
-            var listUrls = response.Selector.SelectNodes("//div[@class='property-card']");
-
-            if (listUrls != null)
-            {
-                var headers = new Dictionary<string, string> { { "x-requested-with", "XMLHttpRequest" } };
-                var searchListCard = response.DictArgs["form"] as SearchListCard;
-                searchListCard.NextPage();
-                Console.WriteLine($"Tipo {searchListCard.Goal} Pagina {searchListCard.Per_page}");
-                Request.FormPost("https://www.dlegend.com.br/search/searchListCard", ParseResult, searchListCard, headers, dictArgs: response.DictArgs);
-
-                foreach (var div in response.Selector.SelectNodes("//div[@class='property-card']"))
+                var imovel = new ImoveiscapturadosDto(SpiderEnum.DLegend, tipoImovel)
                 {
-                    var newDictArgs = new Dictionary<string, object>()
-                    {
-                        { "Tipo", div.SelectSingleNode(".//p[@class='cod']/small").TextOrNull() },
-                        { "bairro", response.DictArgs["bairro"] },
-                        { "TipoImovel", response.DictArgs["TipoImovel"] },
-                    };
+                    Url = url,
+                    Bairro = item.AddressDistrict,
+                    Cep = item.AddressCep,
+                    Cidade = item.AddressCity,
+                    SiglaEstado = item.AddressUf,
+                    Rua = $"{item.Address}, {item.AddressAdditional}",
 
-                    var url = div.SelectSingleNode(".//a").GetAttributeValue("href", null);
-                    Request.Get(url, ParseImovel, dictArgs: newDictArgs);
-                }
+                    AreaPrivativa = item.PrivativeArea,
+                    AreaTotal = item.PrivativeAreaMax,
+
+                    Quartos = item.Bedroom,
+                    Garagens = item.Parking,
+                    Descricao = item.Description,
+                    Tipo = item.Goal,
+                    Valor = item.SalesValue,
+                    Suites = item.Description.ReValue(@"\d? su[íi]tes?"),
+                    Banheiros = item.Description.ReValue(@"\d? banheiros?"),
+                    Churrasqueiras = item.Description.ReValue("churrasqueira") is null ? "0" : "1",
+                    Imagens = imagens,
+                };
+                Save(imovel);
             }
         }
-
-        public void ParseImovel(Response response)
-        {
-            var ul = response.Selector.SelectSingleNode("//ul[@class='property-info-list']");
-            var descriptionSelector = response.Selector.SelectSingleNode("//section[@class='property-description wrap']/div/p");
-            var tipoImovel = int.Parse(response.DictArgs["TipoImovel"].ToString());
-
-            var tipoEnum = tipoImovel == 1 ? TipoImovelEnum.Comprar : TipoImovelEnum.Comprar;
-            var imob = new ImoveiscapturadosDto(SpiderEnum.DLegend, tipoEnum)
-            {
-                Url = response.Url,
-                Bairro = response.DictArgs["bairro"].ToString(),
-                Cidade = "Porto Alegre",
-                SiglaEstado = "RS",
-
-                Tipo = response.DictArgs["Tipo"].ToString(),
-                AreaPrivativa = ul.SelectSingleNode(".//use/@*[contains(.,'#svg-metreage')]/../../..").ReFirst("(.*?) -"),
-                AreaTotal = ul.SelectSingleNode(".//use/@*[contains(.,'#svg-metreage')]/../../..").ReFirst("- (.*)"),
-                Quartos = ul.SelectSingleNode("./li[@class='dormitorio-icon']/div[2]").TextOrNull(),
-                Banheiros = ul.SelectSingleNode(".//use/@*[contains(.,'#svg-bathroom')]/../../..").TextOrNull(),
-                Garagens = ul.SelectSingleNode(".//use/@*[contains(.,'#svg-garage')]/../../..").TextOrNull(),
-                Churrasqueiras = descriptionSelector.ReHas("churrasqueira") ? "1" : "0",
-                Imagens = response.Selector.SelectSingleNode("//div[@class='b-lazy img-background']").GetAttr("data-src"),
-                Valor = response.Selector.SelectSingleNode("//p[@class='price-por']/span[@class='value']").TextOrNull(),
-                Rua = response.Selector.SelectSingleNode("//h1[@class='property-title']").TextOrNull(),
-                Descricao = descriptionSelector.TextOrNull(),
-                
-            };
-            Save(imob);
-        }
     }
 
-    public class SearchMapsFilter
+    public sealed class DLegendImageJson
     {
-        public string Free { get; set; } 
-
-        public List<string> Neighborhood { get; set; }
-        public List<string> Goal { get; set; }
-        public List<string> Price { get; set; } = new List<string> { "0", "100.000.000" };
-        public List<string> Footage { get; set; } = new List<string> { "0", "14000" };
-
-        public SearchMapsFilter(string goal, string neighborhood)
-        {
-            Goal = new List<string> { goal };
-            Neighborhood = new List<string> { neighborhood };
-        }
+        public string File { get; set; }
     }
 
-
-    public class SearchListCard
+    public sealed class DlegendJson
     {
+        public string RentTotalUnits { get; set; }
+        public string SalesTotalUnits { get; set; }
+        public string Address { get; set; }
+        public string AddressType { get; set; }
+        public string AddressNumber { get; set; }
+        public string AddressAdditional { get; set; }
+        public string AddressDistrict { get; set; }
+        public string AddressCity { get; set; }
+        public string AddressUf { get; set; }
+        public string AddressCep { get; set; }
+        public string AddressCountry { get; set; }
+        public string AddressReference { get; set; }
+        public string Confidential { get; set; }
+        public string DisplayRent { get; set; }
+        public string DisplayBuy { get; set; }
+        public string Bedroom { get; set; }
+        public string Parking { get; set; }
+        public string ParkingMax { get; set; }
+        public string Launch { get; set; }
+        public string LaunchSales { get; set; }
+        public string Code { get; set; }
+        public string Cover { get; set; }
+        public string Featured { get; set; }
+        public string PrivativeArea { get; set; }
         public string Goal { get; set; }
-        public string Orderby { get; set; } = "destaque-desc";
-
-        public List<string> Code { get; set; }
-        public int Per_page { get; private set; }
-
-        public void NextPage() => Per_page += 10;
-        public SearchListCard(List<string> codes, string goal)
-        {
-            Per_page = 0;
-            Code = codes;
-            Goal = goal;
-        }
-    }
-
-    public class SearchMapResult
-    {
-        public List<ImoveisDLegend> Imoveis { get; set; }
-    }
-    public class ImoveisDLegend
-    {
-        public string Id { get; set; }
+        public string Slogan { get; set; }
+        public string Description { get; set; }
+        public string RentalValue { get; set; }
+        public string SalesValue { get; set; }
+        public string Images { get; set; }
+        public string Files { get; set; }
+        public string RentalOrder { get; set; }
+        public string SalesOrder { get; set; }
+        public string Order { get; set; }
+        public string Status { get; set; }
+        public string PrivativeAreaMax { get; set; }
+        public string RentalValueMax { get; set; }
+        public string SalesValueMax { get; set; }
+        public string PromotionalValue { get; set; }
+        public string IsIncome { get; set; }
+        public string IncomeValue { get; set; }
+        public string Furnished { get; set; }
+        public string Lat { get; set; }
+        public string Lng { get; set; }
+        public string CategoryName { get; set; }
+        public string CategoryDescription { get; set; }
     }
 }

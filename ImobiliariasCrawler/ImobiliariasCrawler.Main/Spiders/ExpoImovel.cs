@@ -10,15 +10,12 @@ namespace ImobiliariasCrawler.Main.Spiders
 {
     public class ExpoImovel : SpiderBase
     {
-
-        private PexinContext _contextAux;
         public ExpoImovel() : base(
                 new ConfigurationSpider(
                         concurretnRequests: 5,
                         downloadDelay: new TimeSpan(0,0,0,0,1000)
                     ))
         {
-            _contextAux = new PexinContext();
         }
 
 
@@ -26,8 +23,8 @@ namespace ImobiliariasCrawler.Main.Spiders
         {
             var header = new Dictionary<string, string> { { "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0" } };
 
-            var lastProcessed = DateTime.Now.AddDays(-30);
-            var urlList = _contextAux.UrlsProcessadas
+            var lastProcessed = DateTime.Now.AddDays(-15);
+            var urlList = _context.UrlsProcessadas
                 .Where(u => u.ProcessedAt < lastProcessed)
                 .Where(u => u.Spider == (int)SpiderEnum.ExpoImovel).ToList();
 
@@ -41,11 +38,11 @@ namespace ImobiliariasCrawler.Main.Spiders
 
         public override void Parse(Response response)
         {
-            var tipoImovel = response.DictArgs["tipoImovelEnum"] as string;
+            var tipoImovel = response.DictArgs["tipoImovelEnum"].ToString();
             var tipoImovelEnum = tipoImovel == "0" ? TipoImovelEnum.Alugar : TipoImovelEnum.Comprar;
 
-            var estado = response.DictArgs["estado"] as string;
-            var tipo = response.DictArgs["tipo"] as string;
+            var estado = response.DictArgs["estado"].ToString();
+            var tipo = response.DictArgs["tipo"].ToString();
 
             var imovel = new ImoveiscapturadosDto(SpiderEnum.ExpoImovel, tipoImovelEnum)
             {
@@ -81,13 +78,10 @@ namespace ImobiliariasCrawler.Main.Spiders
                 imovel.AreaPrivativa = imovel.AreaPrivativa.Replace("\n", "").Replace("\t", "");
 
             Save(imovel);
-            lock (_contextAux)
-            {
-                var urlParaProcessar = response.DictArgs["urlParaProcessar"] as UrlsProcessadas;
-                urlParaProcessar.ProcessedAt = DateTime.Now;
-                _contextAux.Update(urlParaProcessar);
-                _contextAux.SaveChanges();
-            }
+
+            var urlParaProcessar = response.DictArgs["urlParaProcessar"] as UrlsProcessadas;
+            urlParaProcessar.ProcessedAt = DateTime.Now;
+            UpdateUrlProcessada(urlParaProcessar);
         }
 
 

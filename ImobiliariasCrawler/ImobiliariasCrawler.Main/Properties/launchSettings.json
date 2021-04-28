@@ -31,6 +31,10 @@
     "ExpoImovel": {
       "commandName": "Project",
       "commandLineArgs": "ExpoImovel"
+    },
+    "ExpoImovelProcessarUrl": {
+      "commandName": "Project",
+      "commandLineArgs": "ExpoImovelProcessarUrl"
     }
   }
 }

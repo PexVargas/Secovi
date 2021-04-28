@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
@@ -26,15 +27,14 @@ namespace ImobiliariasCrawler.Main.Spiders
                 var dictCidadeEstado = new Dictionary<string, object> { { "cidade", cidade }, { "estado", estado } };
 
                 var urlAluguel = string.Format(UrlBaseAluguel, 1, estado, cidade);
-                Request.Get(urlAluguel, callback: ParseResult, dictArgs: dictCidadeEstado);
+                Request.Get(urlAluguel, callback: ParsePaginacao, dictArgs: dictCidadeEstado);
 
                 var urlVenda = string.Format(UrlBaseVenda, 1, estado, cidade);
-                Request.Get(urlVenda, callback: ParseResult, dictArgs: dictCidadeEstado);
-
+                Request.Get(urlVenda, callback: ParsePaginacao, dictArgs: dictCidadeEstado);
             }
         }
 
-        public async void ParseResult(Response response)
+        public async void ParsePaginacao(Response response)
         {
             var contentString = await response.HttpResponse.Content.ReadAsStringAsync();
             var formatedContent = contentString.Replace("vistasoftrest_realties_callback(", "").Replace("realties_callback(", "").Replace(");", "");
@@ -42,11 +42,22 @@ namespace ImobiliariasCrawler.Main.Spiders
 
 
             var urlBase = response.Url.Contains("tipo_negociacao=-2") ? UrlBaseVenda : UrlBaseAluguel;
-            if (desserialize.CurrentPage < desserialize.NumberOfPages)
+            if (desserialize.NumberOfPages > 1)
             {
-                var urlNextPage = string.Format(urlBase, desserialize.CurrentPage+1, response.DictArgs["estado"].ToString(), response.DictArgs["cidade"]);
-                Request.Get(urlNextPage, callback: ParseResult, dictArgs: response.DictArgs);
+                foreach (var item in Enumerable.Range(0, desserialize.NumberOfPages - 1))
+                {
+                    var urlNextPage = string.Format(urlBase, ++desserialize.CurrentPage, response.DictArgs["estado"].ToString(), response.DictArgs["cidade"]);
+                    Request.Get(urlNextPage, callback: ParseResult, dictArgs: response.DictArgs);
+                }
             }
+            ParseResult(response);
+        }
+
+        public async void ParseResult(Response response)
+        {
+            var contentString = await response.HttpResponse.Content.ReadAsStringAsync();
+            var formatedContent = contentString.Replace("vistasoftrest_realties_callback(", "").Replace("realties_callback(", "").Replace(");", "");
+            var desserialize = JsonSerializer.Deserialize<JsonImoveis>(formatedContent);
 
             foreach (var item in desserialize.Items)
             {
@@ -70,7 +81,9 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Iptu = item.FormattedIPTUValue,
                     Suites = item.Suites.ToString(),
                     Valor = item.FormattedFullPrice,
-                    Condominio = item.FormattedCondominiumValue
+                    Garagens = item.ParkingSpots.ToString(),
+                    Condominio = item.FormattedCondominiumValue,
+                    
                 };
                 Save(imovel);
             }
@@ -99,6 +112,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             public string FormattedIPTUValue { get; set; }
             public string FormattedLotArea { get; set; }
             public string Image { get; set; }
+            public int ParkingSpots { get; set; }
             public int Suites { get; set; }
 
             public CurrentSpotCreditoReal CurrentSpot { get; set; }
