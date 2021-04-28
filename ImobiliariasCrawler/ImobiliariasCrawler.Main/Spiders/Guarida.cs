@@ -1,4 +1,4 @@
-﻿using ImobiliariasCrawler.Main.Extensions;
+using ImobiliariasCrawler.Main.Extensions;
 using ImobiliariasCrawler.Main.Model;
 using System;
 using System.Collections.Generic;
@@ -103,6 +103,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 }
                 catch { }
             }
+            Save(imovel);
         }
     }
 
