@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Linq;
+using ImobiliariasCrawler.Main.Extensions;
 
 namespace ImobiliariasCrawler.Main.Spiders
 {
@@ -83,8 +84,13 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Valor = item.FormattedFullPrice,
                     Garagens = item.ParkingSpots.ToString(),
                     Condominio = item.FormattedCondominiumValue,
-                    
                 };
+                var baseUrl = "https://www.creditoreal.com.br";
+                if (tipoEnum == TipoImovelEnum.Comprar)
+                    imovel.Url = $"{baseUrl}/vendas/{item.ReferenceId}";
+                else
+                    imovel.Url = $"{baseUrl}/alugafacil/{item.ReferenceId}/imovel-{item.CurrentNegotiationTypeTitle}-em-{item.CurrentSpot.Neighborhood}-{item.CurrentSpot.City}"
+                        .RemoveAccents().Replace(" ", "-");
                 Save(imovel);
             }
         }
