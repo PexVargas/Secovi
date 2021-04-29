@@ -23,16 +23,11 @@ namespace ImobiliariasCrawler.Main
         private readonly SemaphoreSlim _semaphore;
         private readonly MonitorSpiders _logging;
         private readonly ConfigurationSpider _configuration;
-
-
-        public readonly static JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
-        };
+        private readonly HttpClient httpClient;
 
         public ManageRequests(MonitorSpiders logging, ConfigurationSpider configuration)
         {
+            httpClient = new HttpClient();
             _configuration = configuration;
             _semaphore = new SemaphoreSlim(_configuration.ConcurrentRequests);
             _logging = logging;
@@ -46,7 +41,7 @@ namespace ImobiliariasCrawler.Main
 
         public void Post(string url, object body, Callback callback, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
-            var payload = JsonSerializer.Serialize(body, JsonOptions);
+            var payload = JsonSerializer.Serialize(body, StringExtension.JsonOptionsCamelCase);
             var jsonContent = new StringContent(payload, Encoding.UTF8, "application/json");
             Request(url, callback, httpContent: jsonContent, dictArgs: dictArgs, headers: headers);
         }
@@ -76,7 +71,6 @@ namespace ImobiliariasCrawler.Main
                 {
                     _fingerPrintRequest.Add(hashFingerPrint);
 
-                    using var httpClient = new HttpClient();
 
                     _logging.AddCountRequest();
                     var request = CreateRequest(url, httpContent);

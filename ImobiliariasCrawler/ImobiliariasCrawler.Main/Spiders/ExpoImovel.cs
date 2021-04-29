@@ -10,24 +10,18 @@ namespace ImobiliariasCrawler.Main.Spiders
 {
     public class ExpoImovel : SpiderBase
     {
-
-        private PexinContext _contextAux;
         public ExpoImovel() : base(
                 new ConfigurationSpider(
                         concurretnRequests: 5,
                         downloadDelay: new TimeSpan(0,0,0,0,1000)
                     ))
-        {
-            _contextAux = new PexinContext();
-        }
-
-
+        {}
         public override void BeginRequests()
         {
             var header = new Dictionary<string, string> { { "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0" } };
 
-            var lastProcessed = DateTime.Now.AddDays(-30);
-            var urlList = _contextAux.UrlsProcessadas
+            var lastProcessed = DateTime.Now.AddDays(-15);
+            var urlList = _context.UrlsProcessadas
                 .Where(u => u.ProcessedAt < lastProcessed)
                 .Where(u => u.Spider == (int)SpiderEnum.ExpoImovel).ToList();
 
@@ -41,29 +35,30 @@ namespace ImobiliariasCrawler.Main.Spiders
 
         public override void Parse(Response response)
         {
-            var tipoImovel = response.DictArgs["tipoImovelEnum"] as string;
+            var tipoImovel = response.DictArgs["tipoImovelEnum"].ToString();
             var tipoImovelEnum = tipoImovel == "0" ? TipoImovelEnum.Alugar : TipoImovelEnum.Comprar;
 
-            var estado = response.DictArgs["estado"] as string;
-            var tipo = response.DictArgs["tipo"] as string;
+            var estado = response.DictArgs["estado"].ToString();
+            var tipo = response.DictArgs["tipo"].ToString();
 
             var imovel = new ImoveiscapturadosDto(SpiderEnum.ExpoImovel, tipoImovelEnum)
             {
                 Url = response.Url,
                 SiglaEstado = estado,
-                Rua = response.Selector.SelectSingleNode("//div[@class='lista-detalhe']/h3").TextOrNull(),
+                Rua = response.Selector.SelectSingleNode("//div[@class='info-localizacao']//h3").TextOrNull(),
 
                 Tipo = tipo,
                 Valor = response.Selector.SelectSingleNode("//div[@class='precAptDetExp']").TextOrNull(),
                 Quartos = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'Quartos')]/../div[3]").TextOrNull(),
                 Suites = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'suítes')]/../div[3]").TextOrNull(),
                 Banheiros = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'banheiros sociais')]/../div[3]").TextOrNull(),
-                AreaTotal = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'Área')]/../div[3]").TextOrNull(),
+                AreaTotal = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'Área')]/../div[3]").TextOrNull()
+                            ?? response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'área total')]/../div[3]").TextOrNull(),
                 AreaPrivativa = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'área privativa')]/../div[3]").TextOrNull(),
                 Garagens = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'Vagas')]/../div[3]").TextOrNull(),
                 Descricao = response.Selector.SelectSingleNode("//div[@class='textDetExpo']").TextOrNull(),
                 Imagens = response.Selector.SelectSingleNode("//div[@id='geralGaleria']//img").GetAttr("data-src"),
-                Condominio = response.Selector.SelectSingleNode("//div[@class='noxSubNomCond']").TextOrNull()
+                Condominio = response.Selector.SelectSingleNode("//div[@id='noxSubNomCond']").TextOrNull()
             };
             var cidadeBairro = response.Selector.SelectSingleNode("//div[@id='verMapa']/p").TextOrNull();
             if (cidadeBairro != null)
@@ -81,13 +76,10 @@ namespace ImobiliariasCrawler.Main.Spiders
                 imovel.AreaPrivativa = imovel.AreaPrivativa.Replace("\n", "").Replace("\t", "");
 
             Save(imovel);
-            lock (_contextAux)
-            {
-                var urlParaProcessar = response.DictArgs["urlParaProcessar"] as UrlsProcessadas;
-                urlParaProcessar.ProcessedAt = DateTime.Now;
-                _contextAux.Update(urlParaProcessar);
-                _contextAux.SaveChanges();
-            }
+
+            var urlParaProcessar = response.DictArgs["urlParaProcessar"] as UrlsProcessadas;
+            urlParaProcessar.ProcessedAt = DateTime.Now;
+            UpdateUrlProcessada(urlParaProcessar);
         }
 
 

@@ -9,7 +9,7 @@ namespace ImobiliariasCrawler.Main.Spiders
 {
     public abstract class SpiderBase : SpiderAbstract
     {
-        private readonly PexinContext _context;
+        protected readonly PexinContext _context;
         private int _bufferInsertItems = 0;
 
         public SpiderBase(ConfigurationSpider config = null) : base(config ?? new ConfigurationSpider(new TimeSpan(0, 0, 0, 0, 1000), 10))
@@ -32,6 +32,14 @@ namespace ImobiliariasCrawler.Main.Spiders
                     }
                     finally { }
                 }
+            }
+        }
+
+        public void UpdateUrlProcessada(UrlsProcessadas urlProcessada)
+        {
+            lock (_context)
+            {
+                _context.Update(urlProcessada);
             }
         }
 

@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Linq;
+using ImobiliariasCrawler.Main.Extensions;
 
 namespace ImobiliariasCrawler.Main
 {
@@ -41,7 +42,7 @@ namespace ImobiliariasCrawler.Main
 
         public static T Deserialize<T>(this HtmlNode htmlNode)
         {
-            return JsonSerializer.Deserialize<T>(htmlNode.InnerText, ManageRequests.JsonOptions);
+            return JsonSerializer.Deserialize<T>(htmlNode.InnerText, StringExtension.JsonOptionsCamelCase);
         }
     }
 }
