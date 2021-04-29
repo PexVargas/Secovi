@@ -94,6 +94,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Valor = dictKeyValue["imovelAluguel"],
                 Condominio = dictKeyValue["imovelCondominio"],
                 Iptu = dictKeyValue["imovelIptu"],
+                CodImolvelAPI = response.Url.Split("/").Skip(5).FirstOrDefault()
             };
             if (imovel.Suites == "Suíte") imovel.Suites = "1";
             if (imovel.Suites is null)

@@ -84,6 +84,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Rua = item.Endereco,
                     SiglaEstado = item.Estado == "Rio Grande do Sul" ? "RS" : item.Estado,
                     Tipo = item.Tipo,
+                    CodImolvelAPI = item.Url.Split("/").LastOrDefault()
                     
                 };
                 Request.Get(url: imovel.Url, callback: ParseImovel, dictArgs: new Dictionary<string, object> { { "imovel", imovel } });

@@ -84,6 +84,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Valor = item.FormattedFullPrice,
                     Garagens = item.ParkingSpots.ToString(),
                     Condominio = item.FormattedCondominiumValue,
+                    CodImolvelAPI = item.ReferenceId
                 };
                 var baseUrl = "https://www.creditoreal.com.br";
                 if (tipoEnum == TipoImovelEnum.Comprar)

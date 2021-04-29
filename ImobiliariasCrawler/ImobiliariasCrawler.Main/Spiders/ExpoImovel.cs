@@ -58,7 +58,8 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Garagens = response.Selector.SelectSingleNode("//div[@class='boxInforDetTopInt' ]//div[contains(text(),'Vagas')]/../div[3]").TextOrNull(),
                 Descricao = response.Selector.SelectSingleNode("//div[@class='textDetExpo']").TextOrNull(),
                 Imagens = response.Selector.SelectSingleNode("//div[@id='geralGaleria']//img").GetAttr("data-src"),
-                Condominio = response.Selector.SelectSingleNode("//div[@id='noxSubNomCond']").TextOrNull()
+                Condominio = response.Selector.SelectSingleNode("//div[@id='noxSubNomCond']").TextOrNull(),
+                CodImolvelAPI = response.Url.Split("/").LastOrDefault()
             };
             var cidadeBairro = response.Selector.SelectSingleNode("//div[@id='verMapa']/p").TextOrNull();
             if (cidadeBairro != null)

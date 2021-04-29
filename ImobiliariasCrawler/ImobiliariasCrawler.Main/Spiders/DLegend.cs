@@ -59,12 +59,13 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Quartos = item.Bedroom,
                     Garagens = item.Parking,
                     Descricao = item.Description,
-                    Tipo = item.Goal,
+                    Tipo = item.CategoryDescription,
                     Valor = item.SalesValue,
                     Suites = item.Description.ReValue(@"\d? su[íi]tes?"),
                     Banheiros = item.Description.ReValue(@"\d? banheiros?"),
                     Churrasqueiras = item.Description.ReValue("churrasqueira") is null ? "0" : "1",
                     Imagens = imagens,
+                    CodImolvelAPI = item.Code,
                 };
                 Save(imovel);
             }

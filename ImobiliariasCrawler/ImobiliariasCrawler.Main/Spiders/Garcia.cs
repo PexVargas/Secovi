@@ -74,6 +74,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Condominio = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Condomínio' )]/strong").TextOrNull(),
                 Iptu = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'IPTU' )]/strong").TextOrNull(),
                 Imagens = response.Selector.SelectSingleNode("//div[@id='dfoto']//img").GetAttributeValue("src", null),
+                CodImolvelAPI = response.Url.Split(",").LastOrDefault()
             };
             if (imovel.AreaPrivativa is null)
                 imovel.AreaPrivativa = response.Selector.SelectSingleNode("//ul[@class='infos']/li[contains(text(),'Privativo' )]/strong").ReFirst("(.*?m)");
