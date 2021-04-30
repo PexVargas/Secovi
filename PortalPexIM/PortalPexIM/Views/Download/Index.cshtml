@@ -10,7 +10,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <form id="RegisterValidation" action="" method="" novalidate="novalidate">
+    
             <div class="card ">
                 <div class="card-header card-header-info card-header-icon">
                     <div class="card-icon">
@@ -18,72 +18,70 @@
                     </div>
                     <h4 class="card-title">Download de base</h4>
                 </div>
-                <div class="card-body ">
-                    <div class="form-group bmd-form-group">
 
-                        <div class="form-group">
-                            <label for="exampleFormControlSelect2">Indicador Nacional</label>
-                            @*<select multiple class="form-control selectpicker" data-style="btn btn-link" title="" id="">
+                @using (Html.BeginForm("GerarCsv", "Download", FormMethod.Post, new { enctype = "multipart/form-data", id = "myform" }))
+                {
+                    <div class="card-body ">
+                        <div class="form-group bmd-form-group">
 
-                                @foreach (var item in Model)
-                                {
-                                    <option value="@item.CodEstado">@item.NomeEstado</option>
-                                }
-
-
-                            </select>*@
-                        </div>
-
-                    </div>
-                    <div class="form-group bmd-form-group">
-                        <div class="form-group">
-                            <label for="exampleFormControlSelect2">Tipo de dado</label>
-                            <select multiple class="form-control selectpicker" data-style="btn btn-link" title="" id="">
-
-                                <option value="">Todos</option>
-                                <option value="1">Venda</option>
-                                <option value="2">Locação</option>
-
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group bmd-form-group">
-                        <div class="form-group">
                             <div class="form-group">
-                                <label class="label-control">Mês/Ano</label>
-                                <input type="text" class="form-control datetimepicker" value="21/06/2018" />
+                                <label for="exampleFormControlSelect2">Indicador Nacional</label>
+
+                            </div>
+
+                        </div>
+                        <div class="form-group bmd-form-group">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect2">Tipo de dado</label>
+                                <select  class="form-control selectpicker" data-style="btn btn-link" title="" id="tipoImovel" name="tipoImovel">
+                                    <option value="">Todos</option>
+                                    <option value="1">Venda</option>
+                                    <option value="2">Locação</option>
+                                </select>
                             </div>
                         </div>
+                        <div class="form-group bmd-form-group">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label class="label-control">Mês/Ano</label>
+                                    <input type="text" class="form-control datetimepicker" id="periodo" name="periodo" />
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                   
-                </div>
-                <div class="card-footer text-right">
-                    <div class="form-check mr-auto">
-                     
+                    <div class="card-footer text-right">
+                        <div class="form-check mr-auto">
+
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Baixar</button>
                     </div>
-                    <button type="submit" class="btn btn-danger">Cancelar</button>
-                    <button type="submit" class="btn btn-success">Baixar</button>
-                </div>
+                }
+
             </div>
-        </form>
+   
     </div>
 </div>
 
 <script>
-    $('.datetimepicker').datetimepicker({
-        icons: {
-            time: "fa fa-clock-o",
-            date: "fa fa-calendar",
-            up: "fa fa-chevron-up",
-            down: "fa fa-chevron-down",
-            previous: 'fa fa-chevron-left',
-            next: 'fa fa-chevron-right',
-            today: 'fa fa-screenshot',
-            clear: 'fa fa-trash',
-            close: 'fa fa-remove'
-        }
+    $(document).ready(function () {
+        $('.datetimepicker').datetimepicker({
+            format: 'MM/YYYY',
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        });
     });
+  
 </script>
 
 

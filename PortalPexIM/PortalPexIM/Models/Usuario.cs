@@ -13,5 +13,7 @@ namespace PortalPexIM.Models
 
         [Required(ErrorMessage = "A senha deve ser inserida.")]
         public string Senha { get; set; }
+
+        public string SiglaEstado { get; set; }
     }
 }

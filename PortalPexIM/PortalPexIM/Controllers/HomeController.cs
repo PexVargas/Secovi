@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,10 +25,13 @@ namespace PortalPexIM.Controllers
 
         public IActionResult Index()
         {
+           
+            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             FiltroPesquisa filtro = new FiltroPesquisa();
-            filtro.Cidades = db.Imoveisclassificados.Select(x => x.Cidade).Distinct().ToArray();
-            filtro.Bairros = db.Imoveisclassificados.Select(x => x.Bairro).Distinct().ToArray();
-            filtro.Tipos = db.Imoveisclassificados.Select(x => x.Tipo).Distinct().ToArray();
+            filtro.Cidades = db.Imoveisclassificados.Where(x=>x.SiglaEstado == siglaEstado).Select(x => x.Cidade).Distinct().ToArray();
+            filtro.Bairros = db.Imoveisclassificados.Where(x => x.SiglaEstado == siglaEstado).Select(x => x.Bairro).Distinct().ToArray();
+            filtro.Tipos = db.Imoveisclassificados.Where(x => x.SiglaEstado == siglaEstado).Select(x => x.Tipo).Distinct().ToArray();
 
             return View(filtro);
         }
@@ -47,6 +51,12 @@ namespace PortalPexIM.Controllers
         public JsonResult GetEvolutivo([FromBody] FiltroPesquisa filtro) 
         {
             peximContext dbe = new peximContext();
+            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+          
+
+            var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
+            var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
+            var dataBase = new DateTime(ano, mes, 1).AddMonths(-13);
 
             var imoveis = (from i in dbe.Imoveisclassificados
                            where i.Tipo!=null 
@@ -54,6 +64,9 @@ namespace PortalPexIM.Controllers
                            && ((filtro.Bairros == null || filtro.Bairros.Length == 0)|| filtro.Bairros.Contains(i.Bairro))
                            && ((filtro.Tipos == null || filtro.Tipos.Length == 0) ||filtro.Tipos.Contains(i.Tipo))
                            && i.TipoImovel == filtro.TipoImovel
+                           && i.Excluido == 0
+                           && i.SiglaEstado == siglaEstado
+                           && i.DataClassificacao >= (dataBase)
                            group i by new { i.DataClassificacao.Value.Year, i.DataClassificacao.Value.Month } into g
                            
                            select new
@@ -69,6 +82,10 @@ namespace PortalPexIM.Controllers
         public JsonResult GetTipos([FromBody] FiltroPesquisa filtro)
         {
             peximContext dbt = new peximContext();
+            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
+            var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
+            var dataBase = new DateTime(ano, mes, 1);
 
             var imoveis = (from i in dbt.Imoveisclassificados
                            where i.Tipo != null
@@ -76,6 +93,9 @@ namespace PortalPexIM.Controllers
                             && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
                             && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
                             && i.TipoImovel == filtro.TipoImovel
+                            && i.Excluido == 0
+                            && i.SiglaEstado == siglaEstado
+                            && i.DataClassificacao == (dataBase)
                            group i by new { i.Tipo } into g
 
                            select new
@@ -91,6 +111,11 @@ namespace PortalPexIM.Controllers
         [HttpPost]
         public JsonResult GetCidades([FromBody] FiltroPesquisa filtro)
         {
+            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
+            var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
+            var dataBase = new DateTime(ano, mes, 1);
+
             peximContext dbc = new peximContext();
             var imoveis = (from i in dbc.Imoveisclassificados
                            where i.Tipo != null
@@ -98,6 +123,9 @@ namespace PortalPexIM.Controllers
                             && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
                             && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
                             && i.TipoImovel == filtro.TipoImovel
+                            && i.SiglaEstado == siglaEstado
+                            && i.Excluido == 0
+                            && i.DataClassificacao == (dataBase)
                            group i by new { i.Cidade } into g
 
                            select new
@@ -112,6 +140,11 @@ namespace PortalPexIM.Controllers
         [HttpPost]
         public JsonResult GetBairros([FromBody] FiltroPesquisa filtro)
         {
+            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
+            var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
+            var dataBase = new DateTime(ano, mes, 1);
+
             peximContext dbc = new peximContext();
             var imoveis = (from i in dbc.Imoveisclassificados
                            where i.Tipo != null
@@ -119,6 +152,9 @@ namespace PortalPexIM.Controllers
                             && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
                             && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
                             && i.TipoImovel == filtro.TipoImovel
+                            && i.SiglaEstado == siglaEstado
+                            && i.Excluido == 0
+                            && i.DataClassificacao == (dataBase)
                            group i by new { i.Bairro } into g
 
                            select new
@@ -133,6 +169,11 @@ namespace PortalPexIM.Controllers
         [HttpPost]
         public JsonResult GetGaragens([FromBody] FiltroPesquisa filtro)
         {
+            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
+            var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
+            var dataBase = new DateTime(ano, mes, 1);
+
             peximContext dbc = new peximContext();
             var imoveis = (from i in dbc.Imoveisclassificados
                            where i.Tipo != null
@@ -140,6 +181,9 @@ namespace PortalPexIM.Controllers
                             && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
                             && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
                             && i.TipoImovel == filtro.TipoImovel
+                            && i.SiglaEstado == siglaEstado
+                            && i.Excluido == 0
+                            && i.DataClassificacao == (dataBase)
                            group i by new { i.Garagens } into g
                            select new
                            {
@@ -225,9 +269,9 @@ namespace PortalPexIM.Controllers
         [HttpPost]
         public JsonResult Cidades()
         {
-          
+            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var imoveis = (from i in db.Imoveisclassificados
-                          where i.Cidade!=null
+                          where i.Cidade!=null && i.SiglaEstado == siglaEstado
                            group i by new { i.Cidade } into g
                            select new
                            {
@@ -241,9 +285,10 @@ namespace PortalPexIM.Controllers
         [HttpPost]
         public JsonResult Bairros([FromBody]  FiltroPesquisa filtro)
         {
- 
+            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             var imoveis = (from i in db.Imoveisclassificados
-                           where filtro.Cidades.Contains(i.Cidade)
+                           where filtro.Cidades.Contains(i.Cidade) && i.SiglaEstado == siglaEstado
                            group i by new { i.Bairro } into g
                            select new
                            {

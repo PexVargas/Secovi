@@ -15,6 +15,7 @@ namespace PortalPexIM.ViewModel
         public string[] Tipos { get; set; }
 
         public int TipoImovel { get; set; }
+        public string DtReferencia { get; set; }
     }
 
 }

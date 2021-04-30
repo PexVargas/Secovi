@@ -8,12 +8,14 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using PortalPexIM.Models;
+using PortalPexIM.Model;
 
 namespace PortalPexIM.Controllers
 {
    
     public class UsuarioController : Controller
     {
+        peximContext db = new peximContext();
         public IActionResult Index()
         {
             return View();
@@ -25,7 +27,8 @@ namespace PortalPexIM.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, usuario.Login),
-                new Claim(ClaimTypes.Role, "Usuario_Comum")
+                new Claim(ClaimTypes.Role, "Usuario_Comum"),
+                new Claim(ClaimTypes.NameIdentifier, usuario.SiglaEstado)
             };
 
             var identidadeDeUsuario = new ClaimsIdentity(claims, "Login")  ;
@@ -62,8 +65,12 @@ namespace PortalPexIM.Controllers
                 {
                     //aqui poderia ter alguma requisição para base de dados, estou usando
                     //dados estáticos para não complicar
-                    if (usuario.Login == "admin" && usuario.Senha == "Portal4.0")
+
+                    var usuarioBd = db.Usuarios.Where(x => x.Login == usuario.Login && x.Senha == usuario.Senha).FirstOrDefault();
+                    if (usuarioBd!= null)
                     {
+                        usuario.SiglaEstado = usuarioBd.SiglaEstado;
+
                         Login(usuario);
                         return RedirectToAction("Index", "Home");
 

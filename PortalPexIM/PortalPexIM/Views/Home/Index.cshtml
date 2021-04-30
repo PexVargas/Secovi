@@ -86,13 +86,19 @@
 <div class="fundoFiltroLista"></div>
 <div class="funcFiltroLista">
     <div class="col-md-12">
+
         <div class="form-group col-md-12">
-            <select multiple id="cmbCidade"  class="form-control selectpicker" data-style="btn btn-link" title="Selecione a Cidade">
-                @foreach(var itens in Model.Cidades) 
-                { 
+   
+            <input type="text" class="form-control datetimepicker" value="04/2021"  id="dtReferencia" name="dtReferencia" title="Selecione a referência" />
+        </div>
+
+        <div class="form-group col-md-12">
+            <select multiple id="cmbCidade" class="form-control selectpicker" data-style="btn btn-link" title="Selecione a Cidade">
+                @foreach (var itens in Model.Cidades)
+                {
                     <option value="@itens">@itens</option>
                 }
-                
+
             </select>
         </div>
         <div class="form-group col-md-12">
@@ -105,8 +111,8 @@
         </div>
         <div class="form-group col-md-12">
             <select multiple id="cmbTipo" class="form-control selectpicker" data-style="btn btn-link" title="Selecione o Tipo">
-                @foreach(var itens in Model.Tipos) 
-                { 
+                @foreach (var itens in Model.Tipos)
+                {
                     <option value="@itens">@itens</option>
                 }
             </select>
@@ -235,12 +241,28 @@
 
     $(document).ready(function () {       
         Pesquisar();
+
+        $('.datetimepicker').datetimepicker({
+            format: 'MM/YYYY',
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        });
     });  
 
     var cidades = [];
     var bairros = [];
     var tipos = [];
     var tipoimovel = 2;
+    var dtRefencia = "";
 
     $('.boxFiltro').on('click', function () {
         $('.fundoFiltroLista').show();
@@ -302,6 +324,8 @@
         cidades = $('#cmbCidade').val();
         bairros = $('#cmbBairro').val();
         tipos = $('#cmbTipo').val();
+        dtRefencia = $('#dtReferencia').val();
+  
 
         CarregarGraficoMeses();
         CarregarGraficoTipos();
@@ -319,7 +343,7 @@
             type: "POST",
             contentType: "application/json; charset=utf-8",
             url: "/Home/GetEvolutivo",
-            data: JSON.stringify({ cidades: cidades, Bairros: bairros, Tipos: tipos, TipoImovel: tipoimovel }),
+            data: JSON.stringify({ cidades: cidades, Bairros: bairros, Tipos: tipos, TipoImovel: tipoimovel, DtReferencia: dtRefencia }),
 
             dataType: "json",
             success: function (result) {
@@ -355,14 +379,13 @@
     }
 
     function CarregarGraficoCidades() {
-        var processed_json = new Array();
-
+       
         var processed_json = new Array();
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
             url: "/Home/GetCidades",
-            data: JSON.stringify({ cidades, bairros, tipos, tipoimovel }),
+            data: JSON.stringify({ cidades, bairros, tipos, tipoimovel, DtReferencia: dtRefencia  }),
 
             dataType: "json",
             success: function (result) {
@@ -411,7 +434,7 @@
             type: "POST",
             contentType: "application/json; charset=utf-8",
             url: "/Home/GetBairros",
-            data: JSON.stringify({ cidades, bairros, tipos, tipoimovel }),
+            data: JSON.stringify({ cidades, bairros, tipos, tipoimovel, DtReferencia: dtRefencia }),
 
             dataType: "json",
             success: function (result) {
@@ -454,14 +477,13 @@
     }
 
     function CarregarGraficoTipos() {
-        var processed_json = new Array();
-
+       
         var processed_json = new Array();
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
             url: "/Home/GetTipos",
-            data: JSON.stringify({ cidades, bairros, tipos, tipoimovel }),
+            data: JSON.stringify({ cidades, bairros, tipos, tipoimovel, DtReferencia: dtRefencia }),
 
             dataType: "json",
             success: function (result) {
@@ -512,7 +534,7 @@
             type: "POST",
             contentType: "application/json; charset=utf-8",
             url: "/Home/GetGaragens",
-            data: JSON.stringify({ cidades, bairros, tipos, tipoimovel }),
+            data: JSON.stringify({ cidades, bairros, tipos, tipoimovel, DtReferencia: dtRefencia }),
 
             dataType: "json",
             success: function (result) {
