@@ -84,6 +84,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Rua = item.Endereco,
                     SiglaEstado = item.Estado,
                     Tipo = item.Tipo,
+                    CodImolvelAPI = item.Url.Split("/").LastOrDefault()
                     
                 };
                 if (tipoImovel == TipoImovelEnum.Alugar)

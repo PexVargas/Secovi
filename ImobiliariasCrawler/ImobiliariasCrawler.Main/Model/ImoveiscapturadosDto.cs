@@ -37,6 +37,7 @@ namespace ImobiliariasCrawler.Main
                 Churrasqueiras = Churrasqueiras,
                 Cidade = Cidade,
                 Condominio = Condominio,
+                CodImolvelAPI = CodImolvelAPI
             };
         }
 
@@ -64,5 +65,7 @@ namespace ImobiliariasCrawler.Main
         public string Rua { get; set; }
         public string Banheiros { get; set; }
         public string Localidade { get; set; }
+        public string CodImolvelAPI { get; set; }
+
     }
 }

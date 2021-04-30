@@ -96,6 +96,7 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Descricao = response.Selector.SelectSingleNode("//div[@class='col-12 p-0 p-lg-3 mt-3']/p").TextOrNull(),
                 Condominio = response.Selector.SelectSingleNode("//div[contains(@class,'sider-form')]//li[contains(text(),'Cond')]").ReFirst("R.*"),
                 Iptu = response.Selector.SelectSingleNode("//div[contains(@class,'sider-form')]//li[contains(text(),'IPTU')]").ReFirst("R.*"),
+                CodImolvelAPI = response.Url.Replace("/", "").Split("_").LastOrDefault(),
             };
             Save(imovel);
         }
