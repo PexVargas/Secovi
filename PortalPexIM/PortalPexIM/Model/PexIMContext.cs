@@ -19,6 +19,7 @@ namespace PortalPexIM.Model
         {
         }
 
+        public virtual DbSet<Imobiliarias> Imobiliarias { get; set; }
         public virtual DbSet<Imoveiscapturados> Imoveiscapturados { get; set; }
         public virtual DbSet<Imoveisclassificados> Imoveisclassificados { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
@@ -35,6 +36,27 @@ namespace PortalPexIM.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Imobiliarias>(entity =>
+            {
+                entity.HasKey(e => e.CodImobiliaria)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("imobiliarias");
+
+                entity.Property(e => e.CodImobiliaria)
+                    .HasColumnName("codImobiliaria")
+                    .HasColumnType("int(6) unsigned");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(6)");
+
+                entity.Property(e => e.Nome)
+                    .IsRequired()
+                    .HasColumnName("nome")
+                    .HasMaxLength(100);
+            });
+
             modelBuilder.Entity<Imoveiscapturados>(entity =>
             {
                 entity.HasKey(e => e.CodImovelcapturado)

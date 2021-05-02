@@ -35,6 +35,7 @@ namespace PortalPexIM.Controllers
 
             using (var db1  = new peximContext())
             {
+                var lstImobiliarias = db1.Imobiliarias.ToList();
 
                 using (var reader = new StreamReader(arquivo.OpenReadStream()))
                 {
@@ -75,10 +76,13 @@ namespace PortalPexIM.Controllers
                                 im.Url = linhaArray[9];
                                 im.Descricao = linhaArray[10];
 
-                                //im.CodImobiliaria = linhaArray[11];
+                                var Imobiliaria = lstImobiliarias.Where(x => x.Nome == linhaArray[11]).FirstOrDefault();
+                                if(Imobiliaria != null)
+                                    im.CodImobiliaria = Imobiliaria.CodImobiliaria;
+
                                 im.SiglaEstado = siglaEstado;
                                 im.Finalidade = linhaArray[13];
-                                im.TipoImovel = 2;//linhaArray[13] == "Locação" ? 2 : 1;
+                                im.TipoImovel = linhaArray[13].Trim().ToLower() == "venda" ? 1 : 2;
                                 //im.Perfil = linhaArray[14];
                                 im.Anunciante = linhaArray[15];
                                 im.Localidade = linhaArray[16];

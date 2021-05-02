@@ -123,7 +123,6 @@ C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netco
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.csprojAssemblyReference.cache
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.AssemblyInfoInputs.cache
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.AssemblyInfo.cs
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.csproj.CoreCompileInputs.cache
@@ -303,3 +302,4 @@ C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\obj\De
 C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.dll
 C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.pdb
 C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.genruntimeconfig.cache
+C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.csprojAssemblyReference.cache

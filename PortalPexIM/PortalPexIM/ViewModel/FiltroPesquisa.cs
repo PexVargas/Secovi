@@ -16,6 +16,8 @@ namespace PortalPexIM.ViewModel
 
         public int TipoImovel { get; set; }
         public string DtReferencia { get; set; }
+        public int TipoArea { get; set; }
+        public string Unidade { get; set; }
     }
 
 }

@@ -39,22 +39,17 @@ namespace PortalPexIM.Controllers
             {
                 List<ImoveisDados> ic = RetornaDadosClassificados(tipoImovel, siglaEstado, mes, ano);
 
-               
+                var lstImobiliarias = db.Imobiliarias.ToList();
                 sb.AppendLine("Tipo;Cidade;Bairro;Valor;Area Privativa;Area Total;Quartos;Garagens;Suítes;Url;Descrição;Imobiliaria;Estado;Finalidade;Perfil;Anunciante;Endereco; Iptu; Apto;Condominio;Dormitorios");
 
                 foreach (ImoveisDados line in ic)
                 { 
-                   sb.AppendLine(LinhaCSV(line));
+                   sb.AppendLine(LinhaCSV(line, lstImobiliarias));
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXX");
-                Console.WriteLine(ex.InnerException.ToString());
-                Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXX");
-                Console.WriteLine(ex.Message.ToString());
-                Console.ReadKey();
+                
             }
 
             // Convert a string to utf-8 bytes.
@@ -116,7 +111,7 @@ namespace PortalPexIM.Controllers
             }
         }
 
-        public string LinhaCSV(ImoveisDados line)
+        public string LinhaCSV(ImoveisDados line, List<Imobiliarias> listImobiliarias)
         {
             string retorno = string.Empty;
             try
@@ -129,11 +124,8 @@ namespace PortalPexIM.Controllers
 
                 retorno += line.Valor + ";";
 
-
                 retorno += line.AreaPrivativa + ";";
                 retorno += line.AreaTotal + ";";
-
-             
 
                 retorno += (line.Quartos == null ? 0 : line.Quartos) + ";";
                 retorno += (line.Garagens == null ? 0 : line.Garagens) + ";";
@@ -155,13 +147,16 @@ namespace PortalPexIM.Controllers
                                 .Replace("\"", "")
                                 .Replace(Environment.NewLine, " ");
 
-                //retorno += "\"" + descricao + "\"" + ";";
+          
                 retorno += descricao + ";";
 
-                //var list = listImobiliarias.Where(x => x.CodImobiliaria == line.CodImobiliaria);
+                var imobiliaria = listImobiliarias.Where(x => x.Id == line.CodImobiliaria).FirstOrDefault();
 
-                //retorno += listImobiliarias.Where(x => x.CodImobiliaria == line.CodImobiliaria).First().Nome + ";";
-                retorno += "ZAP"+ ";";
+                if (imobiliaria != null)
+                   retorno += imobiliaria.Nome + ";";
+                else
+                    retorno += "NA" + ";";
+
                 retorno += line.SiglaEstado + ";";
                 retorno += (line.TipoImovel == 1 ? "Venda" : "Locação") + ";";
                 retorno += line.Perfil + ";";

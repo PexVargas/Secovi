@@ -57,56 +57,101 @@ namespace PortalPexIM.Controllers
             var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
             var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
             var dataBase = new DateTime(ano, mes, 1).AddMonths(-13);
+            var lstImoveis = new List<Imovel>();
 
-            var imoveis = (from i in dbe.Imoveisclassificados
-                           where i.Tipo!=null 
-                           && ((filtro.Cidades == null || filtro.Cidades.Length == 0)|| filtro.Cidades.Contains(i.Cidade)) 
-                           && ((filtro.Bairros == null || filtro.Bairros.Length == 0)|| filtro.Bairros.Contains(i.Bairro))
-                           && ((filtro.Tipos == null || filtro.Tipos.Length == 0) ||filtro.Tipos.Contains(i.Tipo))
-                           && i.TipoImovel == filtro.TipoImovel
-                           && i.Excluido == 0
-                           && i.SiglaEstado == siglaEstado
-                           && i.DataClassificacao >= (dataBase)
-                           group i by new { i.DataClassificacao.Value.Year, i.DataClassificacao.Value.Month } into g
-                           
+            //var imoveis = (from i in dbe.Imoveisclassificados
+            //               where i.Tipo!=null 
+            //               && ((filtro.Cidades == null || filtro.Cidades.Length == 0)|| filtro.Cidades.Contains(i.Cidade)) 
+            //               && ((filtro.Bairros == null || filtro.Bairros.Length == 0)|| filtro.Bairros.Contains(i.Bairro))
+            //               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) ||filtro.Tipos.Contains(i.Tipo))
+            //               && i.TipoImovel == filtro.TipoImovel
+            //               && i.Excluido == 0
+            //               && i.SiglaEstado == siglaEstado
+            //               && i.DataClassificacao >= (dataBase)
+            //               group i by new { i.DataClassificacao.Value.Year, i.DataClassificacao.Value.Month } into g
+
+            //               select new
+            //               {
+            //                   key = FormatarMesAno(g.Key.Year, g.Key.Month),
+            //                   value = g.Count(),    
+            //               }).ToList();
+
+            if (filtro.Unidade == "quantidade")
+            {
+                lstImoveis = (from i in dbe.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao >= (dataBase)
+                              select new Imovel
+                              {
+                                  Data = i.DataClassificacao,
+                                  Valor = 1,
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x=>x.Data).ToList();
+            }
+            else if (filtro.Unidade == "valorMedio")
+            {
+                lstImoveis = (from i in dbe.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                              && i.DataClassificacao >= (dataBase)
+                               && i.Valor > 0 && i.Valor < 30000000000000
+                              select new Imovel
+                              {
+                                  Data = i.DataClassificacao,
+                                  Valor = i.Valor,
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).ToList();
+            }
+            else if (filtro.Unidade == "valorMedioMetros")
+            {
+                lstImoveis = (from i in dbe.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao >= (dataBase)
+                               && i.Valor > 0 && i.Valor < 30000000000000
+                               && ((filtro.TipoArea == 1 && i.AreaTotal != null && i.AreaTotal > 0 && i.AreaTotal < 1000000000)
+                               || (filtro.TipoArea == 2 && i.AreaPrivativa != null && i.AreaPrivativa > 0 && i.AreaPrivativa < 1000000000))
+                              select new Imovel
+                              {
+                                  Data = i.DataClassificacao,
+                                  Valor = (filtro.TipoArea == 1 ? (i.Valor / i.AreaTotal) : (i.Valor / i.AreaPrivativa)),
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).ToList();
+            }
+
+            var evolutivo = BuscarPainel(lstImoveis, filtro.Unidade, filtro.TipoArea);
+
+            var imoveis = (from i in evolutivo
                            select new
                            {
-                               key = FormatarMesAno(g.Key.Year, g.Key.Month),
-                               value = g.Count(),    
+                               key = i.Chave,
+                               value = i.Valor,
                            }).ToList();
 
             return Json(imoveis);
         }
-
-        //[HttpPost]
-        //public JsonResult GetTipos([FromBody] FiltroPesquisa filtro)
-        //{
-        //    peximContext dbt = new peximContext();
-        //    var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        //    var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
-        //    var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
-        //    var dataBase = new DateTime(ano, mes, 1);
-
-        //    var imoveis = (from i in dbt.Imoveisclassificados
-        //                   where i.Tipo != null
-        //                    && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
-        //                    && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
-        //                    && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
-        //                    && i.TipoImovel == filtro.TipoImovel
-        //                    && i.Excluido == 0
-        //                    && i.SiglaEstado == siglaEstado
-        //                    && i.DataClassificacao == (dataBase)
-        //                   group i by new { i.Tipo } into g
-
-        //                   select new
-        //                   {
-        //                       key = g.Key.Tipo,
-        //                       value = g.Count(),
-        //                   }).ToList().OrderByDescending(x=>x.value);
-
-        //    return Json(imoveis);
-        //}
-
 
         [HttpPost]
         public JsonResult GetTipos([FromBody] FiltroPesquisa filtro)
@@ -116,27 +161,77 @@ namespace PortalPexIM.Controllers
             var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
             var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
             var dataBase = new DateTime(ano, mes, 1);
+            var lstImoveis = new List<Imovel>();
 
-            var lstImoveis = (from i in dbt.Imoveisclassificados
-                           where i.Tipo != null
-                            && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
-                            && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
-                            && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
-                            && i.TipoImovel == filtro.TipoImovel
-                            && i.Excluido == 0
-                            && i.SiglaEstado == siglaEstado
-                            && i.DataClassificacao == (dataBase)
-                           select new Imovel
-                           {
-                               Tipo = i.Tipo,
-                               Valor = (i.Valor == null ? 0 : i.Valor),
-                               ValorTotal = (i.Valor == null ? 0 : i.Valor),
-                               AreaPrivativa = i.AreaPrivativa,
-                               AreaTotal = i.AreaTotal,
-                           }).OrderBy(x => x.Valor).ToList();
+            if (filtro.Unidade == "quantidade") 
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                              select new Imovel
+                              {
+                                  Tipo = i.Tipo,
+                                  Valor = 1,
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
+            else if (filtro.Unidade == "valorMedio") 
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                               && i.Valor > 0 && i.Valor < 30000000000000
+                              select new Imovel
+                              {
+                                  Tipo = i.Tipo,
+                                  Valor = i.Valor,
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
+            else if (filtro.Unidade == "valorMedioMetros")
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                                && i.Valor > 0 && i.Valor < 30000000000000
+                               && ((filtro.TipoArea == 1 && i.AreaTotal != null && i.AreaTotal > 0 && i.AreaTotal < 1000000000)
+                               || (filtro.TipoArea == 2 && i.AreaPrivativa != null && i.AreaPrivativa > 0 && i.AreaPrivativa < 1000000000))
+                              select new Imovel
+                              {
+                                  Tipo = i.Tipo,
+                                  Valor = (filtro.TipoArea == 1 ? (i.Valor / i.AreaTotal) : (i.Valor / i.AreaPrivativa)),
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
 
 
-            var Tipos = BuscarTipos(lstImoveis, "valorMedioMetros", 1 );
+
+
+            var Tipos = BuscarTipos(lstImoveis,filtro.Unidade, filtro.TipoArea );
 
             var imoveis = (from i in Tipos
                            select new
@@ -148,7 +243,342 @@ namespace PortalPexIM.Controllers
             return Json(imoveis);
         }
 
-        public List<BaseDados> BuscarTipos(List<Imovel> imoveis,  string unidade, int? tipoArea)
+        [HttpPost]
+        public JsonResult GetCidades([FromBody] FiltroPesquisa filtro)
+        {
+            peximContext dbt = new peximContext();
+            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
+            var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
+            var dataBase = new DateTime(ano, mes, 1);
+            var lstImoveis = new List<Imovel>();
+
+            if (filtro.Unidade == "quantidade")
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                              select new Imovel
+                              {
+                                  Cidade = i.Cidade,
+                                  Valor = 1,
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
+            else if (filtro.Unidade == "valorMedio")
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                               && i.Valor > 0 && i.Valor < 30000000000000
+                              select new Imovel
+                              {
+                                  Cidade = i.Cidade,
+                                  Valor = i.Valor,
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
+            else if (filtro.Unidade == "valorMedioMetros")
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                                && i.Valor > 0 && i.Valor < 30000000000000
+                               && ((filtro.TipoArea == 1 && i.AreaTotal != null && i.AreaTotal > 0 && i.AreaTotal < 1000000000)
+                               || (filtro.TipoArea == 2 && i.AreaPrivativa != null && i.AreaPrivativa > 0 && i.AreaPrivativa < 1000000000))
+                              select new Imovel
+                              {
+                                  Cidade = i.Cidade,
+                                  Valor = (filtro.TipoArea == 1 ? (i.Valor / i.AreaTotal) : (i.Valor / i.AreaPrivativa)),
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
+
+
+
+
+            var Cidades = BuscarCidades(lstImoveis, filtro.Unidade, filtro.TipoArea);
+
+            var imoveis = (from i in Cidades
+                           select new
+                           {
+                               key = i.Chave,
+                               value = i.Valor,
+                           }).ToList().OrderByDescending(x => x.value);
+
+            return Json(imoveis);
+        }
+
+
+        public JsonResult GetBairros([FromBody] FiltroPesquisa filtro)
+        {
+            peximContext dbt = new peximContext();
+            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
+            var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
+            var dataBase = new DateTime(ano, mes, 1);
+            var lstImoveis = new List<Imovel>();
+
+            if (filtro.Unidade == "quantidade")
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                              select new Imovel
+                              {
+                                  Bairro = i.Bairro,
+                                  Valor = 1,
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
+            else if (filtro.Unidade == "valorMedio")
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                               && i.Valor > 0 && i.Valor < 30000000000000
+                              select new Imovel
+                              {
+                                  Bairro = i.Bairro,
+                                  Valor = i.Valor,
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
+            else if (filtro.Unidade == "valorMedioMetros")
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                                && i.Valor > 0 && i.Valor < 30000000000000
+                               && ((filtro.TipoArea == 1 && i.AreaTotal != null && i.AreaTotal > 0 && i.AreaTotal < 1000000000)
+                               || (filtro.TipoArea == 2 && i.AreaPrivativa != null && i.AreaPrivativa > 0 && i.AreaPrivativa < 1000000000))
+                              select new Imovel
+                              {
+                                  Bairro = i.Bairro,
+                                  Valor = (filtro.TipoArea == 1 ? (i.Valor / i.AreaTotal) : (i.Valor / i.AreaPrivativa)),
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
+
+
+
+
+            var Bairros = BuscarBairros(lstImoveis, filtro.Unidade, filtro.TipoArea);
+
+            var imoveis = (from i in Bairros
+                           select new
+                           {
+                               key = i.Chave,
+                               value = i.Valor,
+                           }).ToList().OrderByDescending(x => x.value);
+
+            return Json(imoveis);
+        }
+
+        public JsonResult GetGaragens([FromBody] FiltroPesquisa filtro)
+        {
+            peximContext dbt = new peximContext();
+            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
+            var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
+            var dataBase = new DateTime(ano, mes, 1);
+            var lstImoveis = new List<Imovel>();
+
+            if (filtro.Unidade == "quantidade")
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                              select new Imovel
+                              {
+                                  Garagem = i.Garagens,
+                                  Valor = 1,
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
+            else if (filtro.Unidade == "valorMedio")
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                               && i.Valor > 0 && i.Valor < 30000000000000
+                              select new Imovel
+                              {
+                                  Garagem = i.Garagens,
+                                  Valor = i.Valor,
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
+            else if (filtro.Unidade == "valorMedioMetros")
+            {
+                lstImoveis = (from i in dbt.Imoveisclassificados
+                              where i.Tipo != null
+                               && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
+                               && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
+                               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
+                               && i.TipoImovel == filtro.TipoImovel
+                               && i.Excluido == 0
+                               && i.SiglaEstado == siglaEstado
+                               && i.DataClassificacao == (dataBase)
+                                && i.Valor > 0 && i.Valor < 30000000000000
+                               && ((filtro.TipoArea == 1 && i.AreaTotal != null && i.AreaTotal > 0 && i.AreaTotal < 1000000000)
+                               || (filtro.TipoArea == 2 && i.AreaPrivativa != null && i.AreaPrivativa > 0 && i.AreaPrivativa < 1000000000))
+                              select new Imovel
+                              {
+                                  Garagem = i.Garagens,
+                                  Valor = (filtro.TipoArea == 1 ? (i.Valor / i.AreaTotal) : (i.Valor / i.AreaPrivativa)),
+                                  ValorTotal = (i.Valor == null ? 0 : i.Valor),
+                                  AreaPrivativa = i.AreaPrivativa,
+                                  AreaTotal = i.AreaTotal,
+                              }).OrderBy(x => x.Valor).ToList();
+            }
+
+
+
+
+            var garagens = BuscarGaragens(lstImoveis, filtro.Unidade, filtro.TipoArea);
+
+            var imoveis = (from i in garagens
+                           select new
+                           {
+                               key = FormatarGaragem(Convert.ToInt32(i.Chave)),
+                               value = i.Valor,
+                           }).ToList().OrderByDescending(x => x.value);
+
+            return Json(imoveis);
+        }
+
+        public List<BaseDados> BuscarPainel(List<Imovel> imoveis,  string unidade, int? tipoArea)
+        {
+            if (unidade != "valorMedioMetros")
+                tipoArea = 2;
+
+            List<BaseDados> tiposResult = new List<BaseDados>();
+
+            var dadosAgrupados = (from i in imoveis
+                                  select new
+                                  {
+                                      Chave = i.Data,
+                                      Valor = i.Valor,
+                                      Area = (tipoArea == 1 ? i.AreaTotal : i.AreaPrivativa),
+                                  }).GroupBy(x => x.Chave).ToList();
+
+            foreach (var dados in dadosAgrupados)
+            {
+                if (dados.Key != null)
+                {
+                    BaseDados baseDados = new BaseDados();
+
+                    var valores = (from i in imoveis
+                                   where i.Data == dados.Key
+                                
+                                   select new ImovelOutlier()
+                                   {
+                                       valor = Convert.ToDouble(i.Valor),
+                                       Area = (tipoArea == 1 ? i.AreaTotal : i.AreaPrivativa),
+                                   }).ToList();
+
+
+                    var dadosGrupo = dados.FirstOrDefault();
+                    baseDados.Chave = FormatarMesAno(dadosGrupo.Chave.Value.Year, dadosGrupo.Chave.Value.Month);//dadosGrupo.Chave;
+
+                    if (unidade == "quantidade")
+                    {
+                        var valor = valores.Count;
+                        baseDados.Valor = valor;
+                        baseDados.Quantidade = valor;
+                        baseDados.Metragem = valores.Where(x => x.Area > 0).Average(x => x.Area);
+                    }
+                    else
+                    {
+                        var grupo = AplicarOutLier(valores);
+                        baseDados.Valor = Convert.ToDecimal(grupo.Valor);
+                        baseDados.Quantidade = grupo.Quantidade;
+                        baseDados.Minimo = grupo.Minimo;
+                        baseDados.Maximo = grupo.Maximo;
+                        baseDados.Metragem = grupo.Metragem;
+                    }
+
+                    tiposResult.Add(baseDados);
+                }
+            }
+
+            //if (unidade == "quantidade")
+            //    return tiposResult.OrderByDescending(x => x.Quantidade).Where(x => x.Quantidade > 0).ToList();
+            //else
+            //    return tiposResult.OrderByDescending(x => x.Valor).Where(x => x.Quantidade > 0).ToList();
+
+            if (unidade == "quantidade")
+                return tiposResult.Where(x => x.Quantidade > 0).ToList();
+            else
+                return tiposResult.Where(x => x.Quantidade > 0).ToList();
+        }
+
+        public List<BaseDados> BuscarTipos(List<Imovel> imoveis, string unidade, int? tipoArea)
         {
             if (unidade != "valorMedioMetros")
                 tipoArea = 2;
@@ -171,7 +601,67 @@ namespace PortalPexIM.Controllers
 
                     var valores = (from i in imoveis
                                    where i.Tipo == dados.Key
-                                
+
+                                   select new ImovelOutlier()
+                                   {
+                                       valor = Convert.ToDouble(i.Valor),
+                                       Area = (tipoArea == 1 ? i.AreaTotal : i.AreaPrivativa),
+                                   }).ToList();
+
+
+                    var dadosGrupo = dados.FirstOrDefault();
+                    baseDados.Chave = dadosGrupo.Chave;
+
+                    if (unidade == "quantidade")
+                    {
+                        var valor = valores.Count;
+                        baseDados.Valor = valor;
+                        baseDados.Quantidade = valor;
+                        baseDados.Metragem = valores.Where(x => x.Area > 0).Average(x => x.Area);
+                    }
+                    else
+                    {
+                        var grupo = AplicarOutLier(valores);
+                        baseDados.Valor = Convert.ToDecimal(grupo.Valor);
+                        baseDados.Quantidade = grupo.Quantidade;
+                        baseDados.Minimo = grupo.Minimo;
+                        baseDados.Maximo = grupo.Maximo;
+                        baseDados.Metragem = grupo.Metragem;
+                    }
+
+                    tiposResult.Add(baseDados);
+                }
+            }
+
+            if (unidade == "quantidade")
+                return tiposResult.OrderByDescending(x => x.Quantidade).Where(x => x.Quantidade > 0).ToList();
+            else
+                return tiposResult.OrderByDescending(x => x.Valor).Where(x => x.Quantidade > 0).ToList();
+        }
+        public List<BaseDados> BuscarCidades(List<Imovel> imoveis, string unidade, int? tipoArea)
+        {
+            if (unidade != "valorMedioMetros")
+                tipoArea = 2;
+
+            List<BaseDados> tiposResult = new List<BaseDados>();
+
+            var dadosAgrupados = (from i in imoveis
+                                  select new
+                                  {
+                                      Chave = i.Cidade,
+                                      Valor = i.Valor,
+                                      Area = (tipoArea == 1 ? i.AreaTotal : i.AreaPrivativa),
+                                  }).GroupBy(x => x.Chave).ToList();
+
+            foreach (var dados in dadosAgrupados)
+            {
+                if (dados.Key != null)
+                {
+                    BaseDados baseDados = new BaseDados();
+
+                    var valores = (from i in imoveis
+                                   where i.Cidade == dados.Key
+
                                    select new ImovelOutlier()
                                    {
                                        valor = Convert.ToDouble(i.Valor),
@@ -209,92 +699,125 @@ namespace PortalPexIM.Controllers
                 return tiposResult.OrderByDescending(x => x.Valor).Where(x => x.Quantidade > 0).ToList();
         }
 
-
-
-        [HttpPost]
-        public JsonResult GetCidades([FromBody] FiltroPesquisa filtro)
+        public List<BaseDados> BuscarBairros(List<Imovel> imoveis, string unidade, int? tipoArea)
         {
-            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
-            var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
-            var dataBase = new DateTime(ano, mes, 1);
+            if (unidade != "valorMedioMetros")
+                tipoArea = 2;
 
-            peximContext dbc = new peximContext();
-            var imoveis = (from i in dbc.Imoveisclassificados
-                           where i.Tipo != null
-                            && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
-                            && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
-                            && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
-                            && i.TipoImovel == filtro.TipoImovel
-                            && i.SiglaEstado == siglaEstado
-                            && i.Excluido == 0
-                            && i.DataClassificacao == (dataBase)
-                           group i by new { i.Cidade } into g
+            List<BaseDados> tiposResult = new List<BaseDados>();
 
-                           select new
-                           {
-                               key = g.Key.Cidade,
-                               value = g.Count(),
-                           }).ToList().OrderByDescending(x=>x.value);
+            var dadosAgrupados = (from i in imoveis
+                                  select new
+                                  {
+                                      Chave = i.Bairro,
+                                      Valor = i.Valor,
+                                      Area = (tipoArea == 1 ? i.AreaTotal : i.AreaPrivativa),
+                                  }).GroupBy(x => x.Chave).ToList();
 
-            return Json(imoveis);
+            foreach (var dados in dadosAgrupados)
+            {
+                if (dados.Key != null)
+                {
+                    BaseDados baseDados = new BaseDados();
+
+                    var valores = (from i in imoveis
+                                   where i.Bairro == dados.Key
+
+                                   select new ImovelOutlier()
+                                   {
+                                       valor = Convert.ToDouble(i.Valor),
+                                       Area = (tipoArea == 1 ? i.AreaTotal : i.AreaPrivativa),
+                                   }).ToList();
+
+
+                    var dadosGrupo = dados.FirstOrDefault();
+                    baseDados.Chave = dadosGrupo.Chave;
+
+                    if (unidade == "quantidade")
+                    {
+                        var valor = valores.Count;
+                        baseDados.Valor = valor;
+                        baseDados.Quantidade = valor;
+                        baseDados.Metragem = valores.Where(x => x.Area > 0).Average(x => x.Area);
+                    }
+                    else
+                    {
+                        var grupo = AplicarOutLier(valores);
+                        baseDados.Valor = Convert.ToDecimal(grupo.Valor);
+                        baseDados.Quantidade = grupo.Quantidade;
+                        baseDados.Minimo = grupo.Minimo;
+                        baseDados.Maximo = grupo.Maximo;
+                        baseDados.Metragem = grupo.Metragem;
+                    }
+
+                    tiposResult.Add(baseDados);
+                }
+            }
+
+            if (unidade == "quantidade")
+                return tiposResult.OrderByDescending(x => x.Quantidade).Where(x => x.Quantidade > 0).ToList();
+            else
+                return tiposResult.OrderByDescending(x => x.Valor).Where(x => x.Quantidade > 0).ToList();
         }
-
-        [HttpPost]
-        public JsonResult GetBairros([FromBody] FiltroPesquisa filtro)
+        public List<BaseDados> BuscarGaragens(List<Imovel> imoveis, string unidade, int? tipoArea)
         {
-            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
-            var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
-            var dataBase = new DateTime(ano, mes, 1);
+            if (unidade != "valorMedioMetros")
+                tipoArea = 2;
 
-            peximContext dbc = new peximContext();
-            var imoveis = (from i in dbc.Imoveisclassificados
-                           where i.Tipo != null
-                            && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
-                            && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
-                            && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
-                            && i.TipoImovel == filtro.TipoImovel
-                            && i.SiglaEstado == siglaEstado
-                            && i.Excluido == 0
-                            && i.DataClassificacao == (dataBase)
-                           group i by new { i.Bairro } into g
+            List<BaseDados> tiposResult = new List<BaseDados>();
 
-                           select new
-                           {
-                               key = g.Key.Bairro,
-                               value = g.Count(),
-                           }).ToList().OrderByDescending(x => x.value);
+            var dadosAgrupados = (from i in imoveis
+                                  select new
+                                  {
+                                      Chave = i.Garagem,
+                                      Valor = i.Valor,
+                                      Area = (tipoArea == 1 ? i.AreaTotal : i.AreaPrivativa),
+                                  }).GroupBy(x => x.Chave).ToList();
 
-            return Json(imoveis);
-        }
+            foreach (var dados in dadosAgrupados)
+            {
+                if (dados.Key != null)
+                {
+                    BaseDados baseDados = new BaseDados();
 
-        [HttpPost]
-        public JsonResult GetGaragens([FromBody] FiltroPesquisa filtro)
-        {
-            var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
-            var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
-            var dataBase = new DateTime(ano, mes, 1);
+                    var valores = (from i in imoveis
+                                   where i.Garagem == dados.Key
 
-            peximContext dbc = new peximContext();
-            var imoveis = (from i in dbc.Imoveisclassificados
-                           where i.Tipo != null
-                            && ((filtro.Cidades == null || filtro.Cidades.Length == 0) || filtro.Cidades.Contains(i.Cidade))
-                            && ((filtro.Bairros == null || filtro.Bairros.Length == 0) || filtro.Bairros.Contains(i.Bairro))
-                            && ((filtro.Tipos == null || filtro.Tipos.Length == 0) || filtro.Tipos.Contains(i.Tipo))
-                            && i.TipoImovel == filtro.TipoImovel
-                            && i.SiglaEstado == siglaEstado
-                            && i.Excluido == 0
-                            && i.DataClassificacao == (dataBase)
-                           group i by new { i.Garagens } into g
-                           select new
-                           {
-                               key = FormatarGaragem(g.Key.Garagens),
-                               value = g.Count(),
-                           }).ToList();
+                                   select new ImovelOutlier()
+                                   {
+                                       valor = Convert.ToDouble(i.Valor),
+                                       Area = (tipoArea == 1 ? i.AreaTotal : i.AreaPrivativa),
+                                   }).ToList();
 
-            return Json(imoveis);
+
+                    var dadosGrupo = dados.FirstOrDefault();
+                    baseDados.Chave = dadosGrupo.Chave.ToString();
+
+                    if (unidade == "quantidade")
+                    {
+                        var valor = valores.Count;
+                        baseDados.Valor = valor;
+                        baseDados.Quantidade = valor;
+                        baseDados.Metragem = valores.Where(x => x.Area > 0).Average(x => x.Area);
+                    }
+                    else
+                    {
+                        var grupo = AplicarOutLier(valores);
+                        baseDados.Valor = Convert.ToDecimal(grupo.Valor);
+                        baseDados.Quantidade = grupo.Quantidade;
+                        baseDados.Minimo = grupo.Minimo;
+                        baseDados.Maximo = grupo.Maximo;
+                        baseDados.Metragem = grupo.Metragem;
+                    }
+
+                    tiposResult.Add(baseDados);
+                }
+            }
+
+            if (unidade == "quantidade")
+                return tiposResult.OrderByDescending(x => x.Quantidade).Where(x => x.Quantidade > 0).ToList();
+            else
+                return tiposResult.OrderByDescending(x => x.Valor).Where(x => x.Quantidade > 0).ToList();
         }
 
 

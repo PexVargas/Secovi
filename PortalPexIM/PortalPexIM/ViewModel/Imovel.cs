@@ -9,7 +9,7 @@ namespace PortalPexIM.ViewModel
     {
         public int? CodImovelClassificado { get; set; }
         public int Codigo { get; set; }
-        public DateTime Data { get; set; }
+        public DateTime? Data { get; set; }
         public string Tipo { get; set; }
         public string Cidade { get; set; }
         public string Bairro { get; set; }
