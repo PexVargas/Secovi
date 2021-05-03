@@ -79,6 +79,25 @@
     .dropdown-menu.show {
         height: 200px;
     }
+
+    h3.card-body {
+        text-align: center;
+    }
+
+    .ab {
+        padding: .9375rem 20px;
+        position: relative;
+        padding: 26px;
+        max-height: 140px;
+    }
+
+    p.card-body {
+        text-align: end;
+        margin: -18px;
+    }
+    .cd {
+        height: 140px;;
+    }
     /*FIM CSS FILTRO*/
 </style>
 <div class="boxFiltro">
@@ -135,6 +154,70 @@
         </div>
         <div class="col-md-6" style="float:left;">
             <button type="button" class="btn btn-primary" onclick="preencheFiltro()">Pesquisar</button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header card-header-icon card-header-info">
+                <div class="card-icon">
+                    <i class="material-icons">room</i>
+                </div>
+                <h4 class="card-title">Quantidade de Ofertas</h4>
+            </div>
+            <div class="card-body ab">
+                @*<div class="col-md-9">
+            <h4 class="card-title" id="tituloUnidade">Quantidade de ofertas</h4>
+        </div>*@
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="card-body">28.612,33</h3>
+                        <p class="card-body">cv min</p>
+                    </div>
+                    <br />
+                    <div class="col-md-12">
+                        <p class="card-body">cv max</p>
+                    </div>
+                </div>
+               
+
+
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">local_offer</i>
+                    Baseado em tantas ofertas
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header card-header-icon card-header-info">
+                <div class="card-icon">
+                    <i class="material-icons">south_east</i>
+                </div>
+                <h4 class="card-title">Metragem média dos Imóveis</h4>
+
+            </div>
+            <div class="card-body cd">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="card-body">28.612,33</h3>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">local_offer</i>
+                    Baseado em tantas ofertas
+                </div>
+            </div>
         </div>
     </div>
 </div>
