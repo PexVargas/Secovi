@@ -8,24 +8,27 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using PortalPexIM.Models;
+using PortalPexIM.Model;
 
-namespace InterCementWeb.Controllers
+namespace PortalPexIM.Controllers
 {
    
     public class UsuarioController : Controller
     {
+        peximContext db = new peximContext();
         public IActionResult Index()
         {
             return View();
         }
 
 
-        private async void Login(Models.Usuario usuario)
+        private async void Login(Usuario usuario)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, usuario.Login),
-                new Claim(ClaimTypes.Role, "Usuario_Comum")
+                new Claim(ClaimTypes.Role, "Usuario_Comum"),
+                new Claim(ClaimTypes.NameIdentifier, usuario.SiglaEstado)
             };
 
             var identidadeDeUsuario = new ClaimsIdentity(claims, "Login")  ;
@@ -54,7 +57,7 @@ namespace InterCementWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult LoginPage(Models.Usuario usuario)
+        public IActionResult LoginPage(Usuario usuario)
         {
             try
             {
@@ -62,8 +65,12 @@ namespace InterCementWeb.Controllers
                 {
                     //aqui poderia ter alguma requisição para base de dados, estou usando
                     //dados estáticos para não complicar
-                    if (usuario.Login == "admin" && usuario.Senha == "Portal4.0")
+
+                    var usuarioBd = db.Usuarios.Where(x => x.Login == usuario.Login && x.Senha == usuario.Senha).FirstOrDefault();
+                    if (usuarioBd!= null)
                     {
+                        usuario.SiglaEstado = usuarioBd.SiglaEstado;
+
                         Login(usuario);
                         return RedirectToAction("Index", "Home");
 

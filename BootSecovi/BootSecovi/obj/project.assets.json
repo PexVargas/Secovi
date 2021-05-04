@@ -2157,11 +2157,19 @@
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "C:\\Users\\pexim\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
       "projectName": "BootSecovi",
       "projectPath": "C:\\Users\\pexim\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
       "packagesPath": "C:\\Users\\pexim\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\pexim\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\obj\\",
+=======
+      "projectUniqueName": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+      "projectName": "BootSecovi",
+      "projectPath": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+      "packagesPath": "C:\\Users\\WINDOWS\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\obj\\",
+>>>>>>> master
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pexim\\AppData\\Roaming\\NuGet\\NuGet.Config",
