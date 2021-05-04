@@ -22,7 +22,7 @@ namespace PortalPexIM.Controllers
             //                  CodEstado = i.CodEstado,
             //                  NomeEstado = i.NomeEstado,
             //              }).ToList();
-
+            TempData["DiffUrl"] = "Upload";
             return View();
         }
 

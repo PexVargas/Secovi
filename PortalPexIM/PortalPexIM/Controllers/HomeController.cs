@@ -57,6 +57,7 @@ namespace PortalPexIM.Controllers
             var mes = Convert.ToInt32(filtro.DtReferencia.Split("/")[0]);
             var ano = Convert.ToInt32(filtro.DtReferencia.Split("/")[1]);
             var dataBase = new DateTime(ano, mes, 1).AddMonths(-13);
+            var dataCalculo = new DateTime(ano, mes, 1);
             var lstImoveis = new List<Imovel>();
 
             //var imoveis = (from i in dbe.Imoveisclassificados
@@ -86,7 +87,8 @@ namespace PortalPexIM.Controllers
                                && i.TipoImovel == filtro.TipoImovel
                                && i.Excluido == 0
                                && i.SiglaEstado == siglaEstado
-                               && i.DataClassificacao >= (dataBase)
+                               && (i.DataClassificacao >= (dataBase) && i.DataClassificacao <= (dataCalculo))
+                               
                               select new Imovel
                               {
                                   Data = i.DataClassificacao,
@@ -106,7 +108,7 @@ namespace PortalPexIM.Controllers
                                && i.TipoImovel == filtro.TipoImovel
                                && i.Excluido == 0
                                && i.SiglaEstado == siglaEstado
-                              && i.DataClassificacao >= (dataBase)
+                               && (i.DataClassificacao >= (dataBase) && i.DataClassificacao <= (dataCalculo))
                                && i.Valor > 0 && i.Valor < 30000000000000
                               select new Imovel
                               {
@@ -127,7 +129,7 @@ namespace PortalPexIM.Controllers
                                && i.TipoImovel == filtro.TipoImovel
                                && i.Excluido == 0
                                && i.SiglaEstado == siglaEstado
-                               && i.DataClassificacao >= (dataBase)
+                               && (i.DataClassificacao >= (dataBase) && i.DataClassificacao <= (dataCalculo))
                                && i.Valor > 0 && i.Valor < 30000000000000
                                && ((filtro.TipoArea == 1 && i.AreaTotal != null && i.AreaTotal > 0 && i.AreaTotal < 1000000000)
                                || (filtro.TipoArea == 2 && i.AreaPrivativa != null && i.AreaPrivativa > 0 && i.AreaPrivativa < 1000000000))
@@ -142,12 +144,13 @@ namespace PortalPexIM.Controllers
             }
 
             var evolutivo = BuscarPainel(lstImoveis, filtro.Unidade, filtro.TipoArea);
-
             var imoveis = (from i in evolutivo
                            select new
                            {
                                key = i.Chave,
                                value = i.Valor,
+                               metragemMedia = i.Metragem,
+                               quantidadeOfertas = i.Quantidade
                            }).ToList();
 
             return Json(imoveis);

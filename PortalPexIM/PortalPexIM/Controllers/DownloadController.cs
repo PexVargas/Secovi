@@ -22,7 +22,7 @@ namespace PortalPexIM.Controllers
         {
 
 
-
+            TempData["DiffUrl"] = "Download";
             return View();
         }
 

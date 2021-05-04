@@ -59,7 +59,6 @@
 
     .funcFiltroLista {
         position: absolute;
-        display: none;
         width: 355px;
         z-index: 9;
         top: 27%;
@@ -95,8 +94,21 @@
         text-align: end;
         margin: -18px;
     }
+
     .cd {
-        height: 140px;;
+        height: 140px;
+        ;
+    }
+
+    .container-vermelho {
+        border: 1px solid red;
+    }
+
+    input#dtReferencia {
+        font-weight: bold;
+    }
+    span.numSemNum {
+        font-size: 14px;
     }
     /*FIM CSS FILTRO*/
 </style>
@@ -157,71 +169,6 @@
         </div>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header card-header-icon card-header-info">
-                <div class="card-icon">
-                    <i class="material-icons">room</i>
-                </div>
-                <h4 class="card-title">Quantidade de Ofertas</h4>
-            </div>
-            <div class="card-body ab">
-                @*<div class="col-md-9">
-            <h4 class="card-title" id="tituloUnidade">Quantidade de ofertas</h4>
-        </div>*@
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3 class="card-body">28.612,33</h3>
-                        <p class="card-body">cv min</p>
-                    </div>
-                    <br />
-                    <div class="col-md-12">
-                        <p class="card-body">cv max</p>
-                    </div>
-                </div>
-               
-
-
-            </div>
-            <div class="card-footer">
-                <div class="stats">
-                    <i class="material-icons">local_offer</i>
-                    Baseado em tantas ofertas
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header card-header-icon card-header-info">
-                <div class="card-icon">
-                    <i class="material-icons">south_east</i>
-                </div>
-                <h4 class="card-title">Metragem média dos Imóveis</h4>
-
-            </div>
-            <div class="card-body cd">
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3 class="card-body">28.612,33</h3>
-                    </div>
-                </div>
-
-            </div>
-            <div class="card-footer">
-                <div class="stats">
-                    <i class="material-icons">local_offer</i>
-                    Baseado em tantas ofertas
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -248,6 +195,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal-loading-local"></div>
                 <div class="row" id="graficoEvolutivo">
 
                 </div>
@@ -255,6 +203,68 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header card-header-icon card-header-info">
+                <div class="card-icon">
+                    <i class="material-icons">room</i>
+                </div>
+                <h4 class="card-title">Quantidade de Ofertas</h4>
+            </div>
+            <div class="card-body ab">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="card-body numQtdOfe">Sem registros, por favor modifique a busca!</h3>
+                        <p class="card-body">cv min</p>
+                    </div>
+                    <br />
+                    <div class="col-md-12">
+                        <p class="card-body">cv max</p>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">local_offer</i>
+                    Baseado em tantas ofertas
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header card-header-icon card-header-info">
+                <div class="card-icon">
+                    <i class="material-icons">south_east</i>
+                </div>
+                <h4 class="card-title">Metragem média dos Imóveis</h4>
+
+            </div>
+            <div class="card-body cd">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="card-body numMetMed">Sem registros, por favor modifique a busca!</h3>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">local_offer</i>
+                    Baseado em tantas ofertas
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <div class="row" id="boxGraficos">
 
@@ -267,6 +277,7 @@
             </div>
             <div class="card-body">
                 <figure class="highcharts-figure">
+                    <div class="modal-loading-local"></div>
                     <div id="graficoCidades"></div>
                 </figure>
             </div>
@@ -283,6 +294,7 @@
             </div>
             <div class="card-body">
                 <figure class="highcharts-figure">
+                    <div class="modal-loading-local"></div>
                     <div id="graficoBairros"></div>
                 </figure>
             </div>
@@ -298,6 +310,7 @@
             </div>
             <div class="card-body" id="boxTipos">
                 <figure class="highcharts-figure">
+                    <div class="modal-loading-local"></div>
                     <div id="graficoTipos"></div>
                 </figure>
             </div>
@@ -313,6 +326,7 @@
             </div>
             <div class="card-body">
                 <figure class="highcharts-figure">
+                    <div class="modal-loading-local"></div>
                     <div id="graficoGaragens"></div>
                 </figure>
             </div>
@@ -338,6 +352,7 @@
         Pesquisar();
 
         $('.datetimepicker').datetimepicker({
+            viewMode: 'months',
             format: 'MM/YYYY',
             icons: {
                 time: "fa fa-clock-o",
@@ -349,10 +364,42 @@
                 today: 'fa fa-screenshot',
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
-            }
+            },
+            locale: 'pt-br'
+        });
+        $('.datetimepicker').on('dp.hide', function (e) {
+            $('.datetimepicker').datetimepicker('destroy');
+            ativaNovamenteDate();
+        });
+        $('#cmbCidade').on('change', function () {
+            document.querySelector("[data-id='cmbCidade']").classList.remove('container-vermelho');
+        });
+        $('.togglebutton').on('click', function () {
+            preencheFiltro();
         });
     });
+    function recarregaPagina() {
+        Pesquisar();
+    }
+    function ativaNovamenteDate() {
 
+        $('.datetimepicker').datetimepicker({
+            viewMode: 'months',
+            format: 'MM/YYYY',
+            icons: {
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove',
+
+            },
+            locale: 'pt-br'
+        });
+    }
     var cidades = [];
     var bairros = [];
     var tipos = [];
@@ -360,6 +407,7 @@
     var dtRefencia = "";
     var unidade;
     var tipoArea = 2;
+    var possuiCidades = false;
 
     $('.boxFiltro').on('click', function () {
         $('.fundoFiltroLista').show();
@@ -402,14 +450,27 @@
     }
 
     function preencheFiltro() {
-        $('.fundoFiltroLista').hide();
-        $('.funcFiltroLista').hide();
+        var data = $('#dtReferencia').val();
+        var cidade = $('#cmbCidade').val();
+        if (data == "" || cidade == "") {
+            if (data == "") {
+                document.querySelector("[data-id='dtReferencia']").classList.add('container-vermelho');
+            }
+            if (cidade == "") {
+                document.querySelector("[data-id='cmbCidade']").classList.add('container-vermelho');
+            }
+        } else {
 
-        cidades = $('#cmbCidade').val();
-        bairros = $('#cmbBairro').val();
-        tipos = $('#cmbTipo').val();
+            $('.fundoFiltroLista').hide();
+            $('.funcFiltroLista').hide();
 
-        Pesquisar();
+            cidades = $('#cmbCidade').val();
+            bairros = $('#cmbBairro').val();
+            tipos = $('#cmbTipo').val();
+
+            Pesquisar();
+        }
+
     }
 
 
@@ -450,8 +511,8 @@
 
 
     function CarregarGraficoMeses() {
-
-
+        $('.modal-loading-local').show();
+        $('#graficoEvolutivo').hide();
         var processed_json = new Array();
         $.ajax({
             type: "POST",
@@ -461,29 +522,47 @@
             data: JSON.stringify({ cidades, bairros, tipos, tipoimovel, DtReferencia: dtRefencia, Unidade: unidade, TipoArea: tipoArea }),
             dataType: "json",
             success: function (result) {
+                
 
-                var processed_json = [];
+                $('.modal-loading-local').hide();
+                $('#graficoEvolutivo').show();
+                if (result.length == 0) {
+                    if (possuiCidades == false) {
+                        $('.numMetMed').html('<span class="numSemNum">Sem registros, por favor modifique a busca!</span>');
+                        $('.numQtdOfe').html('<span class="numSemNum">Sem registros, por favor modifique a busca!</span>');
+                    }
+                    $('#graficoEvolutivo').html('Sem registros, por favor modifique a busca!');
+                } else {
+                    if (possuiCidades == true) {
+                        var todos = result[result.length - 1];
+                        $('.numMetMed').html(todos.metragemMedia.toFixed(2));
+                        $('.numQtdOfe').html("R$" + todos.quantidadeOfertas.toLocaleString('pt-BR'));
+                    }
+                    
+                    var processed_json = [];
 
-                for (i = 0; i < result.length; i++) {
-                    processed_json.push([result[i].key, result[i].key, result[i].value]);
+                    for (i = 0; i < result.length; i++) {
+                        processed_json.push([result[i].key, result[i].key, result[i].value]);
+                    }
+
+                    var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
+
+                    var categories = dadosPivot;
+                    categories[0].shift();
+
+                    var dadosGrafico = [];
+
+                    for (i = 1; i < dadosPivot.length; i++) {
+
+                        dadosGrafico.push({
+                            name: dadosPivot[i].shift(),
+                            data: dadosPivot[i]
+                        });
+                    }
+
+                    CarregarGrafico("graficoEvolutivo", categories[0], dadosGrafico, "Evolutivo de ofertas", "column", "12");
                 }
 
-                var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
-
-                var categories = dadosPivot;
-                categories[0].shift();
-
-                var dadosGrafico = [];
-
-                for (i = 1; i < dadosPivot.length; i++) {
-
-                    dadosGrafico.push({
-                        name: dadosPivot[i].shift(),
-                        data: dadosPivot[i]
-                    });
-                }
-
-                CarregarGrafico("graficoEvolutivo", categories[0], dadosGrafico, "Evolutivo de ofertas", "column", "12");
 
             },
             error: function (err) {
@@ -493,7 +572,8 @@
     }
 
     function CarregarGraficoCidades() {
-
+        $('.modal-loading-local').show();
+        $('#graficoCidades').hide();
         var processed_json = new Array();
         $.ajax({
             type: "POST",
@@ -502,38 +582,46 @@
             data: JSON.stringify({ cidades, bairros, tipos, tipoimovel, DtReferencia: dtRefencia, Unidade: unidade, TipoArea: tipoArea }),
             dataType: "json",
             success: function (result) {
+                $('.modal-loading-local').hide();
+                $('#graficoCidades').show();
+                if (result.length == 0) {
+                    possuiCidades = false;
+                    
+                    $('#graficoCidades').html('Sem registros, por favor modifique a busca!');
+                } else {
+                    possuiCidades = true;
+                    var processed_json = [];
 
-                var processed_json = [];
+                    var value = 0;
+                    for (i = 0; i < result.length; i++) {
+                        var key = result[i].key;
 
-                var value = 0;
-                for (i = 0; i < result.length; i++) {
-                    var key = result[i].key;
-
-                    if (i >= 7) {
-                        var key = "OUTRAS";
-                        value += result[i].value;
-                        processed_json.push([key, key, value]);
+                        if (i >= 7) {
+                            var key = "OUTRAS";
+                            value += result[i].value;
+                            processed_json.push([key, key, value]);
+                        }
+                        else
+                            processed_json.push([result[i].key, result[i].key, result[i].value]);
                     }
-                    else
-                        processed_json.push([result[i].key, result[i].key, result[i].value]);
+
+                    var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
+
+                    var categories = dadosPivot;
+                    categories[0].shift();
+
+                    var dadosGrafico = [];
+
+                    for (i = 1; i < dadosPivot.length; i++) {
+
+                        dadosGrafico.push({
+                            name: dadosPivot[i].shift(),
+                            data: dadosPivot[i]
+                        });
+                    }
+
+                    CarregarGrafico("graficoCidades", categories[0], dadosGrafico, "Oferta por cidades", "bar", "6");
                 }
-
-                var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
-
-                var categories = dadosPivot;
-                categories[0].shift();
-
-                var dadosGrafico = [];
-
-                for (i = 1; i < dadosPivot.length; i++) {
-
-                    dadosGrafico.push({
-                        name: dadosPivot[i].shift(),
-                        data: dadosPivot[i]
-                    });
-                }
-
-                CarregarGrafico("graficoCidades", categories[0], dadosGrafico, "Oferta por cidades", "bar", "6");
             },
             error: function (err) {
             }
@@ -541,6 +629,8 @@
     }
 
     function CarregarGraficoBairros() {
+        $('.modal-loading-local').show();
+        $('#graficoBairros').hide();
         var processed_json = new Array();
 
         $.ajax({
@@ -551,38 +641,44 @@
 
             dataType: "json",
             success: function (result) {
+                $('.modal-loading-local').hide();
+                $('#graficoBairros').show();
 
-                var processed_json = [];
+                if (result.length == 0) {
+                    $('#graficoBairros').html('Sem registros, por favor modifique a busca!');
+                } else {
+                    var processed_json = [];
 
-                var value = 0;
-                for (i = 0; i < result.length; i++) {
-                    var key = result[i].key;
+                    var value = 0;
+                    for (i = 0; i < result.length; i++) {
+                        var key = result[i].key;
 
-                    if (i >= 7) {
-                        var key = "OUTROS";
-                        value += result[i].value;
-                        processed_json.push([key, key, value]);
+                        if (i >= 7) {
+                            var key = "OUTROS";
+                            value += result[i].value;
+                            processed_json.push([key, key, value]);
+                        }
+                        else
+                            processed_json.push([result[i].key, result[i].key, result[i].value]);
                     }
-                    else
-                        processed_json.push([result[i].key, result[i].key, result[i].value]);
+
+                    var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
+
+                    var categories = dadosPivot;
+                    categories[0].shift();
+
+                    var dadosGrafico = [];
+
+                    for (i = 1; i < dadosPivot.length; i++) {
+
+                        dadosGrafico.push({
+                            name: dadosPivot[i].shift(),
+                            data: dadosPivot[i]
+                        });
+                    }
+
+                    CarregarGrafico("graficoBairros", categories[0], dadosGrafico, "Oferta por bairros", "bar", "6");
                 }
-
-                var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
-
-                var categories = dadosPivot;
-                categories[0].shift();
-
-                var dadosGrafico = [];
-
-                for (i = 1; i < dadosPivot.length; i++) {
-
-                    dadosGrafico.push({
-                        name: dadosPivot[i].shift(),
-                        data: dadosPivot[i]
-                    });
-                }
-
-                CarregarGrafico("graficoBairros", categories[0], dadosGrafico, "Oferta por bairros", "bar", "6");
             },
             error: function (err) {
             }
@@ -590,7 +686,8 @@
     }
 
     function CarregarGraficoTipos() {
-
+        $('.modal-loading-local').show();
+        $('#graficoTipos').hide();
         var processed_json = new Array();
 
         $.ajax({
@@ -601,39 +698,45 @@
 
             dataType: "json",
             success: function (result) {
+                $('.modal-loading-local').hide();
+                $('#graficoTipos').show();
 
-                var processed_json = [];
+                if (result.length == 0) {
+                    $('#graficoTipos').html('Sem registros, por favor modifique a busca!');
+                } else {
+                    var processed_json = [];
 
-                var value = 0;
-                for (i = 0; i < result.length; i++) {
-                    var key = result[i].key;
+                    var value = 0;
+                    for (i = 0; i < result.length; i++) {
+                        var key = result[i].key;
 
-                    if (i >= 7) {
-                        var key = "OUTROS";
-                        value += result[i].value;
-                        processed_json.push([key, key, value]);
+                        if (i >= 7) {
+                            var key = "OUTROS";
+                            value += result[i].value;
+                            processed_json.push([key, key, value]);
+                        }
+                        else
+                            processed_json.push([result[i].key, result[i].key, result[i].value]);
                     }
-                    else
-                        processed_json.push([result[i].key, result[i].key, result[i].value]);
+
+
+                    var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
+
+                    var categories = dadosPivot;
+                    categories[0].shift();
+
+                    var dadosGrafico = [];
+
+                    for (i = 1; i < dadosPivot.length; i++) {
+
+                        dadosGrafico.push({
+                            name: dadosPivot[i].shift(),
+                            data: dadosPivot[i]
+                        });
+                    }
+
+                    CarregarGrafico("graficoTipos", categories[0], dadosGrafico, "Tipo de imóvel", "bar", "6");
                 }
-
-
-                var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
-
-                var categories = dadosPivot;
-                categories[0].shift();
-
-                var dadosGrafico = [];
-
-                for (i = 1; i < dadosPivot.length; i++) {
-
-                    dadosGrafico.push({
-                        name: dadosPivot[i].shift(),
-                        data: dadosPivot[i]
-                    });
-                }
-
-                CarregarGrafico("graficoTipos", categories[0], dadosGrafico, "Tipo de imóvel", "bar", "6");
             },
             error: function (err) {
             }
@@ -641,7 +744,8 @@
     }
 
     function CarregarGraficoGaragens() {
-
+        $('.modal-loading-local').show();
+        $('#graficoGaragens').hide();
         var processed_json = new Array();
 
         $.ajax({
@@ -652,8 +756,13 @@
 
             dataType: "json",
             success: function (result) {
-
-                CarregarGraficoPizza("graficoGaragens", "Garagens", result);
+                $('.modal-loading-local').hide();
+                $('#graficoGaragens').show();
+                if (result.length == 0) {
+                    $('#graficoGaragens').html('Sem registros, por favor modifique a busca!');
+                } else {
+                    CarregarGraficoPizza("graficoGaragens", "Garagens", result);
+                }
             },
             error: function (err) {
             }
