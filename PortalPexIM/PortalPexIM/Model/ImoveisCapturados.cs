@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace PortalPexIM.Model
 {
-    public partial class ImoveisCapturados
+    public partial class Imoveiscapturados
     {
         public int CodImovelcapturado { get; set; }
         public string Tipo { get; set; }

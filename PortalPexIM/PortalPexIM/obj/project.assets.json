@@ -1847,19 +1847,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\WINDOWS\\.nuget\\packages\\": {}
+    "C:\\Users\\Person\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
+      "projectUniqueName": "C:\\Users\\Person\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
       "projectName": "PortalPexIM",
-      "projectPath": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
-      "packagesPath": "C:\\Users\\WINDOWS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\obj\\",
+      "projectPath": "C:\\Users\\Person\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
+      "packagesPath": "C:\\Users\\Person\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Person\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\WINDOWS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Person\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1871,6 +1871,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -1882,6 +1883,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
@@ -1920,7 +1922,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

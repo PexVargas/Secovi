@@ -46,14 +46,14 @@ namespace ImobiliariasCrawler.Main
             Request(url, callback, httpContent: jsonContent, dictArgs: dictArgs, headers: headers);
         }
 
-        public void FormPost(string url, Callback callback, object objBody=null, Dictionary<string,string> dictBody=null, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
+        public void FormPost(string url, Callback callback, object objBody = null, Dictionary<string, string> dictBody = null, Dictionary<string, string> headers = null, Dictionary<string, object> dictArgs = null)
         {
             var keyValue = objBody != null ? objBody.ToKeyValue() : dictBody.ToList();
             var formContent = new FormUrlEncodedContent(keyValue);
             Request(url, callback, httpContent: formContent, dictArgs: dictArgs, headers: headers);
         }
 
-        private void Request(string url, Callback callback, HttpContent httpContent = null, Dictionary<string, object> dictArgs=null, Dictionary<string, string> headers=null)
+        private void Request(string url, Callback callback, HttpContent httpContent = null, Dictionary<string, object> dictArgs = null, Dictionary<string, string> headers = null)
         {
             Task.Run(async () =>
             {
@@ -80,13 +80,14 @@ namespace ImobiliariasCrawler.Main
 
                     try
                     {
-                        var response = await httpClient.SendAsync(request);
+                        var response = await RetryRequests(request);
                         var selector = await ContentToHtmlDocument(response);
                         callback.Invoke(CreateResponse(response, selector, dictArgs));
                     }
-                    catch { 
-                        Console.WriteLine($"ERRO REQUEST {hashFingerPrint}");
-                        _logging.AddCountDuplicateRequest(); 
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        _logging.AddCountDuplicateRequest();
                     }
                     finally
                     {
@@ -97,17 +98,33 @@ namespace ImobiliariasCrawler.Main
             });
         }
 
+        public async Task<HttpResponseMessage> RetryRequests(HttpRequestMessage httpRequest)
+        {
+            for (int index = 0; index < 3; index++)
+            {
+                try
+                {
+                    var httpResponse = await httpClient.SendAsync(httpRequest);
+                    httpResponse.EnsureSuccessStatusCode();
+                    return httpResponse;
+                }
+                catch { }
+            }
+            throw new Exception($"Não foi possível fazer a requisição para {httpRequest.RequestUri.AbsoluteUri} após {3} tentativas.");
+        }
+
 
         private static HttpRequestMessage CreateRequest(string url, HttpContent httpContent) =>
             httpContent is null ? new HttpRequestMessage(HttpMethod.Get, url) : new HttpRequestMessage(HttpMethod.Post, url) { Content = httpContent };
 
-        private static Response CreateResponse(HttpResponseMessage httpResponse, HtmlDocument selector, Dictionary<string, object> dictArgs) 
-            => new Response { 
+        private static Response CreateResponse(HttpResponseMessage httpResponse, HtmlDocument selector, Dictionary<string, object> dictArgs)
+            => new Response
+            {
                 HttpResponse = httpResponse,
                 Content = httpResponse.Content,
-                Selector = selector.DocumentNode, 
-                DictArgs = dictArgs, 
-                Url = httpResponse.RequestMessage.RequestUri.AbsoluteUri 
+                Selector = selector.DocumentNode,
+                DictArgs = dictArgs,
+                Url = httpResponse.RequestMessage.RequestUri.AbsoluteUri
             };
 
         private void MakeHeaders(HttpContentHeaders source, Dictionary<string, string> headers = null)
@@ -117,7 +134,7 @@ namespace ImobiliariasCrawler.Main
                     source.Add(key, headers[key]);
         }
 
-       
+
 
         private async Task<HtmlDocument> ContentToHtmlDocument(HttpResponseMessage response)
         {

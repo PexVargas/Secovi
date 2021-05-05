@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "i/JR1TJ77ABUDkSiDc7pgLFtonKKiD1zLKOAMWBaymoIDzAk9bEOYmCwCILkgqI4n0RV0DPaF9QBVW/Iht/TCQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\pexim\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+=======
+  "dgSpecHash": "GU1n3H3rDzDIuNc226RFcRGNh4U3TerUkPtP+vTCknuo5MVl55tp2b3Uuy47fy2RcWQpIeTEoEDXsUJOGkn1Qw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\WINDOWS\\Documents\\GitHub\\Secovi\\BootSecovi\\BootSecovi\\BootSecovi.csproj",
+>>>>>>> master
   "expectedPackageFiles": [
     "C:\\Users\\pexim\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",
     "C:\\Users\\pexim\\.nuget\\packages\\google.protobuf\\3.11.4\\google.protobuf.3.11.4.nupkg.sha512",

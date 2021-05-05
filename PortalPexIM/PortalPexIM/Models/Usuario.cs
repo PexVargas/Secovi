@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace InterCementWeb.Models
+namespace PortalPexIM.Models
 {
     public class Usuario
     {
@@ -13,5 +13,7 @@ namespace InterCementWeb.Models
 
         [Required(ErrorMessage = "A senha deve ser inserida.")]
         public string Senha { get; set; }
+
+        public string SiglaEstado { get; set; }
     }
 }
