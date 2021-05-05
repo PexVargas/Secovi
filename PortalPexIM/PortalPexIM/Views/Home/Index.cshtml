@@ -379,7 +379,7 @@
         });
     });
     function recarregaPagina() {
-        Pesquisar();
+        //Pesquisar();
     }
     function ativaNovamenteDate() {
 
@@ -522,7 +522,7 @@
             data: JSON.stringify({ cidades, bairros, tipos, tipoimovel, DtReferencia: dtRefencia, Unidade: unidade, TipoArea: tipoArea }),
             dataType: "json",
             success: function (result) {
-                
+                debugger;
 
                 $('.modal-loading-local').hide();
                 $('#graficoEvolutivo').show();
@@ -536,7 +536,7 @@
                     if (possuiCidades == true) {
                         var todos = result[result.length - 1];
                         $('.numMetMed').html(todos.metragemMedia.toFixed(2));
-                        $('.numQtdOfe').html(todos.quantidadeOfertas.toLocaleString('pt-BR'));
+                        $('.numQtdOfe').html(todos.value.toLocaleString('pt-BR'));
                     }
                     
                     var processed_json = [];
