@@ -81,8 +81,8 @@ namespace ImobiliariasCrawler.Main.Spiders
                 Rua = response.Selector.SelectSingleNode("//h6[@class='fw-600 t-up']").TextOrNull() ?? dictKeyValue["imovelEndereco"],
                 Cep = dictKeyValue["imovelCep"],
 
-                AreaPrivativa = response.Selector.SelectSingleNode("//h4[@class='fleft100 cl-red fw-600']").TextOrNull(),
-                AreaTotal = response.Selector.SelectSingleNode("//h4[@class='fleft100 cl-red fw-600']").TextOrNull(),
+                AreaPrivativa = response.Selector.SelectSingleNode("//h6[text()='ÁREA']/../h4").TextOrNull(),
+                AreaTotal = response.Selector.SelectSingleNode("//h6[text()='ÁREA']/../h4").TextOrNull(),
 
                 Tipo = response.Selector.SelectSingleNode("//h4[@class='fleft100 cl-red fw-600 t-up']").TextOrNull(),
                 Descricao = response.Selector.SelectSingleNode("//p[@class='ft-size17 fleft100']").TextOrNull(),
@@ -97,6 +97,11 @@ namespace ImobiliariasCrawler.Main.Spiders
                 CodImolvelAPI = response.Url.Split("/").Skip(5).FirstOrDefault()
             };
             if (imovel.Suites == "Suíte") imovel.Suites = "1";
+            if (imovel.Suites is null)
+            {
+                imovel.Suites = imovel.Descricao.ReValue(@"\d? su[íi]te");
+            }
+
             Save(imovel);
         }
     }

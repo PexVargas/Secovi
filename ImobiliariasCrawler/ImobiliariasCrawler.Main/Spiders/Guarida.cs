@@ -1,4 +1,4 @@
-﻿using ImobiliariasCrawler.Main.Extensions;
+using ImobiliariasCrawler.Main.Extensions;
 using ImobiliariasCrawler.Main.Model;
 using System;
 using System.Collections.Generic;
@@ -64,7 +64,7 @@ namespace ImobiliariasCrawler.Main.Spiders
             var desserialize = response.Selector.Deserialize<JsonImovelGuarita>();
             var currentPage = int.Parse(desserialize.Paginacao.Current);
 
-            var tipoImovel = dictForm["opcao-filtro"] == "vender" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
+            var tipoImovel = dictForm["opcao-filtro"].ToString() == "vender" ? TipoImovelEnum.Comprar : TipoImovelEnum.Alugar;
 
             foreach (var item in desserialize.Imoveis)
             {
@@ -82,15 +82,12 @@ namespace ImobiliariasCrawler.Main.Spiders
                     Quartos = item.Quartos,
                     Url = "https://www.guarida.com.br" + item.Url,
                     Rua = item.Endereco,
-                    SiglaEstado = item.Estado,
+                    SiglaEstado = item.Estado == "Rio Grande do Sul" ? "RS" : item.Estado,
                     Tipo = item.Tipo,
                     CodImolvelAPI = item.Url.Split("/").LastOrDefault()
                     
                 };
-                if (tipoImovel == TipoImovelEnum.Alugar)
-                    Request.Get(url: imovel.Url, callback: ParseImovel, dictArgs: new Dictionary<string, object> { { "imovel", imovel } });
-                else
-                    Save(imovel);
+                Request.Get(url: imovel.Url, callback: ParseImovel, dictArgs: new Dictionary<string, object> { { "imovel", imovel } });
             }
         }
 
@@ -103,9 +100,11 @@ namespace ImobiliariasCrawler.Main.Spiders
                 try
                 {
                     imovel.Descricao = response.Selector.SelectSingleNode("//h5[text()='Sobre este imóvel']/..").InnerText.Split("Sobre este imóvel")[1].Split("O que eu preciso para alugar este imóvel?")[0];
+                    imovel.Suites = imovel.Descricao.ReValue(@"\d? su[íi]tes?");
                 }
                 catch { }
             }
+            Save(imovel);
         }
     }
 
