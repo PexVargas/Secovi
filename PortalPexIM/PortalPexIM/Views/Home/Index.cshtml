@@ -110,6 +110,12 @@
     span.numSemNum {
         font-size: 14px;
     }
+    .qtdVermelho{
+        color:red;
+    }
+    .qtdAzul{
+        color:blue;
+    }
     /*FIM CSS FILTRO*/
 </style>
 <div class="boxFiltro">
@@ -210,7 +216,7 @@
                 <div class="card-icon">
                     <i class="material-icons">room</i>
                 </div>
-                <h3 class="card-title">Quantidade de Ofertas</h3>
+                <h3 class="card-title" id="tituloCalculo">Quantidade de ofertas</h3>
             </div>
             <div class="card-body ab">
                 <div class="row">
@@ -361,7 +367,7 @@
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 <script>
-
+    
     $(document).ready(function () {
         Pesquisar();
 
@@ -393,7 +399,7 @@
         });
     });
     function recarregaPagina() {
-        //Pesquisar();
+        Pesquisar();
     }
     function ativaNovamenteDate() {
 
@@ -488,7 +494,7 @@
     }
 
 
-    function Pesquisar() {
+    function Pesquisar(pagina) {
         if ($("#cmbTipoImovel").is(':checked'))
             tipoimovel = 2;
         else
@@ -548,9 +554,25 @@
                     $('#graficoEvolutivo').html('Sem registros, por favor modifique a busca!');
                 } else {
                     if (possuiCidades == true) {
-                        var todos = result[result.length - 1];
-                        $('.numMetMed').html(todos.metragemMedia.toFixed(2));
-                        $('.numQtdOfe').html(todos.value.toLocaleString('pt-BR'));
+                        if (unidade != "quantidade") {
+                            var todos = result[result.length - 1];
+                            $('.numMetMed').html('R$' + todos.metragemMedia.toFixed(2));
+                            $('.numQtdOfe').html('R$' + todos.value.toLocaleString('pt-BR'));
+                            $('.numQtdOfe').removeClass('qtdVermelho');
+                            $('.numQtdOfe').removeClass('qtdAzul');
+                        } else {
+                            var todos = result[result.length - 1];
+                            $('.numMetMed').html(todos.metragemMedia.toFixed(2));
+                            $('.numQtdOfe').html(todos.value.toLocaleString('pt-BR'));
+                            if (todos.value.length < 10) {
+                                $('.numQtdOfe').removeClass('qtdAzul');
+                                $('.numQtdOfe').addClass('qtdVermelho');
+                            } else {
+                                $('.numQtdOfe').removeClass('qtdVermelho');
+                                $('.numQtdOfe').addClass('qtdAzul');
+                            }
+                        }
+                        
                     }
                     
                     var processed_json = [];

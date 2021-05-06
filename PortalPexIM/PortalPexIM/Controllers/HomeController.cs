@@ -25,7 +25,7 @@ namespace PortalPexIM.Controllers
 
         public IActionResult Index()
         {
-           
+            TempData["DiffUrl"] = "";
             var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             FiltroPesquisa filtro = new FiltroPesquisa();
