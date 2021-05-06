@@ -224,13 +224,13 @@
                         <h3 class="card-body numQtdOfe">Sem registros, por favor modifique a busca!</h3>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body">min:</p>
+                        <p class="card-body minmaxcv">min:</p>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body">máx:</p>
+                        <p class="card-body minmaxcv">máx:</p>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body">cv:</p>
+                        <p class="card-body minmaxcv">cv:</p>
                     </div>
                     <br />
                 </div>
@@ -552,11 +552,20 @@
         }
 
 
+
         CarregarGraficoMeses();
         CarregarGraficoTipos();
         CarregarGraficoCidades();
         CarregarGraficoBairros();
         CarregarGraficoGaragens();
+
+        if (unidade == "quantidade") {
+            $('.minmaxcv').hide();
+        }
+        else
+        {
+            $('.minmaxcv').show();
+        }
     }
 
 
@@ -584,22 +593,31 @@
                     $('#graficoEvolutivo').html('Sem registros, por favor modifique a busca!');
                 } else {
                     if (possuiCidades == true) {
+                        debugger
                         if (unidade != "quantidade") {
                             var todos = result[result.length - 1];
-                            $('.numMetMed').html('R$' + todos.metragemMedia.toFixed(2));
+                            $('.numMetMed').html('' + todos.metragemMedia.toFixed(2));
                             $('.numQtdOfe').html('R$' + todos.value.toLocaleString('pt-BR'));
-                            $('.numQtdOfe').removeClass('qtdVermelho');
-                            $('.numQtdOfe').removeClass('qtdAzul');
+                            //$('.numQtdOfe').removeClass('qtdVermelho');
+                            //$('.numQtdOfe').removeClass('qtdAzul');
+                            console.log(todos.value.length)
+                            if (todos.value < 10) {
+                                //$('.numQtdOfe').removeClass('qtdAzul');
+                                //$('.numQtdOfe').addClass('qtdVermelho');
+                            } else {
+                                //$('.numQtdOfe').removeClass('qtdVermelho');
+                                //$('.numQtdOfe').addClass('qtdAzul');
+                            }
                         } else {
                             var todos = result[result.length - 1];
                             $('.numMetMed').html(todos.metragemMedia.toFixed(2));
                             $('.numQtdOfe').html(todos.value.toLocaleString('pt-BR'));
                             if (todos.value.length < 10) {
-                                $('.numQtdOfe').removeClass('qtdAzul');
-                                $('.numQtdOfe').addClass('qtdVermelho');
+                                //$('.numQtdOfe').removeClass('qtdAzul');
+                                //$('.numQtdOfe').addClass('qtdVermelho');
                             } else {
-                                $('.numQtdOfe').removeClass('qtdVermelho');
-                                $('.numQtdOfe').addClass('qtdAzul');
+                                //$('.numQtdOfe').removeClass('qtdVermelho');
+                                //$('.numQtdOfe').addClass('qtdAzul');
                             }
                         }
                         
@@ -626,7 +644,7 @@
                         });
                     }
 
-                    CarregarGrafico("graficoEvolutivo", categories[0], dadosGrafico, "Evolutivo de ofertas", "column", "12");
+                    CarregarGraficoEvolutivo("graficoEvolutivo", categories[0], dadosGrafico, "Evolutivo de ofertas", "column", "12");
                 }
 
 
@@ -662,7 +680,7 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        if (i >= 7) {
+                        if (i >= 15) {
                             var key = "OUTRAS";
                             value += result[i].value;
                             processed_json.push([key, key, value]);
@@ -719,7 +737,7 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        if (i >= 7) {
+                        if (i >= 15) {
                             var key = "OUTROS";
                             value += result[i].value;
                             processed_json.push([key, key, value]);
@@ -776,7 +794,7 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        if (i >= 7) {
+                        if (i >= 15) {
                             var key = "OUTROS";
                             value += result[i].value;
                             processed_json.push([key, key, value]);
@@ -841,6 +859,45 @@
         Highcharts.chart(id, {
             chart: {
                 type: tipo,
+                height: 800
+            },
+            title: {
+                text: titulo
+            },
+            legend: {
+                itemStyle: {
+                    fontSize: '10px'
+                },
+                enabled: false
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+            },
+            //yAxis: {
+            //   // min: 10,
+            //    startOnTick: false
+            //},
+            plotOptions: {
+                series: {
+                    pointWidth: 35
+                }
+            },
+
+            xAxis: {
+                categories: categories
+            },
+            series: dadosGrafico
+        });
+    }
+
+    function CarregarGraficoEvolutivo(id, categories, dadosGrafico, titulo, tipo, colmd) {
+
+
+        Highcharts.chart(id, {
+            chart: {
+                type: tipo,
                 height: 400
             },
             title: {
@@ -874,6 +931,7 @@
         });
     }
 
+
     function CarregarGraficoPizza(id, titulo, dados) {
 
 
@@ -899,7 +957,8 @@
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false,
-                type: 'pie'
+                type: 'pie',
+                height: 800
             },
             title: {
                 text: titulo
