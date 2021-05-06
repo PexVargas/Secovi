@@ -397,7 +397,37 @@
         $('.togglebutton').on('click', function () {
             preencheFiltro();
         });
+        verificaPag()
     });
+    function verificaPag() {
+        var vemParametro = getUrlParameter('pag');
+        console.log(vemParametro);
+        if (vemParametro == 'qtd') {
+            $('.menu-qo .nav-link').click();
+        }
+        if (vemParametro == 'vm') {
+            console.log('entrei');
+            $('.menu-vm .nav-link').click();
+        }
+        if (vemParametro == 'vm2') {
+            $('.menu-vm2 .nav-link').click();
+        }
+    }
+        function getUrlParameter(sParam) {
+            var sPageURL = window.location.search.substring(1),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                }
+            }
+        };
+    
     function recarregaPagina() {
         Pesquisar();
     }

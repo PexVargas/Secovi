@@ -89,19 +89,19 @@
 
                     @if(TempData["DiffUrl"] == "Download" || TempData["DiffUrl"] == "Upload" ){
                     <li class="nav-item">
-                        <span class="nav-link menu-qo" onclick="mudaParaHome();">
+                        <span class="nav-link menu-qo" onclick="mudaParaHome('qtd');">
                             <i class="material-icons">local_offer</i>
                             <p>Quantidade de ofertas </p>
                         </span>
                     </li>
                     <li class="nav-item menu-vm">
-                        <span class="nav-link" onclick="mudaParaHome();">
+                        <span class="nav-link" onclick="mudaParaHome('vm');">
                             <i class="material-icons">paid</i>
                             <p>Valor médio </p>
                         </span>
                     </li>
                     <li class="nav-item menu-vm2">
-                        <span class="nav-link" onclick="mudaParaHome();">
+                        <span class="nav-link" onclick="mudaParaHome('vm2');">
                             <i class="material-icons">architecture</i>
                             <p>Valor médio m²</p>
                         </span>
@@ -280,7 +280,9 @@
                 $(this).removeClass('menuSelecao');
             });
         }
-        function mudaParaHome() { window.location = '/' }
+        function mudaParaHome(pag) {
+            window.location = '..?pag=' + pag;
+        }
     </script>
 
     <!--   Core JS Files   -->
