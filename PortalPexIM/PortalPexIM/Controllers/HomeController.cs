@@ -150,7 +150,9 @@ namespace PortalPexIM.Controllers
                                key = i.Chave,
                                value = i.Valor,
                                metragemMedia = i.Metragem,
-                               quantidadeOfertas = i.Quantidade
+                               quantidadeOfertas = i.Quantidade,
+                               Maximo = i.Maximo,
+                               Minimo = i.Minimo
                            }).ToList();
 
             return Json(imoveis);

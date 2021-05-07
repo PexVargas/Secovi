@@ -224,13 +224,13 @@
                         <h3 class="card-body numQtdOfe">Sem registros, por favor modifique a busca!</h3>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body minmaxcv">min:</p>
+                        <p class="card-body minmaxcv ">min: <span class="valormin"></span></p>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body minmaxcv">máx:</p>
+                        <p class="card-body minmaxcv ">máx: <span class="valormax"></span></p>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body minmaxcv">cv:</p>
+                        <p class="card-body minmaxcv valorcv">cv:</p>
                     </div>
                     <br />
                 </div>
@@ -241,7 +241,7 @@
             <div class="card-footer">
                 <div class="stats">
                     <i class="material-icons">local_offer</i>
-                    Baseado em tantas ofertas
+                    <p> Baseado em <span class="quadroOfertas"> 0 </span> ofertas</p>
                 </div>
             </div>
         </div>
@@ -262,12 +262,12 @@
                     <div class="col-md-12">
                         <h3 class="card-body numMetMed">Sem registros, por favor modifique a busca!</h3>
                     </div>
-                    <div class="col-md-12">
+                    @*<div class="col-md-12">
                         <p class="card-body">min:</p>
                     </div>
                     <div class="col-md-12">
                         <p class="card-body">max:</p>
-                    </div>
+                    </div>*@
 
 
 
@@ -277,7 +277,8 @@
             <div class="card-footer">
                 <div class="stats">
                     <i class="material-icons">local_offer</i>
-                    Baseado em tantas ofertas
+                 
+                    <p> Baseado em <span class="quadroOfertas"> 0 </span> ofertas</p>
                 </div>
             </div>
         </div>
@@ -582,7 +583,9 @@
             data: JSON.stringify({ cidades, bairros, tipos, tipoimovel, DtReferencia: dtRefencia, Unidade: unidade, TipoArea: tipoArea }),
             dataType: "json",
             success: function (result) {
-                //debugger;
+                debugger;
+                //quantidadeOfertas
+            
 
                 $('.modal-loading-local').hide();
                 $('#graficoEvolutivo').show();
@@ -593,8 +596,14 @@
                     }
                     $('#graficoEvolutivo').html('Sem registros, por favor modifique a busca!');
                 } else {
+                    $('.quadroOfertas').html(result[result.length - 1].quantidadeOfertas.toString());
+                    if (result[result.length - 1].maximo != null)
+                        $('.valormax').html(result[result.length - 1].maximo.toString());
+                    if (result[result.length - 1].minimo != null)
+                        $('.valormin').html(result[result.length - 1].minimo.toString());
+
                     if (possuiCidades == true) {
-                        //debugger
+                      
                         if (unidade != "quantidade") {
                             var todos = result[result.length - 1];
                             $('.numMetMed').html('' + todos.metragemMedia.toFixed(2));
