@@ -107,8 +107,8 @@
                         </span>
                     </li>
                     }else{
-                    <li class="nav-item">
-                        <span class="nav-link menu-qo menuSelecao" onclick="mudarTitulo('Quantidade de ofertas'),recarregaPagina()">
+                    <li class="nav-item menu-qo">
+                        <span class="nav-link  menuSelecao " onclick="mudarTitulo('Quantidade de ofertas'),recarregaPagina()">
                             <i class="material-icons">local_offer</i>
                             <p>Quantidade de ofertas </p>
                         </span>
@@ -264,7 +264,7 @@
             
         }
         $(document).ready(function () {
-            trocaMenu();
+            //trocaMenu();
             $('.nav-link').on('click', function (e) {
                 trocaMenu();
                 e.currentTarget.className = "nav-link menuSelecao";

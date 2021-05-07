@@ -570,6 +570,7 @@
 
 
     function CarregarGraficoMeses() {
+        var pagAtual = $('#tituloCalculo').html();
         $('.modal-loading-local').show();
         $('#graficoEvolutivo').hide();
         var processed_json = new Array();
@@ -581,7 +582,7 @@
             data: JSON.stringify({ cidades, bairros, tipos, tipoimovel, DtReferencia: dtRefencia, Unidade: unidade, TipoArea: tipoArea }),
             dataType: "json",
             success: function (result) {
-                debugger;
+                //debugger;
 
                 $('.modal-loading-local').hide();
                 $('#graficoEvolutivo').show();
@@ -593,40 +594,42 @@
                     $('#graficoEvolutivo').html('Sem registros, por favor modifique a busca!');
                 } else {
                     if (possuiCidades == true) {
-                        debugger
+                        //debugger
                         if (unidade != "quantidade") {
                             var todos = result[result.length - 1];
                             $('.numMetMed').html('' + todos.metragemMedia.toFixed(2));
                             $('.numQtdOfe').html('R$' + todos.value.toLocaleString('pt-BR'));
-                            //$('.numQtdOfe').removeClass('qtdVermelho');
-                            //$('.numQtdOfe').removeClass('qtdAzul');
-                            console.log(todos.value.length)
+                            $('.numQtdOfe').removeClass('qtdVermelho');
+                            $('.numQtdOfe').removeClass('qtdAzul');
                             if (todos.value < 10) {
-                                //$('.numQtdOfe').removeClass('qtdAzul');
-                                //$('.numQtdOfe').addClass('qtdVermelho');
+                                $('.numQtdOfe').removeClass('qtdAzul');
+                                $('.numQtdOfe').addClass('qtdVermelho');
                             } else {
-                                //$('.numQtdOfe').removeClass('qtdVermelho');
-                                //$('.numQtdOfe').addClass('qtdAzul');
+                                $('.numQtdOfe').removeClass('qtdVermelho');
+                                $('.numQtdOfe').addClass('qtdAzul');
                             }
                         } else {
                             var todos = result[result.length - 1];
                             $('.numMetMed').html(todos.metragemMedia.toFixed(2));
                             $('.numQtdOfe').html(todos.value.toLocaleString('pt-BR'));
-                            if (todos.value.length < 10) {
-                                //$('.numQtdOfe').removeClass('qtdAzul');
-                                //$('.numQtdOfe').addClass('qtdVermelho');
+                            if (todos.value < 10) {
+                                $('.numQtdOfe').removeClass('qtdAzul');
+                                $('.numQtdOfe').addClass('qtdVermelho');
                             } else {
-                                //$('.numQtdOfe').removeClass('qtdVermelho');
-                                //$('.numQtdOfe').addClass('qtdAzul');
+                                $('.numQtdOfe').removeClass('qtdVermelho');
+                                $('.numQtdOfe').addClass('qtdAzul');
                             }
                         }
                         
                     }
                     
                     var processed_json = [];
-
+                    
                     for (i = 0; i < result.length; i++) {
-                        processed_json.push([result[i].key, result[i].key, result[i].value]);
+                        if (pagAtual == 'Quantidade de ofertas')
+                            processed_json.push([result[i].key, result[i].key + " - " + result[i].value, result[i].value]);
+                        else
+                            processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value, result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -640,7 +643,7 @@
 
                         dadosGrafico.push({
                             name: dadosPivot[i].shift(),
-                            data: dadosPivot[i]
+                            data: dadosPivot[i],
                         });
                     }
 
@@ -656,6 +659,7 @@
     }
 
     function CarregarGraficoCidades() {
+        var pagAtual = $('#tituloCalculo').html();
         $('.modal-loading-local').show();
         $('#graficoCidades').hide();
         var processed_json = new Array();
@@ -686,7 +690,10 @@
                             processed_json.push([key, key, value]);
                         }
                         else
-                            processed_json.push([result[i].key, result[i].key, result[i].value]);
+                            if (pagAtual == 'Quantidade de ofertas')
+                                processed_json.push([result[i].key, result[i].key + " - " + result[i].value, result[i].value]);
+                            else
+                                processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value, result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -696,14 +703,16 @@
 
                     var dadosGrafico = [];
 
-                    for (i = 1; i < dadosPivot.length; i++) {
+                    
+                        for (i = 1; i < dadosPivot.length; i++) {
 
-                        dadosGrafico.push({
-                            name: dadosPivot[i].shift(),
-                            data: dadosPivot[i]
-                        });
-                    }
-
+                            dadosGrafico.push({
+                                name: dadosPivot[i].shift() ,
+                                data: dadosPivot[i]
+                            });
+                        }
+                    
+                    
                     CarregarGrafico("graficoCidades", categories[0], dadosGrafico, "Oferta por cidades", "bar", "6");
                 }
             },
@@ -713,6 +722,7 @@
     }
 
     function CarregarGraficoBairros() {
+        var pagAtual = $('#tituloCalculo').html();
         $('.modal-loading-local').show();
         $('#graficoBairros').hide();
         var processed_json = new Array();
@@ -743,7 +753,10 @@
                             processed_json.push([key, key, value]);
                         }
                         else
-                            processed_json.push([result[i].key, result[i].key, result[i].value]);
+                            if (pagAtual == 'Quantidade de ofertas')
+                                processed_json.push([result[i].key, result[i].key + " - " + result[i].value, result[i].value]);
+                            else
+                                processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value, result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -770,6 +783,7 @@
     }
 
     function CarregarGraficoTipos() {
+        var pagAtual = $('#tituloCalculo').html();
         $('.modal-loading-local').show();
         $('#graficoTipos').hide();
         var processed_json = new Array();
@@ -800,7 +814,10 @@
                             processed_json.push([key, key, value]);
                         }
                         else
-                            processed_json.push([result[i].key, result[i].key, result[i].value]);
+                            if (pagAtual == 'Quantidade de ofertas')
+                                processed_json.push([result[i].key, result[i].key + " - " + result[i].value, result[i].value]);
+                            else
+                                processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value, result[i].value]);
                     }
 
 
@@ -1015,6 +1032,7 @@
             item = [];
             item.push(key);
             for (var i = 0; i < newCols.length; i++) {
+                
                 item.push(result[key][newCols[i]] || 0);
             }
             ret.push(item);
