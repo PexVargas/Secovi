@@ -597,17 +597,18 @@
                     $('#graficoEvolutivo').html('Sem registros, por favor modifique a busca!');
                 } else {
                     $('.quadroOfertas').html(result[result.length - 1].quantidadeOfertas.toString());
-                    if (result[result.length - 1].maximo != null)
-                        $('.valormax').html(result[result.length - 1].maximo.toString());
-                    if (result[result.length - 1].minimo != null)
-                        $('.valormin').html(result[result.length - 1].minimo.toString());
+                    
 
                     if (possuiCidades == true) {
                       
                         if (unidade != "quantidade") {
                             var todos = result[result.length - 1];
-                            $('.numMetMed').html('' + todos.metragemMedia.toFixed(2));
+                            $('.numMetMed').html('' + todos.metragemMedia.toLocaleString('pt-BR'));
                             $('.numQtdOfe').html('R$' + todos.value.toLocaleString('pt-BR'));
+                            if (result[result.length - 1].maximo != null)
+                                $('.valormax').html(result[result.length - 1].maximo.toLocaleString('pt-BR'));
+                            if (result[result.length - 1].minimo != null)
+                                $('.valormin').html(result[result.length - 1].minimo.toLocaleString('pt-BR'));
                             $('.numQtdOfe').removeClass('qtdVermelho');
                             $('.numQtdOfe').removeClass('qtdAzul');
                             if (todos.value < 10) {
@@ -638,7 +639,7 @@
                         if (pagAtual == 'Quantidade de ofertas')
                             processed_json.push([result[i].key, result[i].key + " - " + result[i].value, result[i].value]);
                         else
-                            processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value, result[i].value]);
+                            processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -693,16 +694,16 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        if (i >= 15) {
-                            var key = "OUTRAS";
-                            value += result[i].value;
-                            processed_json.push([key, key, value]);
-                        }
+                        //if (i >= 15) {
+                        //    var key = "OUTRAS";
+                        //    value += result[i].value;
+                        //    processed_json.push([key, key, value]);
+                        //}
                         else
                             if (pagAtual == 'Quantidade de ofertas')
-                                processed_json.push([result[i].key, result[i].key + " - " + result[i].value, result[i].value]);
+                                processed_json.push([result[i].key, result[i].key + " - " + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                             else
-                                processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value, result[i].value]);
+                                processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -756,16 +757,16 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        if (i >= 15) {
-                            var key = "OUTROS";
-                            value += result[i].value;
-                            processed_json.push([key, key, value]);
-                        }
+                        //if (i >= 15) {
+                        //    var key = "OUTROS";
+                        //    value += result[i].value;
+                        //    processed_json.push([key, key, value]);
+                        //}
                         else
                             if (pagAtual == 'Quantidade de ofertas')
-                                processed_json.push([result[i].key, result[i].key + " - " + result[i].value, result[i].value]);
+                                processed_json.push([result[i].key, result[i].key + " - " + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                             else
-                                processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value, result[i].value]);
+                                processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -817,16 +818,16 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        if (i >= 15) {
-                            var key = "OUTROS";
-                            value += result[i].value;
-                            processed_json.push([key, key, value]);
-                        }
+                        //if (i >= 15) {
+                        //    var key = "OUTROS";
+                        //    value += result[i].value;
+                        //    processed_json.push([key, key, value]);
+                        //}
                         else
                             if (pagAtual == 'Quantidade de ofertas')
-                                processed_json.push([result[i].key, result[i].key + " - " + result[i].value, result[i].value]);
+                                processed_json.push([result[i].key, result[i].key + " - " + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                             else
-                                processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value, result[i].value]);
+                                processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                     }
 
 
