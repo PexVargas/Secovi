@@ -224,10 +224,10 @@
                         <h3 class="card-body numQtdOfe">Sem registros, por favor modifique a busca!</h3>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body minmaxcv ">min: <span class="valormin"></span></p>
+                        <p class="card-body minmaxcv ">min: R$ <span class="valormin"></span>.00</p>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body minmaxcv ">máx: <span class="valormax"></span></p>
+                        <p class="card-body minmaxcv ">máx: R$ <span class="valormax"></span>.00</p>
                     </div>
                     <div class="col-md-12">
                         <p class="card-body minmaxcv valorcv">cv:</p>
@@ -656,7 +656,7 @@
                         });
                     }
 
-                    CarregarGraficoEvolutivo("graficoEvolutivo", categories[0], dadosGrafico, "Evolutivo de ofertas", "column", "12");
+                    CarregarGraficoEvolutivo("graficoEvolutivo", categories[0], dadosGrafico, "Série histórica", "column", "12");
                 }
 
 
@@ -906,6 +906,11 @@
             //    startOnTick: false
             //},
             plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
                 series: {
                     pointWidth: 35
                 }
