@@ -108,7 +108,7 @@
         font-weight: bold;
     }
     span.numSemNum {
-        font-size: 18px;
+        font-size: 14px;
     }
     .qtdVermelho{
         color:red;
@@ -221,16 +221,16 @@
             <div class="card-body ab">
                 <div class="row">
                     <div class="col-md-12">
-                        <h3 class="card-body numQtdOfe" style="font-size:18px">Sem registros, por favor modifique a busca!</h3>
+                        <h3 class="card-body numQtdOfe">Sem registros, por favor modifique a busca!</h3>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body minmaxcv ">min: R$ <span class="valormin"></span></p>
+                        <p class="card-body minmaxcv ">min: R$ <span class="valormin"></span>.00</p>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body minmaxcv ">máx: R$ <span class="valormax"></span></p>
+                        <p class="card-body minmaxcv ">máx: R$ <span class="valormax"></span>.00</p>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body minmaxcv ">CV: R$ <span class="valorcv"></span></p>
+                        <p class="card-body minmaxcv valorcv">cv:</p>
                     </div>
                     <br />
                 </div>
@@ -260,7 +260,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <h3 class="card-body numMetMed" style="font-size:18px">Sem registros, por favor modifique a busca!</h3>
+                        <h3 class="card-body numMetMed">Sem registros, por favor modifique a busca!</h3>
                     </div>
                     @*<div class="col-md-12">
                         <p class="card-body">min:</p>
@@ -609,8 +609,6 @@
                                 $('.valormax').html(result[result.length - 1].maximo.toLocaleString('pt-BR'));
                             if (result[result.length - 1].minimo != null)
                                 $('.valormin').html(result[result.length - 1].minimo.toLocaleString('pt-BR'));
-                            if (result[result.length - 1].cv != null)
-                                $('.valorcv').html(result[result.length - 1].cv.toLocaleString('pt-BR'));
                             $('.numQtdOfe').removeClass('qtdVermelho');
                             $('.numQtdOfe').removeClass('qtdAzul');
                             if (todos.value < 10) {
@@ -638,10 +636,10 @@
                     var processed_json = [];
                     
                     for (i = 0; i < result.length; i++) {
-                        if (pagAtual == 'Quantidade de ofertas')
-                            processed_json.push([result[i].key, result[i].key + " - " + result[i].value, result[i].value]);
-                        else
-                            processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
+                        //if (pagAtual == 'Quantidade de ofertas')
+                            processed_json.push([result[i].key, result[i].key, result[i].value]);
+                        //else
+                        //    processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -696,16 +694,16 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        //if (i >= 15) {
-                        //    var key = "OUTRAS";
-                        //    value += result[i].value;
-                        //    processed_json.push([key, key, value]);
-                        //}
-                        //else
-                            if (pagAtual == 'Quantidade de ofertas')
-                                processed_json.push([result[i].key, result[i].key , result[i].value]);
-                            else
-                                processed_json.push([result[i].key, result[i].key , result[i].value]);
+                        if (i >= 15) {
+                            //var key = "OUTRAS";
+                            //value += result[i].value;
+                            //processed_json.push([key, key, value]);
+                        }
+                        else
+                            //if (pagAtual == 'Quantidade de ofertas')
+                                processed_json.push([result[i].key, result[i].key, result[i].value]);
+                            //else
+                            //    processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -759,16 +757,16 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        //if (i >= 15) {
-                        //    var key = "OUTROS";
-                        //    value += result[i].value;
-                        //    processed_json.push([key, key, value]);
-                        //}
-                        //else
-                            if (pagAtual == 'Quantidade de ofertas')
-                                processed_json.push([result[i].key, result[i].key , result[i].value]);
-                            else
-                                processed_json.push([result[i].key, result[i].key , result[i].value]);
+                        if (i >= 15) {
+                            //var key = "OUTROS";
+                            //value += result[i].value;
+                            //processed_json.push([key, key, value]);
+                        }
+                        else
+                            /*if (pagAtual == 'Quantidade de ofertas')*/
+                                processed_json.push([result[i].key, result[i].key, result[i].value]);
+                            //else
+                            //    processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -820,16 +818,16 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        //if (i >= 15) {
-                        //    var key = "OUTROS";
-                        //    value += result[i].value;
-                        //    processed_json.push([key, key, value]);
-                        //}
-                       // else
-                            if (pagAtual == 'Quantidade de ofertas')
-                                processed_json.push([result[i].key, result[i].key , result[i].value]);
-                            else
-                                processed_json.push([result[i].key, result[i].key , result[i].value]);
+                        if (i >= 15) {
+                            //var key = "OUTROS";
+                            //value += result[i].value;
+                            //processed_json.push([key, key, value]);
+                        }
+                        else
+                            //if (pagAtual == 'Quantidade de ofertas')
+                                processed_json.push([result[i].key, result[i].key, result[i].value]);
+                            //else
+                            //    processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                     }
 
 
@@ -884,7 +882,7 @@
 
     function CarregarGrafico(id, categories, dadosGrafico, titulo, tipo, colmd) {
 
-
+    //if (unidade == "quantidade") {
         Highcharts.chart(id, {
             chart: {
                 type: tipo,
@@ -899,11 +897,11 @@
                 },
                 enabled: false
             },
-            yAxis: {
-                title: {
-                    text: ''
-                }
-            },
+            //yAxis: {
+            //    title: {
+            //        text: ''
+            //    }
+            //},
             //yAxis: {
             //   // min: 10,
             //    startOnTick: false
@@ -912,19 +910,14 @@
                 bar: {
                     dataLabels: {
                         enabled: true,
-                        formatter: function () {
-                            if (this.y < 1)
-                                return '';
-                            else {
-                                if (unidade == 'quantidade') {
-                                    return this.y.toLocaleString('pt-BR')
-                                }
-                                else
-                                {
-                                    return "R$"+ this.y.toLocaleString('pt-BR')
-                                }
+                        formatter: function (e) {
+                            if (unidade != "quantidade") {
+                                return 'R$ ' + Highcharts.numberFormat(this.y,2);
+                            } else {
+                                return this.y;
                             }
-                               
+
+
                         }
                     }
                 },
@@ -933,10 +926,17 @@
                 }
             },
 
-            xAxis: {
-                categories: categories
-            },
+            //xAxis: {
+            //    categories: categories
+            //},
             series: dadosGrafico
+        });
+        Highcharts.setOptions({
+
+            lang: {
+                decimalPoint: ',',
+                thousandsSep: '.'
+            }
         });
     }
 
