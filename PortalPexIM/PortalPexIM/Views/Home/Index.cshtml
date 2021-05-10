@@ -107,14 +107,17 @@
     input#dtReferencia {
         font-weight: bold;
     }
+
     span.numSemNum {
-        font-size: 14px;
+        font-size: 18px;
     }
-    .qtdVermelho{
-        color:red;
+
+    .qtdVermelho {
+        color: red;
     }
-    .qtdAzul{
-        color:blue;
+
+    .qtdAzul {
+        color: blue;
     }
     /*FIM CSS FILTRO*/
 </style>
@@ -221,16 +224,16 @@
             <div class="card-body ab">
                 <div class="row">
                     <div class="col-md-12">
-                        <h3 class="card-body numQtdOfe">Sem registros, por favor modifique a busca!</h3>
+                        <h3 class="card-body numQtdOfe" style="font-size:18px">Sem registros, por favor modifique a busca!</h3>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body minmaxcv ">min: R$ <span class="valormin"></span>.00</p>
+                        <p class="card-body minmaxcv ">min: R$ <span class="valormin"></span></p>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body minmaxcv ">máx: R$ <span class="valormax"></span>.00</p>
+                        <p class="card-body minmaxcv ">máx: R$ <span class="valormax"></span></p>
                     </div>
                     <div class="col-md-12">
-                        <p class="card-body minmaxcv valorcv">cv:</p>
+                        <p class="card-body minmaxcv ">CV: R$ <span class="valorcv"></span></p>
                     </div>
                     <br />
                 </div>
@@ -260,14 +263,14 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <h3 class="card-body numMetMed">Sem registros, por favor modifique a busca!</h3>
+                        <h3 class="card-body numMetMed" style="font-size:18px">Sem registros, por favor modifique a busca!</h3>
                     </div>
                     @*<div class="col-md-12">
-                        <p class="card-body">min:</p>
-                    </div>
-                    <div class="col-md-12">
-                        <p class="card-body">max:</p>
-                    </div>*@
+                            <p class="card-body">min:</p>
+                        </div>
+                        <div class="col-md-12">
+                            <p class="card-body">max:</p>
+                        </div>*@
 
 
 
@@ -277,7 +280,7 @@
             <div class="card-footer">
                 <div class="stats">
                     <i class="material-icons">local_offer</i>
-                 
+
                     <p> Baseado em <span class="quadroOfertas"> 0 </span> ofertas</p>
                 </div>
             </div>
@@ -368,7 +371,7 @@
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 <script>
-    
+
     $(document).ready(function () {
         Pesquisar();
 
@@ -414,21 +417,21 @@
             $('.menu-vm2 .nav-link').click();
         }
     }
-        function getUrlParameter(sParam) {
-            var sPageURL = window.location.search.substring(1),
-                sURLVariables = sPageURL.split('&'),
-                sParameterName,
-                i;
+    function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
 
-            for (i = 0; i < sURLVariables.length; i++) {
-                sParameterName = sURLVariables[i].split('=');
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
 
-                if (sParameterName[0] === sParam) {
-                    return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-                }
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
             }
-        };
-    
+        }
+    };
+
     function recarregaPagina() {
         Pesquisar();
     }
@@ -563,8 +566,7 @@
         if (unidade == "quantidade") {
             $('.minmaxcv').hide();
         }
-        else
-        {
+        else {
             $('.minmaxcv').show();
         }
     }
@@ -585,7 +587,7 @@
             success: function (result) {
                 debugger;
                 //quantidadeOfertas
-            
+
 
                 $('.modal-loading-local').hide();
                 $('#graficoEvolutivo').show();
@@ -597,10 +599,10 @@
                     $('#graficoEvolutivo').html('Sem registros, por favor modifique a busca!');
                 } else {
                     $('.quadroOfertas').html(result[result.length - 1].quantidadeOfertas.toString());
-                    
+
 
                     if (possuiCidades == true) {
-                      
+
                         if (unidade != "quantidade") {
                             var todos = result[result.length - 1];
                             $('.numMetMed').html('' + todos.metragemMedia.toLocaleString('pt-BR'));
@@ -609,6 +611,8 @@
                                 $('.valormax').html(result[result.length - 1].maximo.toLocaleString('pt-BR'));
                             if (result[result.length - 1].minimo != null)
                                 $('.valormin').html(result[result.length - 1].minimo.toLocaleString('pt-BR'));
+                            if (result[result.length - 1].cv != null)
+                                $('.valorcv').html(result[result.length - 1].cv.toLocaleString('pt-BR'));
                             $('.numQtdOfe').removeClass('qtdVermelho');
                             $('.numQtdOfe').removeClass('qtdAzul');
                             if (todos.value < 10) {
@@ -630,16 +634,16 @@
                                 $('.numQtdOfe').addClass('qtdAzul');
                             }
                         }
-                        
+
                     }
-                    
+
                     var processed_json = [];
-                    
+
                     for (i = 0; i < result.length; i++) {
-                        //if (pagAtual == 'Quantidade de ofertas')
-                            processed_json.push([result[i].key, result[i].key, result[i].value]);
-                        //else
-                        //    processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
+                        if (pagAtual == 'Quantidade de ofertas')
+                            processed_json.push([result[i].key, result[i].key + " - " + result[i].value, result[i].value]);
+                        else
+                            processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -684,7 +688,7 @@
                 $('#graficoCidades').show();
                 if (result.length == 0) {
                     possuiCidades = false;
-                    
+
                     $('#graficoCidades').html('Sem registros, por favor modifique a busca!');
                 } else {
                     possuiCidades = true;
@@ -694,16 +698,16 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        if (i >= 15) {
-                            //var key = "OUTRAS";
-                            //value += result[i].value;
-                            //processed_json.push([key, key, value]);
-                        }
+                        //if (i >= 15) {
+                        //    var key = "OUTRAS";
+                        //    value += result[i].value;
+                        //    processed_json.push([key, key, value]);
+                        //}
+                        //else
+                        if (pagAtual == 'Quantidade de ofertas')
+                            processed_json.push([result[i].key, result[i].key, result[i].value]);
                         else
-                            //if (pagAtual == 'Quantidade de ofertas')
-                                processed_json.push([result[i].key, result[i].key, result[i].value]);
-                            //else
-                            //    processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
+                            processed_json.push([result[i].key, result[i].key, result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -713,16 +717,16 @@
 
                     var dadosGrafico = [];
 
-                    
-                        for (i = 1; i < dadosPivot.length; i++) {
 
-                            dadosGrafico.push({
-                                name: dadosPivot[i].shift() ,
-                                data: dadosPivot[i]
-                            });
-                        }
-                    
-                    
+                    for (i = 1; i < dadosPivot.length; i++) {
+
+                        dadosGrafico.push({
+                            name: dadosPivot[i].shift(),
+                            data: dadosPivot[i]
+                        });
+                    }
+
+
                     CarregarGrafico("graficoCidades", categories[0], dadosGrafico, "Oferta por cidades", "bar", "6");
                 }
             },
@@ -757,16 +761,16 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        if (i >= 15) {
-                            //var key = "OUTROS";
-                            //value += result[i].value;
-                            //processed_json.push([key, key, value]);
-                        }
+                        //if (i >= 15) {
+                        //    var key = "OUTROS";
+                        //    value += result[i].value;
+                        //    processed_json.push([key, key, value]);
+                        //}
+                        //else
+                        if (pagAtual == 'Quantidade de ofertas')
+                            processed_json.push([result[i].key, result[i].key, result[i].value]);
                         else
-                            /*if (pagAtual == 'Quantidade de ofertas')*/
-                                processed_json.push([result[i].key, result[i].key, result[i].value]);
-                            //else
-                            //    processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
+                            processed_json.push([result[i].key, result[i].key, result[i].value]);
                     }
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -818,16 +822,16 @@
                     for (i = 0; i < result.length; i++) {
                         var key = result[i].key;
 
-                        if (i >= 15) {
-                            //var key = "OUTROS";
-                            //value += result[i].value;
-                            //processed_json.push([key, key, value]);
-                        }
+                        //if (i >= 15) {
+                        //    var key = "OUTROS";
+                        //    value += result[i].value;
+                        //    processed_json.push([key, key, value]);
+                        //}
+                        // else
+                        if (pagAtual == 'Quantidade de ofertas')
+                            processed_json.push([result[i].key, result[i].key, result[i].value]);
                         else
-                            //if (pagAtual == 'Quantidade de ofertas')
-                                processed_json.push([result[i].key, result[i].key, result[i].value]);
-                            //else
-                            //    processed_json.push([result[i].key, result[i].key + " - R$" + result[i].value.toLocaleString('pt-BR'), result[i].value]);
+                            processed_json.push([result[i].key, result[i].key, result[i].value]);
                     }
 
 
@@ -882,7 +886,7 @@
 
     function CarregarGrafico(id, categories, dadosGrafico, titulo, tipo, colmd) {
 
-    //if (unidade == "quantidade") {
+
         Highcharts.chart(id, {
             chart: {
                 type: tipo,
@@ -897,11 +901,11 @@
                 },
                 enabled: false
             },
-            //yAxis: {
-            //    title: {
-            //        text: ''
-            //    }
-            //},
+            yAxis: {
+                title: {
+                    text: ''
+                }
+            },
             //yAxis: {
             //   // min: 10,
             //    startOnTick: false
@@ -910,13 +914,17 @@
                 bar: {
                     dataLabels: {
                         enabled: true,
-                        formatter: function (e) {
-                            if (unidade != "quantidade") {
-                                return 'R$ ' + Highcharts.numberFormat(this.y,2);
-                            } else {
-                                return this.y;
+                        formatter: function () {
+                            if (this.y < 1)
+                                return '';
+                            else {
+                                if (unidade == 'quantidade') {
+                                    return this.y.toLocaleString('pt-BR')
+                                }
+                                else {
+                                    return "R$" + this.y.toLocaleString('pt-BR')
+                                }
                             }
-
 
                         }
                     }
@@ -926,17 +934,10 @@
                 }
             },
 
-            //xAxis: {
-            //    categories: categories
-            //},
+            xAxis: {
+                categories: categories
+            },
             series: dadosGrafico
-        });
-        Highcharts.setOptions({
-
-            lang: {
-                decimalPoint: ',',
-                thousandsSep: '.'
-            }
         });
     }
 
@@ -1063,7 +1064,7 @@
             item = [];
             item.push(key);
             for (var i = 0; i < newCols.length; i++) {
-                
+
                 item.push(result[key][newCols[i]] || 0);
             }
             ret.push(item);
