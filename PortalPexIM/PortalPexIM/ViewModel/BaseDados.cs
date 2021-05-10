@@ -14,5 +14,7 @@ namespace PortalPexIM.ViewModel
         public double? Maximo { get; set; }
         public decimal? Metragem { get; set; }
         public List<ImovelOutlier> lstImovelOutlier = new List<ImovelOutlier>();
+
+        public double? CV { get; set; }
     }
 }

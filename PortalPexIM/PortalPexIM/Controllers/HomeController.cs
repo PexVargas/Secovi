@@ -60,23 +60,7 @@ namespace PortalPexIM.Controllers
             var dataCalculo = new DateTime(ano, mes, 1);
             var lstImoveis = new List<Imovel>();
 
-            //var imoveis = (from i in dbe.Imoveisclassificados
-            //               where i.Tipo!=null 
-            //               && ((filtro.Cidades == null || filtro.Cidades.Length == 0)|| filtro.Cidades.Contains(i.Cidade)) 
-            //               && ((filtro.Bairros == null || filtro.Bairros.Length == 0)|| filtro.Bairros.Contains(i.Bairro))
-            //               && ((filtro.Tipos == null || filtro.Tipos.Length == 0) ||filtro.Tipos.Contains(i.Tipo))
-            //               && i.TipoImovel == filtro.TipoImovel
-            //               && i.Excluido == 0
-            //               && i.SiglaEstado == siglaEstado
-            //               && i.DataClassificacao >= (dataBase)
-            //               group i by new { i.DataClassificacao.Value.Year, i.DataClassificacao.Value.Month } into g
-
-            //               select new
-            //               {
-            //                   key = FormatarMesAno(g.Key.Year, g.Key.Month),
-            //                   value = g.Count(),    
-            //               }).ToList();
-
+          
             if (filtro.Unidade == "quantidade")
             {
                 lstImoveis = (from i in dbe.Imoveisclassificados
@@ -143,6 +127,9 @@ namespace PortalPexIM.Controllers
                               }).ToList();
             }
 
+            if (lstImoveis.Where(x => x.Data == dataCalculo).Count() == 0)
+                lstImoveis = new List<Imovel>();
+
             var evolutivo = BuscarPainel(lstImoveis, filtro.Unidade, filtro.TipoArea);
             var imoveis = (from i in evolutivo
                            select new
@@ -152,7 +139,8 @@ namespace PortalPexIM.Controllers
                                metragemMedia = i.Metragem,
                                quantidadeOfertas = i.Quantidade,
                                Maximo = i.Maximo,
-                               Minimo = i.Minimo
+                               Minimo = i.Minimo,
+                               CV = i.CV
                            }).ToList();
 
             return Json(imoveis);
@@ -243,7 +231,7 @@ namespace PortalPexIM.Controllers
                            {
                                key = i.Chave,
                                value = i.Valor,
-                           }).ToList().OrderByDescending(x => x.value);
+                           }).ToList().OrderByDescending(x => x.value).Take(15);
 
             return Json(imoveis);
         }
@@ -333,7 +321,7 @@ namespace PortalPexIM.Controllers
                            {
                                key = i.Chave,
                                value = i.Valor,
-                           }).ToList().OrderByDescending(x => x.value);
+                           }).ToList().OrderByDescending(x => x.value).Take(15); ;
 
             return Json(imoveis);
         }
@@ -423,7 +411,7 @@ namespace PortalPexIM.Controllers
                            {
                                key = i.Chave,
                                value = i.Valor,
-                           }).ToList().OrderByDescending(x => x.value);
+                           }).ToList().OrderByDescending(x => x.value).Take(15); ;
 
             return Json(imoveis);
         }
@@ -566,6 +554,7 @@ namespace PortalPexIM.Controllers
                         baseDados.Minimo = grupo.Minimo;
                         baseDados.Maximo = grupo.Maximo;
                         baseDados.Metragem = grupo.Metragem;
+                        baseDados.CV = grupo.CV;
                     }
 
                     tiposResult.Add(baseDados);
@@ -930,6 +919,8 @@ namespace PortalPexIM.Controllers
                     baseDados.Quantidade = contadorSegundoCorte;
                     valorTotalSegundoCorte = Math.Round(valorTotalSegundoCorte, 4);
 
+                    
+
                     decimal valor = Convert.ToDecimal(valorTotalSegundoCorte / contadorSegundoCorte);
 
                     baseDados.Valor = Math.Round(valor, 2, MidpointRounding.AwayFromZero);
@@ -937,6 +928,12 @@ namespace PortalPexIM.Controllers
                     baseDados.Minimo = imoveis.Where(x => x.outlier == false).Min(x => x.valor);
                     baseDados.Maximo = imoveis.Where(x => x.outlier == false).Max(x => x.valor);
                     baseDados.Metragem = Convert.ToDecimal(imoveis.Where(x => x.outlier == false && x.Area > 0).Average(x => x.Area));
+
+                    var desvioPadrao = CalculateStandardDeviation(imoveis.Where(x => x.outlier == false).Select(x => x.valor));
+                    var mediaAux = imoveis.Where(x => x.outlier == false).Select(x => x.valor).Average();
+                    var cv = desvioPadrao / mediaAux;
+                    baseDados.CV = Math.Round(cv, 2, MidpointRounding.AwayFromZero);
+
                     return baseDados; 
                 }
        
@@ -958,6 +955,24 @@ namespace PortalPexIM.Controllers
             return baseDados;//verificar melhor retorno
         }
 
+        private double CalculateStandardDeviation(IEnumerable<double> values)
+        {
+            double standardDeviation = 0;
+
+            if (values.Any())
+            {
+                // Compute the average.     
+                double avg = values.Average();
+
+                // Perform the Sum of (value-avg)_2_2.      
+                double sum = values.Sum(d => Math.Pow(d - avg, 2));
+
+                // Put it all together.      
+                standardDeviation = Math.Sqrt((sum) / (values.Count() - 1));
+            }
+
+            return standardDeviation;
+        }
         static string FormatarGaragem(int? garagens)
         {
             string garagem = "";

@@ -33,7 +33,9 @@ namespace PortalPexIM.Controllers
             var ano = Convert.ToInt32( periodo.Split("/")[1]);
             var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            using (var db1  = new peximContext())
+            var db1 = new peximContext();
+
+            // using (var db1  = new peximContext())
             {
                 var lstImobiliarias = db1.Imobiliarias.ToList();
 
@@ -56,13 +58,13 @@ namespace PortalPexIM.Controllers
                                 im.Bairro = linhaArray[2];
 
                                 if (linhaArray[3] != "")
-                                    im.Valor = Convert.ToDecimal(linhaArray[3]);
+                                    im.Valor = Convert.ToDecimal(linhaArray[3].Replace(".", ""));
 
                                 if (linhaArray[4] != "")
-                                    im.AreaPrivativa = Convert.ToDecimal(linhaArray[4]);
+                                    im.AreaPrivativa = Convert.ToDecimal(linhaArray[4].Replace(".", ""));
 
                                 if (linhaArray[5] != "")
-                                    im.AreaTotal = Convert.ToDecimal(linhaArray[5]);
+                                    im.AreaTotal = Convert.ToDecimal(linhaArray[5].Replace(".", ""));
 
                                 if (linhaArray[6] != "")
                                     im.Quartos = Convert.ToInt32(linhaArray[6]);
@@ -93,7 +95,7 @@ namespace PortalPexIM.Controllers
                                 im.DataClassificacao = new DateTime(ano, mes, 1);
                                 im.Excluido = 0;
                                 db1.Imoveisclassificados.Add(im);
-                                db1.SaveChanges();
+                               // db1.SaveChanges();
                             }
                             catch (Exception ex)
                             {
@@ -111,7 +113,7 @@ namespace PortalPexIM.Controllers
                 }
             }
 
-   
+            db1.SaveChanges();
             return View("Index");
         }
 
