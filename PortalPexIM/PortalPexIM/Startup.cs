@@ -75,6 +75,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PortalPexIM.Model;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace PortalPexIM
 {
@@ -109,6 +110,20 @@ namespace PortalPexIM
             //        this.Configuration.GetConnectionString("Data Source = pexim.czclmi3p5njz.us - east - 2.rds.amazonaws.com; Initial Catalog = PexIM; User ID = admin; Password = Pietro2011#"),
             //        sqlServerOptions => sqlServerOptions.CommandTimeout(800))
             //    );
+
+
+            services.Configure<FormOptions>(x =>
+            {
+                x.ValueLengthLimit = 5000; // Limit on individual form values
+                x.MultipartBodyLengthLimit = 737280000; // Limit on form body size
+                x.MultipartHeadersLengthLimit = 737280000; // Limit on form header size
+            });
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = 837280000; // Limit on request body size
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -173,6 +188,7 @@ namespace PortalPexIM
             });
 
             app.UseCookiePolicy();
+
         }
     }
 }

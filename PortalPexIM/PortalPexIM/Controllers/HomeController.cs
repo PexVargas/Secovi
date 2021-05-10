@@ -925,8 +925,8 @@ namespace PortalPexIM.Controllers
 
                     baseDados.Valor = Math.Round(valor, 2, MidpointRounding.AwayFromZero);
 
-                    baseDados.Minimo = imoveis.Where(x => x.outlier == false).Min(x => x.valor);
-                    baseDados.Maximo = imoveis.Where(x => x.outlier == false).Max(x => x.valor);
+                    baseDados.Minimo = Math.Round(imoveis.Where(x => x.outlier == false).Min(x => x.valor),2);
+                    baseDados.Maximo = Math.Round(imoveis.Where(x => x.outlier == false).Max(x => x.valor),2);
                     baseDados.Metragem = Convert.ToDecimal(imoveis.Where(x => x.outlier == false && x.Area > 0).Average(x => x.Area));
 
                     var desvioPadrao = CalculateStandardDeviation(imoveis.Where(x => x.outlier == false).Select(x => x.valor));

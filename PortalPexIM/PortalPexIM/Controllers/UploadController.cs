@@ -27,6 +27,7 @@ namespace PortalPexIM.Controllers
         }
 
         [HttpPost]
+        [RequestFormLimits(MultipartBodyLengthLimit = 104857600)]
         public ActionResult Importar(IFormFile arquivo, string periodo)
         {
             var mes = Convert.ToInt32( periodo.Split("/")[0]);
