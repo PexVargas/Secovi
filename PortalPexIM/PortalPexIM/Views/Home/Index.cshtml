@@ -309,7 +309,7 @@
                 <div class="stats">
                     <i class="material-icons">local_offer</i>
 
-                    <p> Baseado em <span class="quadroOfertasCidades"> 0 </span> ofertas</p>
+                    <p class="lblquadroOfertasCidades"> Baseado em <span class="quadroOfertasCidades"> 0 </span> ofertas</p>
                 </div>
             </div>
         </div>
@@ -333,7 +333,7 @@
                 <div class="stats">
                     <i class="material-icons">local_offer</i>
 
-                    <p> Baseado em <span class="quadroOfertasBairros"> 0 </span> ofertas</p>
+                    <p class="lblquadroOfertasBairros"> Baseado em <span class="quadroOfertasBairros"> 0 </span> ofertas</p>
                 </div>
             </div>
         </div>
@@ -356,7 +356,7 @@
                 <div class="stats">
                     <i class="material-icons">local_offer</i>
 
-                    <p> Baseado em <span class="quadroOfertasTipos"> 0 </span> ofertas</p>
+                    <p class="lblquadroOfertasTipos"> Baseado em <span class="quadroOfertasTipos"> 0 </span> ofertas</p>
                 </div>
             </div>
         </div>
@@ -379,7 +379,7 @@
                 <div class="stats">
                     <i class="material-icons">local_offer</i>
 
-                    <p> Baseado em <span class="quadroOfertasGaragens"> 0 </span> ofertas</p>
+                    <p class="lblquadroOfertasGaragens"> Baseado em <span class="quadroOfertasGaragens"> 0 </span> ofertas</p>
                 </div>
             </div>
         </div>
@@ -618,6 +618,7 @@
 
 
                 $('.modal-loading-local').hide();
+                $('.quadroOfertas').html('0');
                 $('#graficoEvolutivo').show();
                 if (result.length == 0) {
                     if (possuiCidades == false) {
@@ -713,6 +714,7 @@
             dataType: "json",
             success: function (result) {
                 $('.modal-loading-local').hide();
+                $('.quadroOfertasCidades').html('0');
                 $('#graficoCidades').show();
                 if (result.length == 0) {
                     possuiCidades = false;
@@ -742,6 +744,13 @@
                     }
 
                     $('.quadroOfertasCidades').html(quantidade.toLocaleString('pt-BR'));
+                    if (quantidade < 10) {
+                        $('.quadroOfertasCidades').addClass('qtdVermelho');
+                        $('.lblquadroOfertasCidades').addClass('qtdVermelho');
+                    } else {
+                        $('.quadroOfertasCidades').removeClass('qtdVermelho');
+                        $('.lblquadroOfertasCidades').removeClass('qtdVermelho');
+                    }
 
 
 
@@ -785,6 +794,7 @@
             dataType: "json",
             success: function (result) {
                 $('.modal-loading-local').hide();
+                $('.quadroOfertasBairros').html('0');
                 $('#graficoBairros').show();
 
                 if (result.length == 0) {
@@ -811,6 +821,13 @@
                     }
 
                     $('.quadroOfertasBairros').html(quantidade.toLocaleString('pt-BR'));
+                    if (quantidade < 10) {
+                        $('.quadroOfertasBairros').addClass('qtdVermelho');
+                        $('.lblquadroOfertasBairros').addClass('qtdVermelho');
+                    } else {
+                        $('.quadroOfertasBairros').removeClass('qtdVermelho');
+                        $('.lblquadroOfertasBairros').removeClass('qtdVermelho');
+                    }
 
 
                     var dadosPivot = getPivotArray(processed_json, 0, 1, 2);
@@ -851,6 +868,7 @@
             dataType: "json",
             success: function (result) {
                 $('.modal-loading-local').hide();
+                $('.quadroOfertasTipos').html('0');
                 $('#graficoTipos').show();
 
                 if (result.length == 0) {
@@ -877,6 +895,13 @@
                     }
 
                     $('.quadroOfertasTipos').html(quantidade.toLocaleString('pt-BR'));
+                    if (quantidade < 10) {
+                        $('.quadroOfertasTipos').addClass('qtdVermelho');
+                        $('.lblquadroOfertasTipos').addClass('qtdVermelho');
+                    } else {
+                        $('.quadroOfertasTipos').removeClass('qtdVermelho');
+                        $('.lblquadroOfertasTipos').removeClass('qtdVermelho');
+                    }
 
 
 
@@ -917,6 +942,7 @@
             dataType: "json",
             success: function (result) {
                 $('.modal-loading-local').hide();
+                $('.quadroOfertasGaragens').html('0');
                 $('#graficoGaragens').show();
                 if (result.length == 0) {
                     $('#graficoGaragens').html('Sem registros, por favor modifique a busca!');
@@ -1049,6 +1075,13 @@
         })
 
         $('.quadroOfertasGaragens').html(quantidade.toLocaleString('pt-BR'));
+        if (quantidade < 10) {
+            $('.quadroOfertasGaragens').addClass('qtdVermelho');
+            $('.lblquadroOfertasGaragens').addClass('qtdVermelho');
+        } else {
+            $('.quadroOfertasGaragens').removeClass('qtdVermelho');
+            $('.lblquadroOfertasGaragens').removeClass('qtdVermelho');
+        }
 
         Highcharts.chart(id, {
             chart: {
