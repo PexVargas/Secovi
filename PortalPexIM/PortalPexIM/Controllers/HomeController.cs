@@ -231,6 +231,8 @@ namespace PortalPexIM.Controllers
                            {
                                key = i.Chave,
                                value = i.Valor,
+                               quantidade = i.Quantidade
+
                            }).ToList().OrderByDescending(x => x.value).Take(15);
 
             return Json(imoveis);
@@ -321,6 +323,7 @@ namespace PortalPexIM.Controllers
                            {
                                key = i.Chave,
                                value = i.Valor,
+                               quantidade = i.Quantidade
                            }).ToList().OrderByDescending(x => x.value).Take(15); ;
 
             return Json(imoveis);
@@ -411,6 +414,7 @@ namespace PortalPexIM.Controllers
                            {
                                key = i.Chave,
                                value = i.Valor,
+                               quantidade = i.Quantidade
                            }).ToList().OrderByDescending(x => x.value).Take(15); ;
 
             return Json(imoveis);
@@ -500,6 +504,7 @@ namespace PortalPexIM.Controllers
                            {
                                key = FormatarGaragem(Convert.ToInt32(i.Chave)),
                                value = i.Valor,
+                               quantidade = i.Quantidade
                            }).ToList().OrderByDescending(x => x.value);
 
             return Json(imoveis);
