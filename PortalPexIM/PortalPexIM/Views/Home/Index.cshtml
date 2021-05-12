@@ -634,7 +634,7 @@
 
                         if (unidade != "quantidade") {
                             var todos = result[result.length - 1];
-                            $('.numMetMed').html('' + todos.metragemMedia.toLocaleString('pt-BR'));
+                            $('.numMetMed').html('' + todos.metragemMedia.toFixed(0));
                             $('.numQtdOfe').html('R$' + todos.value.toLocaleString('pt-BR'));
                             if (result[result.length - 1].maximo != null)
                                 $('.valormax').html(result[result.length - 1].maximo.toLocaleString('pt-BR'));
@@ -993,7 +993,7 @@
                                     return this.y.toLocaleString('pt-BR')
                                 }
                                 else {
-                                    return "R$" + this.y.toLocaleString('pt-BR')
+                                    return "R$" + this.y.toFixed(2).toLocaleString('pt-BR')
                                 }
                             }
 
