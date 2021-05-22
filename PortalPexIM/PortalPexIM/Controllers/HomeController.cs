@@ -29,9 +29,9 @@ namespace PortalPexIM.Controllers
             var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             FiltroPesquisa filtro = new FiltroPesquisa();
-            filtro.Cidades = db.Imoveisclassificados.Where(x=>x.SiglaEstado == siglaEstado).Select(x => x.Cidade).Distinct().ToArray();
-            filtro.Bairros = db.Imoveisclassificados.Where(x => x.SiglaEstado == siglaEstado).Select(x => x.Bairro).Distinct().ToArray();
-            filtro.Tipos = db.Imoveisclassificados.Where(x => x.SiglaEstado == siglaEstado).Select(x => x.Tipo).Distinct().ToArray();
+            filtro.Cidades = db.Imoveisclassificados.Where(x=>x.SiglaEstado == siglaEstado).Select(x => x.Cidade).Distinct().OrderBy(x=>x).ToArray();
+            filtro.Bairros = db.Imoveisclassificados.Where(x => x.SiglaEstado == siglaEstado).Select(x => x.Bairro).Distinct().OrderBy(x => x).ToArray();
+            filtro.Tipos = db.Imoveisclassificados.Where(x => x.SiglaEstado == siglaEstado).Select(x => x.Tipo).Distinct().OrderBy(x => x).ToArray();
 
             return View(filtro);
         }
