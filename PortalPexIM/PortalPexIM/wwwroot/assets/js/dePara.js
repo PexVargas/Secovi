@@ -182,7 +182,7 @@ var tabsExec = 0;
                 contentType: "application/json",
                 async: false,
                 success: function (data) {
-                    debugger;
+                    //debugger;
 
                     var html = '';
                     $(data).each(function (indBairro, elem) {
@@ -474,7 +474,7 @@ var tabsExec = 0;
 
         });
         $("#tab3").on("click", function () {
-            debugger;
+            //debugger;
             tabsExec = 3;
             CodPalavra = 0;
             $("#termosAssociados").html("");

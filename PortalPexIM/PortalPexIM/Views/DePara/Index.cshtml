@@ -4,110 +4,103 @@
 @*<link href="~/Content/dePara.css" rel="stylesheet" />*@
 @*<link href="~/assets/css/dePara.css" rel="stylesheet" />*@
 <link href="~/assets/css/multiple-select.css" rel="stylesheet" />
-<div class="container_12">
-    <div class="grid_12">
-        <h2 class="tituloInputs">Gerenciamento de termos - DE/PARA</h2>
-    </div>
 
-    <div class="grid_12" style="border-bottom: 1px dashed #CCC;"></div>
+<style>
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
 
+    .tab-content.tab-space {
+        margin-left: 24px;
+    }
 
+    div#alertaGraficos {
+        margin-left: 24px;
+    }
 
-    <div class="grid_12" style="margin-top: 20px;">
+    ul.nav.nav-pills.nav-pills-primary {
+        position: absolute;
+        right: 70px;
+        /* top: 20px; */
+        font-size: 20px;
+    }
 
+    .grid_12.config {
+        padding-top: 10px;
+    }
 
-        @*<select multiple class="chosen-select dropMs chosenCidades filtros2" id="selecioneSecovi" name="Estados">
-                @foreach (var e in Model.Estados)
-                {
-                    <option value="@e.CodEstado">@e.NomeEstado</option>
-                }
-            </select>*@
+    h3.tituloInputs {
+        margin-left: 20px;
+    }
 
-    </div>
+    select#termosNaoAssociados {
+        width: 276px;
+    }
 
-    <div class="grid_12">
-        @*<ul class="tabs">
-                <li>
-                    <input type="radio" checked class="tabsIn" name="tabs" id="tab1">
-                    <label for="tab1" class="tabslabel">Cidades</label>
-                    <div id="tab-content1" class="tab-content animated fadeIn">
-                        <select id="paraCidade">
-                        </select>
-                        <button class="btn btn-primary bOk" id="okCidade">ok</button>
-                        <img class="editTermo" id="editTermoCidade" src="../../images/icon_editar_p.png" />
-
-                        <span class="right spanRight">Ou acrescente um novo termo</span>
-                        <img class="addTermo" id="addTermoCidade" src="../../images/icon_plus.png" />
-                    </div>
-                </li>
-
-
-                <li>
-                    <input type="radio" class="tabsIn" name="tabs" id="tab2">
-                    <label for="tab2" class="tabslabel">Bairros</label>
-                    <div id="tab-content2" class="tab-content animated fadeIn">
-
-                        <select id="paraBairroCidade"></select>
-                        <select id="paraBairro"></select>
-
-                        <button class="btn btn-primary bOk" id="okBairro">ok</button>
-                        <img class="editTermo" id="editTermoBairro" src="../../images/icon_editar_p.png" />
-
-                        <span class="right spanRight">Ou acrescente um novo termo</span>
-                        <img class="addTermo" id="addTermoBairro" src="../../images/icon_plus.png" />
-                    </div>
-                </li>
+    select#termosAssociados {
+        width: 276px;
+    }
 
 
+</style>
 
-                <li>
-                    <input type="radio" class="tabsIn" name="tabs" id="tab3">
-                    <label for="tab3" class="tabslabel">Tipos</label>
-                    <div id="tab-content3" class="tab-content animated fadeIn">
-                        <select id="paraTipo">
-                        </select>
-                        <button class="btn btn-primary bOk" id="okTipo">ok</button>
-                        <img class="editTermo" id="editTermoTipo" src="../../images/icon_editar_p.png" />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-info  card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">
+                        trending_up
+                    </i>
+                </div>
 
-                        <span class="right spanRight">Ou acrescente um novo termo</span>
-                        <img class="addTermo" id="addTermoTipo" src="../../images/icon_plus.png" />
-                    </div>
-                </li>
-            </ul>*@
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="container_12">
+                        <div class="grid_12">
+                            <h3 class="tituloInputs">Gerenciamento de termos - DE/PARA</h3>
+                        </div>
+
+                        <div class="grid_12" style="border-bottom: 1px dashed #CCC;"></div>
 
 
-        <ul class="nav nav-pills nav-pills-primary" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist" aria-expanded="true" id="tab1">
-                    Cidades
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#link2" role="tablist" aria-expanded="false" id="tab2">
-                    Bairros
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#link3" role="tablist" aria-expanded="false" id="tab3">
-                    Tipos
-                </a>
-            </li>
-        </ul>
 
-        <div class="tab-content tab-space">
-            <div class="tab-pane active" id="link1" aria-expanded="true">
+                        <div class="grid_12" style="margin-top: 20px;">
+
+
+                            @*<select multiple class="chosen-select dropMs chosenCidades filtros2" id="selecioneSecovi" name="Estados">
+                    @foreach (var e in Model.Estados)
+                    {
+                        <option value="@e.CodEstado">@e.NomeEstado</option>
+                    }
+                </select>*@
+
+                        </div>
+
+                        <div class="grid_12">
+                            @*<ul class="tabs">
+            <li>
+                <input type="radio" checked class="tabsIn" name="tabs" id="tab1">
                 <label for="tab1" class="tabslabel">Cidades</label>
                 <div id="tab-content1" class="tab-content animated fadeIn">
-                    <select id="paraCidade" >
+                    <select id="paraCidade">
                     </select>
                     <button class="btn btn-primary bOk" id="okCidade">ok</button>
-                    @*<img class="editTermo" id="editTermoCidade" src="../../images/icon_editar_p.png" />
+                    <img class="editTermo" id="editTermoCidade" src="../../images/icon_editar_p.png" />
 
-                        <span class="right spanRight">Ou acrescente um novo termo</span>
-                         <img class="addTermo" id="addTermoCidade" src="../../images/icon_plus.png" />*@
+                    <span class="right spanRight">Ou acrescente um novo termo</span>
+                    <img class="addTermo" id="addTermoCidade" src="../../images/icon_plus.png" />
                 </div>
-            </div>
-            <div class="tab-pane" id="link2" aria-expanded="false">
+            </li>
+
+
+            <li>
+                <input type="radio" class="tabsIn" name="tabs" id="tab2">
                 <label for="tab2" class="tabslabel">Bairros</label>
                 <div id="tab-content2" class="tab-content animated fadeIn">
 
@@ -115,59 +108,125 @@
                     <select id="paraBairro"></select>
 
                     <button class="btn btn-primary bOk" id="okBairro">ok</button>
-                    @*<img class="editTermo" id="editTermoBairro" src="../../images/icon_editar_p.png" />
+                    <img class="editTermo" id="editTermoBairro" src="../../images/icon_editar_p.png" />
 
-                        <span class="right spanRight">Ou acrescente um novo termo</span>
-                        <img class="addTermo" id="addTermoBairro" src="../../images/icon_plus.png" />*@
+                    <span class="right spanRight">Ou acrescente um novo termo</span>
+                    <img class="addTermo" id="addTermoBairro" src="../../images/icon_plus.png" />
                 </div>
-            </div>
-            <div class="tab-pane" id="link3" aria-expanded="false">
+            </li>
+
+
+
+            <li>
+                <input type="radio" class="tabsIn" name="tabs" id="tab3">
                 <label for="tab3" class="tabslabel">Tipos</label>
                 <div id="tab-content3" class="tab-content animated fadeIn">
                     <select id="paraTipo">
                     </select>
-                    <button class="btn btn-primary bOk " id="okTipo">ok</button>
-                    @*<img class="editTermo" id="editTermoTipo" src="../../images/icon_editar_p.png" />
+                    <button class="btn btn-primary bOk" id="okTipo">ok</button>
+                    <img class="editTermo" id="editTermoTipo" src="../../images/icon_editar_p.png" />
 
-                        <span class="right spanRight">Ou acrescente um novo termo</span>
-                        <img class="addTermo" id="addTermoTipo" src="../../images/icon_plus.png" />*@
+                    <span class="right spanRight">Ou acrescente um novo termo</span>
+                    <img class="addTermo" id="addTermoTipo" src="../../images/icon_plus.png" />
                 </div>
-            </div>
-        </div>
+            </li>
+        </ul>*@
 
-        <div class="grid_12 alertaAzul selecioneSecoviMsg" id="alertaGraficos" style="display: block;">
-            <div class="alerta">
-                <b>Atenção:</b> Para visualizar as informações que você deseja, é necessario utilizar o filtro de pesquisa acima, selecionando o <b>SECOVI</b> desejado.
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-5" style="min-height: 100px;">
-            <select id="termosNaoAssociados" class="termosNaoAssociados" size="20" multiple="multiple" style="min-width:200px" >
-                <option>termo n associado</option>
-                <option>termo n associado</option>
-                <option>termo n associado</option>
-                <option>termo n associado</option>
-            </select>
-        </div>
-        <div class="col-md-2" style="min-height: 100px;min-width:150px;" >
-            <button class="assoc" id="AssociaTermoSelecionadoMult" title="Associa todos os termos na esquerda">>></button>
-            <button class="assoc" id="AssociaTermoSelecionado" title="Associa termo selecionado">></button>
-            <button class="assoc" id="DesassociaTermoSelecionado" title="desassocia termo selecionado"><</button>
-            <button class="assoc" id="DesassociaTermoSelecionadoMult" title="desassocia todos os termos"><<</button>
-        </div>
-        <div class="col-md-5" style="min-height: 100px;">
-            <select id="termosAssociados" class="termosAssociados" size="20" multiple="multiple" style="min-width:200px" >
-                <option>termo ja associado</option>
-                <option>termo ja associado</option>
-                <option>termo ja associado</option>
-                <option>termo ja associado</option>
-            </select>
-        </div>
-    </div>
+                            <ul class="nav nav-pills nav-pills-primary" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist" aria-expanded="true" id="tab1">
+                                        Cidades
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#link2" role="tablist" aria-expanded="false" id="tab2">
+                                        Bairros
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#link3" role="tablist" aria-expanded="false" id="tab3">
+                                        Tipos
+                                    </a>
+                                </li>
+                            </ul>
 
-        @*<div class="grid_12 top100" style="min-height: 100px;">
+                      
+
+                            <div class="tab-content tab-space">
+                                <div class="tab-pane active" id="link1" aria-expanded="true">
+                                    <label for="tab1" class="tabslabel">Cidades</label>
+                                    <div id="tab-content1" class="tab-content animated fadeIn">
+                                        <select id="paraCidade">
+                                        </select>
+                                        <button class="btn btn-primary bOk" id="okCidade">ok</button>
+                                        @*<img class="editTermo" id="editTermoCidade" src="../../images/icon_editar_p.png" />
+
+                    <span class="right spanRight">Ou acrescente um novo termo</span>
+                     <img class="addTermo" id="addTermoCidade" src="../../images/icon_plus.png" />*@
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="link2" aria-expanded="false">
+                                    <label for="tab2" class="tabslabel">Bairros</label>
+                                    <div id="tab-content2" class="tab-content animated fadeIn">
+
+                                        <select id="paraBairroCidade"></select>
+                                        <select id="paraBairro"></select>
+
+                                        <button class="btn btn-primary bOk" id="okBairro">ok</button>
+                                        @*<img class="editTermo" id="editTermoBairro" src="../../images/icon_editar_p.png" />
+
+                    <span class="right spanRight">Ou acrescente um novo termo</span>
+                    <img class="addTermo" id="addTermoBairro" src="../../images/icon_plus.png" />*@
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="link3" aria-expanded="false">
+                                    <label for="tab3" class="tabslabel">Tipos</label>
+                                    <div id="tab-content3" class="tab-content animated fadeIn">
+                                        <select id="paraTipo">
+                                        </select>
+                                        <button class="btn btn-primary bOk " id="okTipo">ok</button>
+                                        @*<img class="editTermo" id="editTermoTipo" src="../../images/icon_editar_p.png" />
+
+                    <span class="right spanRight">Ou acrescente um novo termo</span>
+                    <img class="addTermo" id="addTermoTipo" src="../../images/icon_plus.png" />*@
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid_12 alertaAzul selecioneSecoviMsg" id="alertaGraficos" style="display: block;">
+                                <div class="alerta">
+                                    <b>Atenção:</b> Para visualizar as informações que você deseja, é necessario utilizar o filtro de pesquisa acima, selecionando o <b>SECOVI</b> desejado.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4" style="min-height: 100px;">
+                                <select id="termosNaoAssociados" class="termosNaoAssociados" size="20" multiple="multiple" style="min-width:200px">
+                                    <option>termo n associado</option>
+                                    <option>termo n associado</option>
+                                    <option>termo n associado</option>
+                                    <option>termo n associado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4" style="min-height: 100px;min-width:150px;">
+                                <button class="assoc" id="AssociaTermoSelecionadoMult" title="Associa todos os termos na esquerda">>></button>
+                                <button class="assoc" id="AssociaTermoSelecionado" title="Associa termo selecionado">></button>
+                                <button class="assoc" id="DesassociaTermoSelecionado" title="desassocia termo selecionado"><</button>
+                                <button class="assoc" id="DesassociaTermoSelecionadoMult" title="desassocia todos os termos"><<</button>
+                            </div>
+                            <div class="col-md-4" style="min-height: 100px;">
+                                <select id="termosAssociados" class="termosAssociados" size="20" multiple="multiple" style="min-width:200px">
+                                    <option>termo ja associado</option>
+                                    <option>termo ja associado</option>
+                                    <option>termo ja associado</option>
+                                    <option>termo ja associado</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        @*<div class="grid_12 top100" style="min-height: 100px;">
                 <div class="grid_4">
                     <select id="termosNaoAssociados" class="termosNaoAssociados" size="20" multiple="multiple">
                         <option>termo n associado</option>
@@ -193,12 +252,22 @@
             </div>*@
 
 
-        <div class="grid_12 config" style="text-align:right">
-            <button class="botaoSalvar btn btn-primary" id="btnSalvar">Salvar</button>
-            <button class="botaoCancelar btn btn-default" onclick="window.location='DePara'">Cancelar</button>
-        </div>
+                        <div class="grid_12 config" style="text-align:right">
+                            <button class="botaoSalvar btn btn-primary" id="btnSalvar">Salvar</button>
+                            <button class="botaoCancelar btn btn-default" onclick="window.location='DePara'">Cancelar</button>
+                        </div>
 
+                    </div>
+
+                </div>
+                @*<div class="modal-loading-local"></div>*@
+           
+            </div>
+        </div>
     </div>
+</div>
+
+
 
     <h1 style="margin-bottom: 200px; visibility: hidden;">separador footer</h1>
 
