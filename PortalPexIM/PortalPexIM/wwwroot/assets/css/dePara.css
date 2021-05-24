@@ -1,0 +1,279 @@
+﻿/*/ Tab como o Vidor desenhou /*/
+#u47 {
+    position: absolute;
+    left: 158px;
+    top: 2px;
+    width: 100px;
+    height: 30px;
+    color: #868686;
+}
+
+.imgTab {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100px;
+    height: 30px;
+}
+
+.tabTipoImg {
+    z-index: -1;
+}
+
+.text {
+    position: absolute;
+    left: 17px;
+    top: -6px;
+    width: 96px;
+    word-wrap: break-word;
+    padding: 0;
+    margin: 0;
+    font-size: 13px;
+    margin-left: 5px;
+}
+
+#u49 {
+    position: absolute;
+    left: 80px;
+    top: 2px;
+    width: 100px;
+    height: 30px;
+    color: #868686;
+}
+
+#u53 {
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 100px;
+    height: 30px;
+}
+
+/*/ Tab atual /*/
+.tabsIn {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+.tabs {
+    float: none;
+    list-style: none;
+    position: relative;
+    padding: 0;
+}
+
+    .tabs li {
+        float: left;
+    }
+
+.tabslabel {
+    /*display: block;*/
+    padding: 10px 20px;
+    border-radius: 2px 2px 0 0;
+    color: #08C;
+    font-size: 15px;
+    font-weight: normal;
+    cursor: pointer;
+    position: relative;
+    top: 3px;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+
+.tabs label:hover {
+    background: rgba(255,255,255,0.5);
+    top: 0;
+}
+
+[id^=tab]:checked + label {
+    /*/ background: #08C; /
+    / color: white; /*/
+    top: 0;
+    border-bottom: 3px solid #08c;
+}
+
+[id^=tab]:checked ~ [id^=tab-content] {
+    /*display: block;*/
+}
+
+.tab-content {
+    border: 1px solid #C9C9C7;
+    display: none;
+    text-align: left;
+    width: 100%;
+    font-size: 14px;
+    line-height: 140%;
+    padding-top: 0px;
+    padding: 15px;
+    position: absolute;
+    top: 34px;
+    z-index: 2;
+    left: 0;
+    box-sizing: border-box;
+    -webkit-animation-duration: 0.5s;
+    -o-animation-duration: 0.5s;
+    -moz-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+}
+
+.pSelecione {
+    padding: 0px;
+    margin: 3px;
+}
+
+.ms-parent {
+    margin-left: 0px !important;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    width: 32px;
+    height: 24px;
+}
+
+.btn {
+    cursor: pointer;
+    display: inline-block;
+    padding: 2px 8px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.top100 {
+    margin-top: 100px;
+}
+
+.config button {
+    float: right;
+}
+
+.assoc {
+    /*display: block;*/
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    /*-webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;*/
+    width: 40px;
+}
+
+.termosNaoAssociados, .termosAssociados, .config button, .assoc {
+    display: none;
+}
+
+.termosAssociados {
+    float: right;
+    width: 340px;
+    margin-right: -4px;
+}
+
+.termosNaoAssociados {
+    width: 340px;
+    margin-left: -6px;
+}
+
+.spanRight {
+    margin-top: 2px;
+    color: #435996;
+}
+
+.inputRight {
+    height: 21px;
+    text-align: left;
+    margin-left: -5px;
+    margin-right: 14px;
+}
+
+.right {
+    float: right;
+}
+
+.addTermo {
+    right: 8px;
+    width: 16px;
+    position: absolute;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.editTermo {
+    /*/ width: 12px; /*/
+    position: absolute;
+    margin-top: 8px;
+    cursor: pointer;
+    padding-left: 10px;
+}
+
+.ms-drop ul > li label {
+    margin-left: -7px;
+}
+
+.ms-drop ul {
+    overflow: auto;
+    margin: 0;
+    padding: 5px 8px;
+}
+
+    .ms-drop ul > li {
+        /*/ list-style: none !important; /*/
+        display: list-item;
+        background-image: none;
+        position: static;
+        width: 100%;
+    }
+
+.botaoSalvar {
+    margin-top: 20px;
+    width: 100px;
+}
+
+.botaoCancelar {
+    margin-top: 20px;
+    margin-right: 10px;
+    width: 100px;
+}
+
+#AssociaTermoSelecionadoMult {
+    margin-top: 25px;
+}
+
+#DesassociaTermoSelecionado {
+    margin-top: 160px;
+}
+
+
+.msgModalDePara {
+    position: absolute;
+    width: 280px;
+    height: 130px;
+    z-index: 2001;
+    background-color: white;
+    left: 50%;
+    top: 40%;
+    margin-left: -140px;
+    margin-top: -45px;
+    opacity: 1;
+    padding: 30px;
+    border: 2px solid #2E3D65;
+}

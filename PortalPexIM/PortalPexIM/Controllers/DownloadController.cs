@@ -57,9 +57,11 @@ namespace PortalPexIM.Controllers
 
             // Convert utf-8 bytes to a string.
             string s_unicode2 = Encoding.UTF8.GetString(utf8Bytes);
+            var result = Encoding.UTF8.GetPreamble().Concat(utf8Bytes).ToArray();
+
             string NomeArquivo = String.Format("{0}_{1}_{2}", tipoImovel, siglaEstado, (ano.ToString() + mes.ToString()));
 
-            return File(Encoding.UTF8.GetBytes(s_unicode2), "text/csv", string.Format( "{0}.csv", NomeArquivo));
+            return File(result, "text/csv", string.Format( "{0}.csv", NomeArquivo));
 
         }
 

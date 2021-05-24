@@ -304,3 +304,4 @@ C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netco
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.genruntimeconfig.cache
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.csprojAssemblyReference.cache
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netcoreapp3.1\web.config
+C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\Razor\Views\DePara\Index.cshtml.g.cs

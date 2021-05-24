@@ -41,5 +41,6 @@ namespace PortalPexIM.Model
         public string BairroCapturado { get; set; }
         public string TipoCapturado { get; set; }
         public string Apto { get; set; }
+        public string PalavraExclusao { get; set; }
     }
 }
