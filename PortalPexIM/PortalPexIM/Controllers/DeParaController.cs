@@ -356,6 +356,33 @@ namespace PortalPexIM.Controllers
                     break;
                 case 2:
                     tipoDePara = "Bairro";
+                    var cidades = db.Cidades.Where(x => x.SiglaEstado == siglaEstado).ToList();
+
+                    var palavrasBairro = db.Palavrasbairros.Where(x => x.SiglaEstado == siglaEstado && x.Excluido != 1).ToList();
+
+                    foreach (var palava in palavrasBairro)
+                    {
+                        Console.WriteLine(palava.Palavra);
+                        var palavrasRelacionadas = db.Palavrasrelacionadasbairro.Where(x => x.CodPalavra == palava.CodPalavra).ToList();
+
+                        foreach (var item in palavrasRelacionadas)
+                        {
+                            var cidade = cidades.Where(x => x.CodCidade == palava.CodCidade).FirstOrDefault().NomeCidade.ToUpper().Trim();
+
+                            var imoveis = db.Imoveisclassificados.Where(x => x.Bairro.ToUpper().Trim() == item.Palavra.ToUpper().Trim()
+                            && x.SiglaEstado == siglaEstado
+                            && x.Excluido != 1
+                            && x.Cidade.ToUpper().Trim() == cidade
+                            && (x.DataClassificacao.Value.Year == DateTime.Now.Year && x.DataClassificacao.Value.Month == DateTime.Now.Month)).ToList();
+
+                            foreach (var im in imoveis)
+                            {
+                                im.Bairro = palava.Palavra;
+                            }
+
+                            db.SaveChanges();
+                        }
+                    }
                     break;
                 default:
                     tipoDePara = "Tipo";
