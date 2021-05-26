@@ -367,7 +367,8 @@ var tabsExec = 0;
                     $("#termosNaoAssociados option:selected").remove();
             }
             else {
-                alert('Selecione uma cidade, bairro ou tipo antes de clicar no botão de transferência de termos.');
+              
+                swal("Selecione uma cidade, bairro ou tipo antes de clicar no botão de transferência de termos.", "", "warning");
             }
 
         });
@@ -400,7 +401,8 @@ var tabsExec = 0;
                 $("#termosNaoAssociados option:selected").remove();
             }
             else {
-                alert('Selecione uma cidade, bairro ou tipo antes de clicar no botão de transferência de termos.');
+         
+                swal("Selecione uma cidade, bairro ou tipo antes de clicar no botão de transferência de termos.", "", "warning");
             }
         });
 
@@ -540,7 +542,7 @@ var tabsExec = 0;
         populaListaDeParaCidades();
 
         $('#paraBairroCidade').on('change', function () {
-            alert(this.value);
+           
             atualizarTabelaBairro(parseInt(this.value))
         });
 
@@ -583,6 +585,7 @@ function atualizarTabelaCidadeBairro(cod) {
         dataType: "json",
         complete: function (data) {
             var html = '';
+            html += '<option value="' + "" + '" data-codcidade="' + 1 + '">' + "" + '</option>';
             $(data.responseJSON).each(function (indBairro, elem) {
 
                 html += '<option value="' + elem.codCidade + '" data-codcidade="' + 1 + '">' + elem.nomeCidade + '</option>';
@@ -608,6 +611,7 @@ function atualizarTabelaBairro(cod) {
         dataType: "json",
         complete: function (data) {
             var html = '';
+            html += '<option value="' + "" + '" data-codcidade="' + 1 + '">' + "" + '</option>';
             $(data.responseJSON).each(function (indBairro, elem) {
                 html += '<option value="' + elem.codPalavra + '" data-codcidade="' + 1 + '">' + elem.nomePalavra + '</option>';
             })
@@ -633,6 +637,7 @@ function atualizarTabelaTipo(cod) {
   
 
             var html = '';
+            html += '<option value="' + "" + '" data-codcidade="' + 1 + '">' + "" + '</option>';
             $(data.responseJSON.palavras).each(function (indBairro, elem) {
 
                 html += '<option value="' + elem.codPalavra + '" data-codcidade="' + 1 + '">' + elem.nomePalavra + '</option>';
@@ -670,10 +675,11 @@ function AplicarDePara(Cod, dePara) {
         type: "POST",
         contentType: "application/json",
         dataType: "json",
-        async: true,
+        async: false,
         complete: function (data) {
             
-            $(".modalSalvar").fadeIn(150);
+            //$(".modalSalvar").fadeIn(150);
+            swal("Operação realizada com sucesso!", "", "success");
         },
         error: function (data) {
 

@@ -90,6 +90,7 @@ namespace PortalPexIM.Controllers
                           where im.SiglaEstado == siglaEstado
                           && im.Excluido != 1
                           && im.Tipo != null
+                          && (im.DataClassificacao.Value.Year == DateTime.Now.Year && im.DataClassificacao.Value.Month == DateTime.Now.Month)
                           select new Tipo()
                           {
                               NomeTipo = im.Tipo.ToUpper(),
@@ -110,6 +111,7 @@ namespace PortalPexIM.Controllers
             {
                 if (lstPalavrasTipos.Where(x => x.NomeTipo.ToUpper().Trim() == item.NomeTipo.ToUpper().Trim()).Count() == 0)
                 {
+
                     lstResult.Add(new Tipo() { NomeTipo = item.NomeTipo });
                 }
             }
@@ -129,7 +131,7 @@ namespace PortalPexIM.Controllers
             listaBairros = (from im in db.Imoveisclassificados
                             where im.SiglaEstado == siglaEstado
                             && im.Excluido != 1
-
+                             && (im.DataClassificacao.Value.Year == DateTime.Now.Year && im.DataClassificacao.Value.Month == DateTime.Now.Month)
                             select new Bairro()
                             {
                                 NomeBairro = im.Cidade.ToUpper() + " - " + im.Bairro.ToUpper(),
@@ -207,6 +209,7 @@ namespace PortalPexIM.Controllers
                 var lstCidades = (from im in dbx.Imoveisclassificados
                                   where im.SiglaEstado == siglaEstado
                                   && im.Excluido != 1
+                                   && (im.DataClassificacao.Value.Year == DateTime.Now.Year && im.DataClassificacao.Value.Month == DateTime.Now.Month)
                                   select new Cidade
                                   {
                                       NomeCidade = im.Cidade.ToUpper(),

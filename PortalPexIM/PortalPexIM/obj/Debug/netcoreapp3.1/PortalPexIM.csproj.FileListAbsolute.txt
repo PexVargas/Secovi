@@ -227,6 +227,9 @@ C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\obj\De
 C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.dll
 C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.pdb
 C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.genruntimeconfig.cache
+C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netcoreapp3.1\web.config
+C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\Razor\Views\DePara\Index.cshtml.g.cs
+C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netcoreapp3.1\web.config
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
@@ -284,6 +287,7 @@ C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netco
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.TagHelpers.input.cache
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.TagHelpers.output.cache
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.RazorCoreGenerate.cache
+C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\Razor\Views\DePara\Index.cshtml.g.cs
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\Razor\Views\Download\Index.cshtml.g.cs
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
@@ -302,8 +306,3 @@ C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netco
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.dll
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.pdb
 C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.genruntimeconfig.cache
-C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\PortalPexIM.csprojAssemblyReference.cache
-C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netcoreapp3.1\web.config
-C:\Users\WINDOWS\Documents\GitHub\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\Razor\Views\DePara\Index.cshtml.g.cs
-C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\bin\Debug\netcoreapp3.1\web.config
-C:\Users\Admin\Desktop\ASPNETCoreWithReact\Secovi\PortalPexIM\PortalPexIM\obj\Debug\netcoreapp3.1\Razor\Views\DePara\Index.cshtml.g.cs

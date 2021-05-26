@@ -46,6 +46,9 @@
 
 
 </style>
+<head>
+    <meta charset="UTF-8">
+</head>
 
 <div class="row">
     <div class="col-md-12">
@@ -73,64 +76,11 @@
                         <div class="grid_12" style="margin-top: 20px;">
 
 
-                            @*<select multiple class="chosen-select dropMs chosenCidades filtros2" id="selecioneSecovi" name="Estados">
-                    @foreach (var e in Model.Estados)
-                    {
-                        <option value="@e.CodEstado">@e.NomeEstado</option>
-                    }
-                </select>*@
 
                         </div>
 
                         <div class="grid_12">
-                            @*<ul class="tabs">
-            <li>
-                <input type="radio" checked class="tabsIn" name="tabs" id="tab1">
-                <label for="tab1" class="tabslabel">Cidades</label>
-                <div id="tab-content1" class="tab-content animated fadeIn">
-                    <select id="paraCidade">
-                    </select>
-                    <button class="btn btn-primary bOk" id="okCidade">ok</button>
-                    <img class="editTermo" id="editTermoCidade" src="../../images/icon_editar_p.png" />
-
-                    <span class="right spanRight">Ou acrescente um novo termo</span>
-                    <img class="addTermo" id="addTermoCidade" src="../../images/icon_plus.png" />
-                </div>
-            </li>
-
-
-            <li>
-                <input type="radio" class="tabsIn" name="tabs" id="tab2">
-                <label for="tab2" class="tabslabel">Bairros</label>
-                <div id="tab-content2" class="tab-content animated fadeIn">
-
-                    <select id="paraBairroCidade"></select>
-                    <select id="paraBairro"></select>
-
-                    <button class="btn btn-primary bOk" id="okBairro">ok</button>
-                    <img class="editTermo" id="editTermoBairro" src="../../images/icon_editar_p.png" />
-
-                    <span class="right spanRight">Ou acrescente um novo termo</span>
-                    <img class="addTermo" id="addTermoBairro" src="../../images/icon_plus.png" />
-                </div>
-            </li>
-
-
-
-            <li>
-                <input type="radio" class="tabsIn" name="tabs" id="tab3">
-                <label for="tab3" class="tabslabel">Tipos</label>
-                <div id="tab-content3" class="tab-content animated fadeIn">
-                    <select id="paraTipo">
-                    </select>
-                    <button class="btn btn-primary bOk" id="okTipo">ok</button>
-                    <img class="editTermo" id="editTermoTipo" src="../../images/icon_editar_p.png" />
-
-                    <span class="right spanRight">Ou acrescente um novo termo</span>
-                    <img class="addTermo" id="addTermoTipo" src="../../images/icon_plus.png" />
-                </div>
-            </li>
-        </ul>*@
+      
 
 
                             <ul class="nav nav-pills nav-pills-primary" role="tablist">
@@ -204,10 +154,10 @@
                         <div class="row">
                             <div class="col-md-4" style="min-height: 100px;">
                                 <select id="termosNaoAssociados" class="termosNaoAssociados" size="20" multiple="multiple" style="min-width:200px">
+                                    @*<option>termo n associado</option>
                                     <option>termo n associado</option>
                                     <option>termo n associado</option>
-                                    <option>termo n associado</option>
-                                    <option>termo n associado</option>
+                                    <option>termo n associado</option>*@
                                 </select>
                             </div>
                             <div class="col-md-4" style="min-height: 100px;min-width:150px;">
@@ -218,10 +168,10 @@
                             </div>
                             <div class="col-md-4" style="min-height: 100px;">
                                 <select id="termosAssociados" class="termosAssociados" size="20" multiple="multiple" style="min-width:200px">
+                                    @*<option>termo ja associado</option>
                                     <option>termo ja associado</option>
                                     <option>termo ja associado</option>
-                                    <option>termo ja associado</option>
-                                    <option>termo ja associado</option>
+                                    <option>termo ja associado</option>*@
                                 </select>
                             </div>
                         </div>
