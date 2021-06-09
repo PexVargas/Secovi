@@ -399,6 +399,9 @@
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 <script>
+    //function funcao1() {
+    //    alert("Eu sou um alert!");
+    //}
 
     $(document).ready(function () {
         Pesquisar();
@@ -1008,7 +1011,27 @@
             xAxis: {
                 categories: categories
             },
-            series: dadosGrafico
+            series: dadosGrafico,
+
+            exporting: {
+                menuItemDefinitions: {
+                    // Custom definition
+                    label: {
+                        onclick: function (vai, cavalo) {
+                            debugger
+                            alert(vai.path[4].id)
+
+
+                        },
+                        text: 'Download CSV'
+                    }
+                },
+                buttons: {
+                    contextButton: {
+                        menuItems: ["viewFullscreen", "printChart", "separator", "downloadPNG", "downloadJPEG", "downloadPDF", "downloadSVG", 'separator', "label"]
+                    }
+                }
+            }
         });
     }
 
@@ -1111,7 +1134,27 @@
                 name: '',
                 colorByPoint: true,
                 data: dadosProcessados
-            }]
+            }],
+
+            exporting: {
+                menuItemDefinitions: {
+                    // Custom definition
+                    label: {
+                        onclick: function (vai, cavalo) {
+                            debugger
+                            alert(vai.path[4].id)
+
+
+                        },
+                        text: 'Download CSV'
+                    }
+                },
+                buttons: {
+                    contextButton: {
+                        menuItems: ["viewFullscreen", "printChart", "separator", "downloadPNG", "downloadJPEG", "downloadPDF", "downloadSVG", 'separator', "label"]
+                    }
+                }
+            }
         });
     }
 
