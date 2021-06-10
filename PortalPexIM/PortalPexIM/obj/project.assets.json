@@ -1847,19 +1847,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\vinic\\.nuget\\packages\\": {}
+    "C:\\Users\\marlo\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\vinic\\OneDrive\\Documentos\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
+      "projectUniqueName": "C:\\Users\\marlo\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
       "projectName": "PortalPexIM",
-      "projectPath": "C:\\Users\\vinic\\OneDrive\\Documentos\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
-      "packagesPath": "C:\\Users\\vinic\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\vinic\\OneDrive\\Documentos\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\obj\\",
+      "projectPath": "C:\\Users\\marlo\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\PortalPexIM.csproj",
+      "packagesPath": "C:\\Users\\marlo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\marlo\\Documents\\GitHub\\Secovi\\PortalPexIM\\PortalPexIM\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\vinic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\marlo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1922,7 +1922,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

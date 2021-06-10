@@ -233,7 +233,7 @@ namespace PortalPexIM.Controllers
                                value = i.Valor,
                                quantidade = i.Quantidade
 
-                           }).ToList().OrderByDescending(x => x.value).Take(15);
+                           }).ToList().OrderByDescending(x => x.value);
 
             return Json(imoveis);
         }
@@ -324,7 +324,7 @@ namespace PortalPexIM.Controllers
                                key = i.Chave,
                                value = i.Valor,
                                quantidade = i.Quantidade
-                           }).ToList().OrderByDescending(x => x.value).Take(15); ;
+                           }).ToList().OrderByDescending(x => x.value); ;
 
             return Json(imoveis);
         }
@@ -415,7 +415,7 @@ namespace PortalPexIM.Controllers
                                key = i.Chave,
                                value = i.Valor,
                                quantidade = i.Quantidade
-                           }).ToList().OrderByDescending(x => x.value).Take(15); ;
+                           }).ToList().OrderByDescending(x => x.value); 
 
             return Json(imoveis);
         }
@@ -1078,6 +1078,7 @@ namespace PortalPexIM.Controllers
                            {
                                tipo = g.Key.Bairro,
                                valor = g.Count()
+
                            }).ToList();
 
             return Json(imoveis);
