@@ -669,16 +669,26 @@ function getArraySelecionados(selector) {
 
 function AplicarDePara(Cod, dePara) {
 
+ 
+    swal({
+        title: 'Aguarde, estamos processando sua operação...',
+        text: "este processo pode demorar alguns instantes.",
+        type: 'warning',
+        showConfirmButton: false,
+        confirmButtonText: ''
+    })
+
     $.ajax({
 
-        url: '/DePara/AplicarDePara?DePara=' + dePara,
+        url: '/DePara/AplicarDePara?DePara=' + dePara +"&Cod="+Cod,
         type: "POST",
         contentType: "application/json",
         dataType: "json",
-        async: false,
+        async: true,
         complete: function (data) {
             
             //$(".modalSalvar").fadeIn(150);
+            swal.close();
             swal("Operação realizada com sucesso!", "", "success");
         },
         error: function (data) {

@@ -315,7 +315,7 @@ namespace PortalPexIM.Controllers
         }
 
         [HttpPost]
-        public void AplicarDePara(int DePara)
+        public void AplicarDePara(int DePara, int Cod)
         {
 
             var siglaEstado = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -382,8 +382,8 @@ namespace PortalPexIM.Controllers
                             {
                                 im.Bairro = palava.Palavra;
                             }
-
-                            db.SaveChanges();
+                            if(imoveis.Count()>0)
+                                db.SaveChanges();
                         }
                     }
                     break;
@@ -391,6 +391,7 @@ namespace PortalPexIM.Controllers
                     tipoDePara = "Tipo";
 
                     var palavrasTipo = db.Palavrastipo.Where(x => x.SiglaEstado == siglaEstado && x.Excluido != 1).ToList();
+                    var dataPeriodoTemp = new DateTime(2021, 5, 1);
 
                     foreach (var palava in palavrasTipo)
                     {
@@ -398,10 +399,10 @@ namespace PortalPexIM.Controllers
 
                         foreach (var item in palavrasRelacionadasTipo)
                         {
-                            var imoveis = db.Imoveisclassificados.Where(x => x.Tipo.ToUpper().Trim() == item.Palavra.ToUpper().Trim() 
-                            && x.SiglaEstado == siglaEstado 
-                            && x.Excluido != 1 
-                            && (x.DataClassificacao.Value.Year == DateTime.Now.Year && x.DataClassificacao.Value.Month == DateTime.Now.Month)).ToList();
+                            var imoveis = db.Imoveisclassificados.Where(x => x.Tipo.ToUpper().Trim() == item.Palavra.ToUpper().Trim()
+                            && x.SiglaEstado == siglaEstado
+                            && x.Excluido != 1
+                            && x.DataClassificacao >= dataPeriodoTemp).ToList(); // (x.DataClassificacao.Value.Year == DateTime.Now.Year && x.DataClassificacao.Value.Month == DateTime.Now.Month)).ToList();
 
                             foreach (var im in imoveis)
                             {
