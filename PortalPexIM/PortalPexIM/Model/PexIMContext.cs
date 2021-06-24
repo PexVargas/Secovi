@@ -10,8 +10,13 @@ namespace PortalPexIM.Model
 {
     public partial class peximContext : DbContext
     {
+        //public peximContext()
+        //{
+        //}
+
         public peximContext()
         {
+            Database.SetCommandTimeout(150000);
         }
 
         public peximContext(DbContextOptions<peximContext> options)

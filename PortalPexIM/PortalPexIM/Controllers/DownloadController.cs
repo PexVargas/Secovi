@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -40,7 +43,7 @@ namespace PortalPexIM.Controllers
                 List<ImoveisDados> ic = RetornaDadosClassificados(tipoImovel, siglaEstado, mes, ano);
 
                 var lstImobiliarias = db.Imobiliarias.ToList();
-                sb.AppendLine("Tipo;Cidade;Bairro;Valor;Area Privativa;Area Total;Quartos;Garagens;Suítes;Url;Descrição;Imobiliaria;Estado;Finalidade;Perfil;Anunciante;Endereco; Iptu; Apto;Condominio;Dormitorios");
+                sb.AppendLine("Tipo;Cidade;Bairro;Valor;Area Privativa;Area Total;Quartos;Garagens;Suítes;Url;Descrição;Imobiliaria;Estado;Finalidade;Perfil;Anunciante;Endereco;Iptu;Apto;Condominio;Dormitorios");
 
                 foreach (ImoveisDados line in ic)
                 { 
@@ -67,6 +70,7 @@ namespace PortalPexIM.Controllers
 
         public List<ImoveisDados> RetornaDadosClassificados(int tipoImovel, string siglaEstado, string mes, int ano)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
             using (var dbx = new peximContext())
             {
                
@@ -113,16 +117,22 @@ namespace PortalPexIM.Controllers
             }
         }
 
+        public static string StripHTML(string input)
+        {
+            return Regex.Replace(input, "<.*?>", String.Empty);
+        }
+
         public string LinhaCSV(ImoveisDados line, List<Imobiliarias> listImobiliarias)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
             string retorno = string.Empty;
             try
             {
                 string descricao = string.Empty;
 
-                retorno += line.Tipo + ";";
-                retorno += line.Cidade + ";";
-                retorno += line.Bairro + ";";
+                retorno += line.Tipo.Replace(";", "") + ";";
+                retorno += line.Cidade.Replace(";", "") + ";";
+                retorno += line.Bairro.Replace(";","") + ";";
 
                 retorno += line.Valor + ";";
 
@@ -138,7 +148,7 @@ namespace PortalPexIM.Controllers
                 if (line.Descricao == null)
                     line.Descricao = "";
 
-                descricao = line.Descricao
+                descricao = StripHTML(line.Descricao
                                 .Replace(";", ",")
                                 .Replace("\r\n", " ")
                                 .Replace("\n\r", " ")
@@ -147,7 +157,7 @@ namespace PortalPexIM.Controllers
                                 .Replace("\r", " ")
                                 .Replace("\n", " ")
                                 .Replace("\"", "")
-                                .Replace(Environment.NewLine, " ");
+                                .Replace(Environment.NewLine, " "));
 
           
                 retorno += descricao + ";";
