@@ -40,14 +40,15 @@ namespace PortalPexIM.Controllers
 
             try
             {
-                List<ImoveisDados> ic = RetornaDadosClassificados(tipoImovel, siglaEstado, mes, ano);
+                var ic = RetornaDadosClassificados(tipoImovel, siglaEstado, mes, ano);
 
                 var lstImobiliarias = db.Imobiliarias.ToList();
                 sb.AppendLine("Tipo;Cidade;Bairro;Valor;Area Privativa;Area Total;Quartos;Garagens;Suítes;Url;Descrição;Imobiliaria;Estado;Finalidade;Perfil;Anunciante;Endereco;Iptu;Apto;Condominio;Dormitorios");
 
                 foreach (ImoveisDados line in ic)
                 { 
-                   sb.AppendLine(LinhaCSV(line, lstImobiliarias));
+                    if(line.Tipo != null)
+                        sb.AppendLine(LinhaCSV(line, lstImobiliarias));
                 }
             }
             catch (Exception ex)
@@ -102,7 +103,7 @@ namespace PortalPexIM.Controllers
                                      CodImobiliaria = ic.CodImobiliaria,
                                      SiglaEstado = ic.SiglaEstado,
                                      TipoImovel = ic.TipoImovel,
-                                    // Perfil = ic.Perfil,
+                                     //Perfil = ic.Perfil,
                                      Anunciante = ic.Anunciante,
                                      Endereco = ic.Localidade,//revisar
                                      Iptu = ic.Iptu,
@@ -130,7 +131,7 @@ namespace PortalPexIM.Controllers
             {
                 string descricao = string.Empty;
 
-                retorno += line.Tipo.Replace(";", "") + ";";
+                retorno += line.Tipo + ";";
                 retorno += line.Cidade.Replace(";", "") + ";";
                 retorno += line.Bairro.Replace(";","") + ";";
 
@@ -171,7 +172,12 @@ namespace PortalPexIM.Controllers
 
                 retorno += line.SiglaEstado + ";";
                 retorno += (line.TipoImovel == 1 ? "Venda" : "Locação") + ";";
-                retorno += line.Perfil + ";";
+               
+                if (line.Tipo != null)
+                    retorno += DeParaPerfil(line.Tipo) + ";";
+                else
+                    line.Tipo = "";
+
                 retorno += line.Anunciante + ";";
                 retorno += line.Endereco + ";";
                 retorno += line.Iptu + ";";
@@ -185,6 +191,78 @@ namespace PortalPexIM.Controllers
             }
 
             return retorno;
+        }
+
+        public string DeParaPerfil(string tipo)
+        {
+            string perfil = "OUTROS";
+
+            if (tipo.Contains("CASA")|| 
+                tipo.Contains("APARTAMENTO") || 
+                tipo.Contains("COBERTURA") ||
+                tipo.Contains("COBERTURA") ||
+                tipo.Contains("QUITINETE"))
+                perfil = "RESIDENCIAL";
+
+            if (tipo.Contains("COMERCIAL") || 
+                tipo.Contains("GALPÃO/DEPÓSITO/ARMAZÉM") || 
+                tipo.Contains("LOJA") || 
+                tipo.Contains("PONTO COMERCIAL/LOJA/BOX") || 
+                tipo.Contains("PRÉDIO")||
+                tipo.Contains("EDIFÍCIO") ||
+                tipo.Contains("PONTO COMERCIAL") ||
+                tipo.Contains("BOX") ||
+                tipo.Contains("SALA") ||
+                tipo.Contains("CONJUNTO")  )
+                perfil = "COMERCIAL";
+
+
+            return perfil;
+        }
+        public string DeParaPerfilOlD(string tipo)
+        {
+            string perfil = "OUTROS";
+            Dictionary<string, string> deParaPerfil =  new Dictionary<string, string>();
+
+            deParaPerfil.Add("APARTAMENTO", "RESIDENCIAL");
+            deParaPerfil.Add("COBERTURA", "RESIDENCIAL");
+            deParaPerfil.Add("CASA", "RESIDENCIAL");
+
+            deParaPerfil.Add("CASA 1 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("CASA 2 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("CASA 3 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("CASA 4 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("CASA DE CONDOMÍNIO DE DOIS ANDARES >= 5 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("CASA DE CONDOMÍNIO DE DOIS ANDARES 2 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("CASA DE CONDOMÍNIO DE DOIS ANDARES 3 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("CASA DE CONDOMÍNIO DE DOIS ANDARES 4 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("CASA DE VILA 1 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("CASA DE VILA 2 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("CASA DE VILA DUPLEX 2 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("COBERTURA", "RESIDENCIAL");
+            deParaPerfil.Add("COBERTURA >= 5 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("COBERTURA 1 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("COBERTURA 2 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("COBERTURA 3 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("COBERTURA 4 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("COBERTURA TRIPLEX 4 DORM.", "RESIDENCIAL");
+            deParaPerfil.Add("QUITINETE", "RESIDENCIAL");
+
+            deParaPerfil.Add("COMERCIAL", "COMERCIAL");
+            deParaPerfil.Add("GALPÃO/DEPÓSITO/ARMAZÉM", "COMERCIAL");
+            deParaPerfil.Add("LOJA", "COMERCIAL");
+            deParaPerfil.Add("PONTO COMERCIAL/LOJA/BOX", "COMERCIAL");
+            deParaPerfil.Add("PRÉDIO", "COMERCIAL");
+            deParaPerfil.Add("PRÉDIO/EDIFÍCIO INTEIRO", "COMERCIAL");
+            deParaPerfil.Add("SALA/CONJUNTO", "COMERCIAL");
+
+
+            var cPerfil = deParaPerfil.Where(x => x.Key.Contains(tipo.Trim().ToUpper())).FirstOrDefault();
+           
+            if(cPerfil.Key != null)
+                perfil = cPerfil.Value;
+
+            return perfil;
         }
     }
 }
